@@ -25,23 +25,47 @@ jQuery(document).ready(function() {
     	$(this).removeClass('input-error');
     });
     
-    $("a[name='family-father-role']").on('click', function(){
+
+    $("#next-step").on('click', function(){
+        console.log("EIAFOI");
+        // $(".baseinfo").fadeOut('slow');
+        $(".exampletable").fadeIn();
+    });
+
+
+    $(".mbr-save-form").on('submit', function(e){
+        // e.preventDefault();
+        var mbr = $("#mbr-chosen").parent().attr("id");
+        var res = mbr.split("mbr-choice-");
+        $("input[name='_mbrid']").attr("value", res[1]);
+    });
+
+    $("a[name='mbr_selection']").on('click', function(){
         console.log("YES CLICK");
         console.log($(this));
 
+        // $("a[name='mbr_selection']")
         var username = "aoiejfoiajfe";
         var token =  "AFOIKJOIAFE";
         var dataString = 'username='+username+'&token='+token; 
 
+        $("#mbr-chosen").attr({'id': ''}).html('Pilih Member');
 
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-          }
-        });
+        // $.ajaxSetup({
+        //   headers: {
+        //     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //   }
+        // });find
+    $tt = $(this).parent();
+    console.log($tt);
 
-        var x = $('meta[name="_token"]').attr('content');
-        console.log(x);
+    // console.log("UEUEUE");
+
+
+    // $("input[name='_mbrid']").attr("value", $("input[name='_memberkey']").val() );
+
+        // var x = $('meta[name="_token"]').attr('content');
+        // console.log(x);
 
         // $.ajax({
         //     type: "POST",
@@ -56,11 +80,8 @@ jQuery(document).ready(function() {
         // },"json");
 
 
-        $(this).css({
-           // 'font-size' : '10px',
-           'background-color' : 'blue',
-           // 'height' : '10px'
-        }).html("Terpilih");
+        $(this)
+            .attr({'id' : 'mbr-chosen'}).html('<i class="fa fa-check" aria-hidden="true"></i> Terpilih');
 
 
     });

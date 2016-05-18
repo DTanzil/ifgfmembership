@@ -18,7 +18,11 @@
     <!-- /.row -->
 
     <div class="row">
+
         <div class="col-lg-12">
+            <!-- Display Notification & Validation Errors -->
+            @include('common.errors')
+
             <div class="container">
     
         <!-- <div class="col-sm-12"> -->
@@ -61,15 +65,15 @@
 
                                 <!-- Table actions: view,edit,delete -->
                                 <td>
-                                    <form action="{{ $urls['delete'] }}{{ $item->id }}" method="POST">
+                                    <form action="{{ $urls['delete'] }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
-
-                                        <button type="submit" id="delete-task-{{ $item->id }}" class="btn btn-danger">
+                                        {{ Form::hidden('_fmid', $item->id) }}
+                                        <button type="submit" class="btn btn-danger">
                                             <i class="fa fa-btn fa-trash"></i>Delete
                                         </button>
                                         <button> Edit </button>
-                                        <a href="family/view/1"> View </a>
+                                        <a href="{{ $urls['view'] }}/{{ $item->id }}"> View </a>
                                     </form>
                                 </td>
                             </tr>

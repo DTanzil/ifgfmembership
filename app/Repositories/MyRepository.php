@@ -6,6 +6,7 @@ namespace App\Repositories;
 // use Bosnadev\Repositories\Exceptions\RepositoryException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
+use App\Member;
 
 /**
  * Class Repository
@@ -36,7 +37,48 @@ abstract class MyRepository implements BaseRepositoryInterface {
      * @return mixed
      */
     abstract function model();
- 
+    
+    /**
+     * Get all members in the group (family,icare,bible study)
+     *
+     * @return mixed
+     */
+    public function getAllMembers($id) {
+        $group = $this->model->find($id);
+
+        $results = array();
+        foreach ($group->roles as $roles) {
+            $member = Member::find($roles->member_id);
+
+            if(array_key_exists($roles->title, $results)) {
+                //include in results
+                array_push($results[$roles->title], $member);
+            } else {
+                //create new key
+                $results[$roles->title] = array($member);                
+            }
+        }
+        // var_dump($results);
+        // die();
+
+        return $results;
+
+    }
+
+    public function getMember($id, $role) {
+        $group = $this->model->find($id);
+        foreach ($group->roles as $roles) {
+            if($roles->group_id == $id && $roles->title === $role && $roles->group_type == $this->model()) {
+                $member = Member::find($roles->member_id);
+                return $member;
+            }
+        }
+        return null;
+    }
+
+
+
+
     /**
      * @param array $columns
      * @return mixed
@@ -63,7 +105,8 @@ abstract class MyRepository implements BaseRepositoryInterface {
      * @return mixed
      */
     public function create(array $data) {
-        return $this->model->create($data);
+        // return $this->model->insert($data);
+        return $this->model->insertGetId($data);
     }
  
     /**
@@ -81,7 +124,7 @@ abstract class MyRepository implements BaseRepositoryInterface {
      * @return mixed
      */
     public function delete($id) {
-        return $this->model->destroy($id);
+        return $this->model->delete($id);
     }
  
     /**
@@ -103,6 +146,17 @@ abstract class MyRepository implements BaseRepositoryInterface {
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
     
+    /**
+     * @param $attribute
+     * @param $value
+     * @return mixed
+     */
+    public function findIfExist($attribute, $value) {
+        //findOrFail(1)
+        return $this->model->where($attribute, '=', $value)->exists();
+    }
+
+
      /**
      * @param $attribute
      * @param $value
@@ -125,4 +179,6 @@ abstract class MyRepository implements BaseRepositoryInterface {
  
         return $this->model = $model->newQuery();
     }
+
+
 }

@@ -27,6 +27,7 @@ class CreateMembersTable extends Migration
             // $table->integer('ministry');
             $table->boolean('member');
             $table->string('address');
+            $table->string('image');
             // $table->string('city');
 
             // $table->string('classes');

@@ -20,6 +20,13 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+         // Insert some stuff
+        DB::table('users')->insert([
+            ['name' => 'Dania', 'email' => 'daniat@uw.edu', 'password' => '$2y$10$cbaBF9z7P32mBsQv54vKn.6W4yDdSc31TN.eHKto6TNAk1n19bBk.'],
+            ['name' => 'Bobo', 'email' => 'bobo@uw.edu', 'password' => '$2y$10$cbaBF9z7P32mBsQv54vKn.6W4yDdSc31TN.eHKto6TNAk1n19bBk.'],
+            ['name' => 'Lolo', 'email' => 'lolo@uw.edu', 'password' => '$2y$10$cbaBF9z7P32mBsQv54vKn.6W4yDdSc31TN.eHKto6TNAk1n19bBk.']
+        ]);
     }
 
     /**

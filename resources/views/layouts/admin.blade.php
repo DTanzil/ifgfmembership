@@ -199,9 +199,13 @@
         $('#example,#example2').DataTable({
                 lengthChange: false,
                 select:true,
+                // search: {
+                //    search: "ora"
+                // },
                 responsive: true,
                  "pagingType": "full_numbers"
-        });
+                }
+        );
     });
     </script>
 

@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Keluarga {{ $family->name }} > Bapak
+                Keluarga {{ $family->name }} 
             </h1>
            <!--  <ol class="breadcrumb">
                 <li class="active">
@@ -17,21 +17,86 @@
     </div>
     <!-- /.row -->
 
-    <div class="row">
+    <div class="row">   
+        <!-- Display Notification & Validation Errors -->
+        @include('common.errors')
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4 baseinfo">
+            <div class="well well-lg">
+                
+                        @if (!empty($member))
+                            <p> {{ $member->name }} saat ini terdaftar sebagai {{ $role }} dari Keluarga {{ $family->name }}. </p>
+
+                            <div class="dt-media">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <a href="#">
+                                          <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px;">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                    <!-- <h4 class="media-heading">Bapak</h4> -->
+                                        <p>Nama: {{ $member->name }}</p>
+                                        <p>Umur: XXXXX</p>
+                                        <p>iCare: XXXXX</p>
+                                   
+
+                                    </div>
+                                </div>
+
+                                <p><b>Apakah kamu ingin mendaftarkan member lain sebagai {{ $role }} dari Keluarga {{ $family->name }}?</b></p>
+                                <p style="font-style:italic;">Jika iya, klik Next. Jika tidak, klik Cancel untuk kembali ke halaman keluarga.</p> 
+                                    <a id="next-step">Next</a>
+                                    <a href=" {{ $urls['edit'] }} " class="btn btn-next">Cancel</a>
+                            </div>
+
+                            
+                        @else
+                            <p> Saat ini belum ada member yang didaftarkan sebagai {{ $role }} dari Keluarga {{ $family->name }}.</p>
+
+                            <div class="dt-media">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <!-- <a href="{{ $urls['edit'] }}/{{ $role }}"> -->
+                                            <i class="fa fa-user-plus dt-profile" aria-hidden="true"></i>                                        
+                                        <!-- </a> -->   
+                                    </div>
+                                    <div class="media-body">
+                                    <!-- <h4 class="media-heading">Bapak</h4> -->
+                                        <p>Nama: - </p>
+                                        <p>Umur: - </p>
+                                        <!-- <p>Nama: XXXXX</p>  -->                                  
+                                    </div>
+                                </div>
+
+                                <p> Apakah kamu ingin mendaftarkan seorang member sebagai {{ $role }} dari Keluarga {{ $family->name }}? </p>
+                                <p style="font-style:italic;">Jika iya, klik Next. Jika tidak, klik Cancel untuk kembali ke halaman keluarga.</p> 
+                                    <a id="next-step">Next</a>
+                                    <a href=" {{ $urls['edit'] }} " class="btn btn-next">Cancel</a>
+                            </div>     
+
+                        @endif
+
+                <!-- <p> Berikut adalah data Bapak dari Keluarga {{ $family->name }} : </p> -->
+
+                
+            
+                 
+                
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+
         <div class="col-lg-12">
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Data Bapak {{ $title['singular'] }} 
-                </div>
+            <div class="exampletable" style="display:none;">
 
-                <div class="panel-body">
-
-                    <!-- Display Validation Errors -->
-                    @include('common.errors')
-                    
-
-                    <table id="example" class="display" cellspacing="0" width="100%" style="border:1px solid black;">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <div class="alert alert-info" role="alert">
+                        Gunakan Search box di bawah untuk mencari Member yang diinginkan. Lalu klik tombol 'Pilih Member' dan Update untuk menyimpan pilihan Anda. 
+                    </div>
+                    <table id="example" class="display" cellspacing="0" width="100%" style="border:1px solid #ddd;" >
                     <!-- <table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%" > -->
                         <thead>
                             <tr>
@@ -53,17 +118,20 @@
 
                                         <!-- Table actions: view,edit,delete -->
                                         <td>
-                                            <form action="/user/profile/add" method="POST">
-                                                {{ csrf_field() }}
-                                                {{ method_field('POST') }}
-                                                {{ Form::hidden('_familyrole', 'father') }}
-                                                {{ Form::hidden('_memberkey', $item->id) }}
+                                            <!-- <form action="/user/profile/add" method="POST"> -->
+                                                <!-- {{ csrf_field() }} -->
+                                                <!-- {{ method_field('POST') }} -->
+                                                
+                                                
                                                 
                                                 <?php //echo Form::email($name, $value = null, $attributes = []); ?>
-                                                <a name="family-father-role" id="father-{{ $item->id }}" class="btn btn-danger">
-                                                    Pilih
-                                                </a>
-                                            </form>
+                                                <span id="mbr-choice-{{ $item->id }}">
+                                                    <a name="mbr_selection" class="btn btn-danger">
+                                                    Pilih Member
+                                                    </a>
+                                                </span>
+
+                                            <!-- </form> -->
                                         </td>
                                     </tr>
                                 @endforeach
@@ -76,166 +144,23 @@
                         </tbody>
                     </table>
 
+                    <form action="{{ $urls['save'] }}" method="POST" class="mbr-save-form">
+                        {{ csrf_field() }}
+                        {{ method_field('POST') }}
+                        {{ Form::hidden('_fmid', $family->id) }}
+                        {{ Form::hidden('_mbrole', 'father') }}
+                        {{ Form::hidden('_mbrid', '') }}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa fa-btn fa-trash"></i>Update
+                        </button>
+                    </form>
+
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
                 
-                    <div class="row">
-                        <div class="col-sm-12 form-box">
-                            
-                            <!-- Add Member Form -->
-                            <form role="form" action="/ifgfbdg/public/member/add" method="POST" class="registration-form">
-                                {{ csrf_field() }}
-
-                                <fieldset>
-                                    
-                                    <div class="form-bottom">
-                                        
-
-                                         <div class="form-group">
-
-                                            
-
-                                                <p> Nama Bapak </p>
-                                                <div class="info"></div>
-                                        </div>
-
-                                        <button type="button" class="btn btn-next">Next</button>
-                                    </div>
-
-                                </fieldset>
-                                
-                                <fieldset>
-                                    <div class="form-top">
-                                        <div class="form-top-left">
-                                            <h1> Step 2 / 3: Bapak & Ibu </h1> 
-                                            <h4>Silakan memilih nama <b>Bapak</b> dari daftar member di tabel bawah. Gunakan search box di kanan untuk mempermudah pencarian.</h4>
-                                        </div>
-                                    </div>
-                                    <div class="form-bottom">
-                                                                               
-                                        <div class="form-group">
-
-                                            <table id="example" class="display" cellspacing="0" width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            @foreach ($tableCols as $key => $name)
-                                                                 <th>{{ $name }}</th>
-                                                            @endforeach
-                                                            
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                   
-                                                    <tbody>
-                                                        @if (count($results) > 0)
-                                                            @foreach ($results as $item)
-                                                                <tr>
-                                                                    @foreach ($tableCols as $key => $col)
-                                                                        <td>{{ $item->$key }}</td>
-                                                                    @endforeach
-
-                                                                    <!-- Table actions: view,edit,delete -->
-                                                                    <td>
-                                                                        <form action="/user/profile/add" method="POST">
-                                                                            {{ csrf_field() }}
-                                                                            {{ method_field('POST') }}
-                                                                            {{ Form::hidden('_familyrole', 'father') }}
-                                                                            {{ Form::hidden('_memberkey', $item->id) }}
-                                                                            
-                                                                            <?php //echo Form::email($name, $value = null, $attributes = []); ?>
-                                                                            <a name="family-father-role" id="father-{{ $item->id }}" class="btn btn-danger">
-                                                                                Select
-                                                                            </a>
-                                                                        </form>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                            
-                                                        @else 
-                                                            <tr>
-                                                                <td colspan"7">There is no data at this time.</td>
-                                                            </tr>
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-
-                                                <p> Nama Bapak </p>
-                                                <div class="info"></div>
-                                        </div>
-
-                                        <button type="button" class="btn btn-previous">Previous</button>
-                                        <button type="button" class="btn btn-next">Next</button>
-                                    </div>
-                                </fieldset>
-                                
-           
-                                <fieldset>
-                                    <div class="form-top">
-                                        <div class="form-top-left">
-                                            <h1> Step 3 / 3: Anak-anak </h1> 
-                                            <h4>Silakan memilih nama <b>Bapak</b> dari daftar member di tabel bawah. Gunakan search box di kanan untuk mempermudah pencarian.</h4>
-                                        </div>
-                                    </div>
-                                    <div class="form-bottom">
-                                                                               
-                                        <div class="form-group">
-
-                                            <!-- <table id="example2" class="display" cellspacing="0" width="100%"> -->
-                                            <table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%" style="border:1px solid black;">
-                                                    <thead>
-                                                        <tr>
-                                                            @foreach ($tableCols as $key => $name)
-                                                                 <th>{{ $name }}</th>
-                                                            @endforeach
-                                                            
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                   
-                                                    <tbody>
-                                                        @if (count($results) > 0)
-                                                            @foreach ($results as $item)
-                                                                <tr>
-                                                                    @foreach ($tableCols as $key => $col)
-                                                                        <td>{{ $item->$key }}</td>
-                                                                    @endforeach
-
-                                                                    <!-- Table actions: view,edit,delete -->
-                                                                    <td>
-                                                                        <form action="{{ $urls['delete'] }}{{ $item->id }}" method="POST">
-                                                                            {{ csrf_field() }}
-                                                                            {{ method_field('POST') }}
-
-                                                                            <button type="submit" name="family-father-{{ $item->id }}" class="form-father-{{ $item->id }}" class="btn btn-danger">
-                                                                                Select
-                                                                            </button>
-                                                                        </form>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                            
-                                                        @else 
-                                                            <tr>
-                                                                <td colspan"7">There is no data at this time.</td>
-                                                            </tr>
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                        </div>
-
-                                        <button type="button" class="btn btn-previous">Previous</button>
-                                        <button type="submit" class="btn">Sign me up!</button>
-                                    </div>
-                                </fieldset>                            
-                            </form>
-                            <!-- /form -->
-                        </div>
-                    </div>
-
-                                <!-- /.row (nested) -->
-                            
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
+                    
+                 
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

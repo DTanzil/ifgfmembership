@@ -4,8 +4,9 @@ namespace App\Repositories;
 
 use App\User;
 use App\Task;
+use App\Repositories\MyRepository;
 
-class TaskRepository implements BaseRepositoryInterface
+class TaskRepository extends MyRepository
 {
     /**
      * Get all of the tasks for a given user.
@@ -20,8 +21,8 @@ class TaskRepository implements BaseRepositoryInterface
                     ->get();
     }
 
-    public function all()
+    public function all($columns = array('*'))
     {
-
+        return true;
     }
 }

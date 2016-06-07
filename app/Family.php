@@ -13,14 +13,24 @@ class Family extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'description'];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'description' => 'array',
+    ];
 
     /**
      * Get all of the family's roles.
      */
     public function roles()
     {
-        return $this->morphMany('App\Role', 'group');
+        return $this->morphMany('App\Group', 'group');
+        // return $this->morphToMany('App\MemberRole', 'group');
     }
 
 }

@@ -29,6 +29,19 @@
                 </li>                
             </ul>
         </li>
+
+        <li>
+            <a href="javascript:;" data-toggle="collapse" data-target="#submenu22"><i class="fa fa-fw fa-bar-chart-o"></i> Family <i class="fa fa-fw fa-caret-down"></i></a>
+            <ul id="submenu22" class="collapse">
+                <li>
+                    <a href="#">All Families</a>
+                </li>
+                <li>
+                    <a href="#">Add New Family</a>
+                </li>                
+            </ul>
+        </li>
+
         <li>
             <a href="#" data-toggle="collapse" data-target="#submenu3"><i class="fa fa-fw fa-table"></i> Bible Study <i class="fa fa-fw fa-caret-down"></i></a>
             <ul id="submenu3" class="collapse">

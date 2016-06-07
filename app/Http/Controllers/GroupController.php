@@ -33,7 +33,7 @@ class GroupController extends Controller
      * @param  GroupRepository  $groups
      * @return void
      */
-    public function __construct(Group $groups)
+    public function __construct(Group $group)
     {
         $this->middleware('auth');
 
@@ -41,7 +41,7 @@ class GroupController extends Controller
         // var_dump($contents);die();
 
         $this->validTypes = array('family','icare','ministry');
-        $this->groups = $groups;
+        $this->group = $group;
     }
 
 
@@ -125,6 +125,34 @@ class GroupController extends Controller
     {
         $members = $this->groups->all();
         return view('members.add', ['tasks' => $this->members]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $group_id = $request->_grpid;
+
+        // form validation
+        $this->validate($request, [
+            '_grpid' => 'bail|required|integer',
+        ]);
+
+
+        if ($this->group->findIfExist('id', $group_id) ) { 
+            
+            //TODO: authorize destroy for group
+            // $this->authorize('destroy', $this->group->find($group_id));
+            $this->group->delete($group_id);
+            $request->session()->flash('message', 'Delete successful.');
+            // return redirect()->route('allfamily');
+        } else {
+            $request->session()->flash('message', 'Invalid family ID.');
+            $request->session()->flash('alert-class', 'alert-danger'); 
+        }
+        
+        // return redirect()->route('allfamily');
+
+        return redirect()->back();
+
     }
 
 }

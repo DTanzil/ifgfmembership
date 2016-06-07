@@ -12,15 +12,15 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->integer('member_id');
-            $table->string('description');
-            $table->integer('group_id');
-            $table->string('group_type');
-            $table->timestamps();
-        });
+        // Schema::create('roles', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->string('title');
+        //     $table->integer('member_id');
+        //     $table->string('description');
+        //     $table->integer('group_id');
+        //     $table->string('group_type');
+        //     $table->timestamps();
+        // });
 
         
     }
@@ -32,6 +32,6 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('roles');
+        // Schema::drop('roles');
     }
 }

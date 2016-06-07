@@ -6,101 +6,74 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Data {{ $title['singular'] }} {{ $family->name }}
+                {{ $family->name }} Family
             </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    Home > All Families > 
+                </li>
+            </ol>
+
         </div>
     </div>
     <!-- /.row -->
 
     <div class="row">
-        
-        <div class="col-lg-12">
-            <!-- Display Validation Errors -->
-            @include('common.errors')
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Anggota {{ $title['singular'] }} 
-                </div>
-
-                <div class="panel-body">
-
-                    
-                            
-                    <div class="row">
-                        
-                        @foreach ($order as $role)
-
-                            @if (isset($members[$role]) && count($members[$role]) >= 1)
-                                @foreach ($members[$role] as $member)
-                                    <!-- <p>I have one or more {{ $member->name }} records!</p> -->
-
-                                    <div class="col-lg-6 col-sm-12 form-box">
-                                        <div class="dt-media">
-                                            <div class="media">
-                                                <div class="media-left media-middle">
-                                                    <a href="{{ $urls['edit'] }}/{{ $role }}">
-                                                      <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px;">
-                                                    </a>
-                                                </div>
-                                                <div class="media-body">
-                                                <h4 class="media-heading">{{ $role }} </h4>
-                                                <p>Nama: {{ $member->name }}</p>
-                                                <p>Umur: XXXXX</p>
-                                                <p>Gender: {{ $member->gender }}</p>
-                                                <p>iCare: XXXXX</p>
-
-                                                <a href="">Edit</a>
-                                                <a href="{{ $urls['edit'] }}/{{ $role }}" class="btn ">Ganti</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                @endforeach
-                            @else
-                                <!-- <p>Skip {{ $role }}</p> -->
-                                
-                                <div class="col-lg-6 col-sm-12 form-box">
-                                    <div class="dt-media">
-                                        <div class="media">
-                                            <div class="media-left media-middle">
-                                                <a href="{{ $urls['edit'] }}/{{ $role }}">
-                                                    <i class="fa fa-user-plus dt-profile" aria-hidden="true"></i>
-                                                
-                                                  <!-- <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px;"> -->
-                                                </a>
-                                            </div>
-
-                                            <div class="media-body">
-                                            <h4 class="media-heading">{{ $role }} </h4>
-                                            <p>Nama: XXXXXXXXXX</p>
-                                            <p>Nama: XXXXXXXXXX</p>
-                                            <p>Nama: XXXXXXXXXX</p>
-                                            <p>Nama: XXXXXXXXXX</p>
-                                            <a href="">Edit</a>
-                                            <a href="{{ $urls['edit'] }}/{{ $role }}" class="btn ">Ganti</a>
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-
-                </div>
-                    <!-- /.row (nested) -->                   
-                    <p> Apabila anda ingin mengedit/menambah anggota keluarga, klik tombol Next di bawah </p>
-                    <button type="button" class="btn btn-next">+ Tambah Anak</button>
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
+        <div class="col-lg-12 col-sm-12 center" style="margin-bottom:20px;">
+            <h3> {{ $family->name }} Family </h3>
+            <p> Address: {{ $info['address'] }}, {{ $info['city'] }} {{ $info['zipcode'] }} </p>
+            <p> Home Phone: {{ $info['phone'] }}</p>
+            <p style="font-size:40px;"><i class="fa fa-users" aria-hidden="true"></i></p>
         </div>
-        <!-- /.col-lg-12 -->
     </div>
+    
+    @foreach ($order as $role)
+        @if (isset($members[$role]) && count($members[$role]) >= 1)
+            @foreach ($members[$role] as $member)
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="col-lg-6">
+                            
+                            <p> 
+                                <a href="{{ $urls['edit'] }}/">
+                                    <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="margin-right:30px;height:230px;width:230px;float:left;">
+                                </a>
+                                <div style="padding:5px;">
+                                <h3 style="margin-top:0;"> {{ $member->name}} </h3>
+                                <p> <span class="mty-bold"> Role in family: </span> {{ $role }} </p>
+                                <p> <span class="mty-bold"> Member ID: </span> A0083BDOF738209</p>
+                                <p> Member since XXXX or Not a member of IFGF Bandung</p>
+                                <p> <span class="mty-bold"> iCare:</span> The Awesome Breakthrough </p>
+                                <p> <span class="mty-bold"> Other Roles: </span>Bible Study Teacher, iCare Facilitator, Music Team </p>
+                                </div>
+                            </p>
+
+                        </div>
+                        <div class="col-lg-6" style="border-left: 3px solid blue;">
+                            <p> Date of birth: XXXXX (Age ##)</p>
+                            <p> Date of birth: XXXXX (Age ##)</p>
+                            <p> Address: XXXXX </p>
+                            <p> E-mail: XXXXX </p>
+                            <p> Cell phone: XXXXX </p>
+                            <p> Home Phone: XXXX </p>
+                            <p> Date Baptized: XXXX </p>
+                            <p> Home Phone: XXXX </p>
+                        </div>
+                    </div>
+            </div>
+
+
+            @endforeach
+
+        @else
+            <!-- <p> NONE </p> -->
+
+        @endif
+    @endforeach
+
+    
+    
 
     
 @endsection

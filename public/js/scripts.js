@@ -19,20 +19,24 @@ jQuery(document).ready(function() {
     */
 
     // console.log("ready!");
+
+    $("#changePhoto").click(function(){
+        $(this).parent().fadeOut();
+        $(this).parent().next().fadeIn();
+    });
+
     $('.registration-form fieldset').first().fadeIn('slow');
     
     $('.registration-form input[type="text"], .registration-form input[type="password"], .registration-form textarea').on('focus', function() {
     	$(this).removeClass('input-error');
     });
     
-
+    // edit role page: show list of member after 'Next'
     $("#next-step").on('click', function(){
-        console.log("EIAFOI");
-        // $(".baseinfo").fadeOut('slow');
-        $(".exampletable").fadeIn();
+        $(".searchmembertable").fadeIn();
     });
 
-
+    // update hidden input for selected member from list of member in a table 
     $(".mbr-save-form").on('submit', function(e){
         // e.preventDefault();
         var mbr = $("#mbr-chosen").parent().attr("id");
@@ -40,16 +44,22 @@ jQuery(document).ready(function() {
         $("input[name='_mbrid']").attr("value", res[1]);
     });
 
-    $("a[name='mbr_selection']").on('click', function(){
-        console.log("YES CLICK");
-        console.log($(this));
+    $("button.mty-delete").click( function(e) {
+        var proceed = confirm("Are you sure you would like to delete this item ?");
+        if(!proceed) {
+            e.preventDefault();            
+        }
+    });
 
+
+    $("a[name='mbr_selection']").on('click', function(){
+        
         // $("a[name='mbr_selection']")
         var username = "aoiejfoiajfe";
         var token =  "AFOIKJOIAFE";
         var dataString = 'username='+username+'&token='+token; 
 
-        $("#mbr-chosen").attr({'id': ''}).html('Pilih Member');
+        $("#mbr-chosen").attr({'id': ''}).html('Choose Member');
 
         // $.ajaxSetup({
         //   headers: {
@@ -81,7 +91,7 @@ jQuery(document).ready(function() {
 
 
         $(this)
-            .attr({'id' : 'mbr-chosen'}).html('<i class="fa fa-check" aria-hidden="true"></i> Terpilih');
+            .attr({'id' : 'mbr-chosen'}).html('<i class="fa fa-check" aria-hidden="true"></i> Selected');
 
 
     });

@@ -94,7 +94,7 @@
                                         {{ Form::hidden('_fmid', $family->id) }}
                                         {{ Form::hidden('_mbrid', '') }}
                                         {{ Form::hidden('_fmaction', 'add') }}
-                                        {{ Form::hidden('_formaction', 'editFamily') }}
+                                        {{ Form::hidden('_formaction', 'editRole') }}
                                         <!-- <button type="submit" class="btn btn-danger">
                                             <i class="fa fa-btn fa-trash"></i>{{ trans('messages.update') }}
                                         </button>

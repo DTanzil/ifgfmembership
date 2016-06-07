@@ -40,8 +40,11 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        return view('tasks.index', [
-            'tasks' => $this->tasks->forUser($request->user()),
+        // return view('tasks.index', [
+        //     'tasks' => $this->tasks->forUser($request->user()),
+        // ]);
+                return view('tasks.index', [
+            'tasks' => array('dan', 'do'),
         ]);
     }
 

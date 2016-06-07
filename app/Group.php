@@ -6,38 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    
+
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    // protected $table = 'fellowship';
-
-     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['type'];
+    protected $fillable = ['description', 'title', 'member_id'];
 
-    // public $types;
 
-    public function roles()
+    /**
+     * Get all of the owning group models.
+     */
+    public function group()
     {
-        return $this->hasMany('App\Role');
+        return $this->morphTo();
     }
-
-    public function members()
-    {
-        return $this->hasMany('App\Member');
-    }
-
 }

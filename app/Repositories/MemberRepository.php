@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\User;
 use App\Member;
+use App\Group;
+use App\Family;
 use App\Repositories\MyRepository;
 
 // class MemberRepository implements BaseRepositoryInterface
@@ -36,5 +38,36 @@ class MemberRepository extends MyRepository
     function model()
     {
         return 'App\Member';
+    }
+
+    function getAllGroups($id) {
+        
+        $groups = Group::where('member_id', 2)
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+        $activities = array();
+        foreach ($groups as $key => $value) {
+            $group = $value->group;
+            // var_dump(Family::class);
+            // var_dump(is_a(Family::class, Family::class));
+            $family = Family::class;
+            $user = User::class;
+            // var_dump($value->title);
+            if($group instanceof $family) {
+                // var_dump("FAMILY");
+                
+                $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->description);
+                $activities['family'][] = $info;
+            } else {
+                // var_dump($group);
+                $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->name);
+                $activities['other'][] = $info;
+            }
+        }
+
+        return $activities;
+
+        return 'DANIA';
     }
 }

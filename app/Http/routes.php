@@ -33,34 +33,35 @@ Route::group(['middleware' => ['web']], function () {
     Route::delete('/task/{task}', 'TaskController@destroy');
 
     Route::get('/members', 'MemberController@index');
-    Route::get('/member/add', 'MemberController@display');
-    Route::post('/member/add', 'MemberController@add');
+    Route::get('/members/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
+    Route::post('/members/save', ['as' => 'savemember', 'uses' => 'MemberController@save']);
+    Route::get('/members/edit/{mbrid?}', ['as' => 'editmember', 'uses' => 'MemberController@editMember']);
+    // Route::post('/member/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
+    Route::delete('/members/photo/delete', ['as' => 'deletephoto', 'uses' => 'MemberController@deletePhoto']);
 
 
-
+    // FAMILY ROUTES 
     Route::get('/family', ['as' => 'allfamily', 'uses' => 'FamilyController@index']);
-    
     Route::get('/family/add', ['as' => 'addfamily', 'uses' => 'FamilyController@add']);
-    Route::post('/family/add', ['as' => 'addfamily', 'uses' => 'FamilyController@add']);    
+    Route::get('/family/edit/{famid?}', ['as' => 'editfamily', 'uses' => 'FamilyController@editFamily']);
+    Route::get('/family/edit/{famid}/{famrole?}', ['as' => 'editfamilyrole', 'uses' => 'FamilyController@editRole']);
+    Route::get('/family/new/{famid}/{famrole?}', ['as' => 'addfamilyrole', 'uses' => 'FamilyController@addFamMemberRole']);
     Route::get('/family/view/{famid?}', ['as' => 'viewfamily', 'uses' => 'FamilyController@view']);
-
+    // Route::post('/family/add', ['as' => 'addfamily', 'uses' => 'FamilyController@add']);           
+    Route::post('/family/save', ['as' => 'savefamily', 'uses' => 'FamilyController@save']);
     Route::delete('/family/delete', ['as' => 'deletefamily', 'uses' => 'FamilyController@destroy']);
 
-    // Route::get('/family/view/{famid}', ['as' => 'viewfamily', 'uses' => 'FamilyController@addSuccess']);
 
-    Route::get('/family/edit/{famid}/{famrole?}', ['as' => 'editfamily', 'uses' => 'FamilyController@edit']);
-
-    Route::post('/family/save', ['as' => 'savefamily', 'uses' => 'FamilyController@save']);
-
-    // Route::get('/family/view/{num}', [ 'as' => 'viewfamily', 'uses' => 'FamilyController@view' ]);
+    
 
 
-    // Route::get('user/{id}', function ($id) {
-    //     return 'User '.$id;
-    // });
+    Route::delete('/group/deletearole', ['as' => 'deletearole', 'uses' => 'GroupController@destroy']);
 
+
+    
+
+    // BLA BLA 
     Route::get('/family/user/profile/add', ['as' => 'boboho', 'uses' => 'FamilyController@index']);
-
     Route::post('/family/user/profile/add', ['as' => 'profileee', 'uses' => 'FamilyController@doajax']);
 
     

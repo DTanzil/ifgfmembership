@@ -48,8 +48,12 @@ abstract class MyRepository implements BaseRepositoryInterface {
 
         $results = array();
         foreach ($group->roles as $roles) {
+            // var_dump($roles);
+            // var_dump($roles->id);
             $member = Member::find($roles->member_id);
-
+            $member->groupid = $roles->id;
+            $member->age = $member->birthdate->age;
+            
             if(array_key_exists($roles->title, $results)) {
                 //include in results
                 array_push($results[$roles->title], $member);
@@ -58,6 +62,7 @@ abstract class MyRepository implements BaseRepositoryInterface {
                 $results[$roles->title] = array($member);                
             }
         }
+        // var_dump($group->roles);
         // var_dump($results);
         // die();
 
@@ -115,8 +120,8 @@ abstract class MyRepository implements BaseRepositoryInterface {
      * @param string $attribute
      * @return mixed
      */
-    public function update(array $data, $id, $attribute="id") {
-        return $this->model->where($attribute, '=', $id)->update($data);
+    public function update(array $data, $value, $attribute="id") {
+        return $this->model->where($attribute, '=', $value)->update($data);
     }
  
     /**
@@ -178,6 +183,25 @@ abstract class MyRepository implements BaseRepositoryInterface {
             throw new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
  
         return $this->model = $model->newQuery();
+    }
+
+     /**
+     * @param $request
+     * @param array $columns
+     * @return $familyinfo
+     * json_encode address, phone, meta data and store it in 'description' field   
+     */
+    public function castDescriptionField($request, $columns = array('phone', 'city', 'address', 'zipcode')) {
+
+        // place other fields information into one array
+                    // $fields = ;
+        $familyinfo = array();
+        foreach ($columns as $key => $value) {
+            $familyinfo[$value] = $request->$value;
+        }
+
+        return json_encode($familyinfo);
+        // return $this->model->where($attribute, $value)->get($columns);
     }
 
 

@@ -1,171 +1,128 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container">
-        
-        <div class="col-sm-12">
-            <button type="button" class="btn btn-primary "><i class="fa fa-btn fa-plus"></i>Add People</button>
+    
+     <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Add Member 
+            </h1>
         </div>
-
-
-        <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Add New Member
-                        </div>
-                        <div class="panel-body">
-
-                            <!-- Display Validation Errors -->
-                            @include('common.errors')
-
-                            <!-- Add Member Form -->
-                            <form role="form" action="/ifgfbdg/public/member/add" method="POST">
-                            {{ csrf_field() }}
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Nama Lengkap</label>
-                                            <input type="text" name="name" class="form-control" value="{{ old('username') }}">
-                                            <!-- <p class="help-block">Example block-level help text here.</p> -->
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label>Email</label>
-                                            <!-- <input class="form-control" placeholder="Email"> -->
-                                            <input type="text" name="email" class="form-control" value="{{ old('email') }}" placeholder="Email">
-
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Hp/Telpon</label>
-                                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="Phone">
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label>Date of Birth</label>
-                                            <input type="text" name="dob" class="form-control" value="{{ old('dob') }}" placeholder="DOB">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Jenis Kelamin</label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="male" {{ (old('isFemale')) ? '' : 'checked' }} >Laki-laki
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="female" {{ (old('isFemale')) ? 'checked' : '' }} >Perempuan
-                                            </label>
-                                            
-                                        </div>
-
-                                       <div class="form-group">
-                                            <label>Status</label>
-                                            <label class="radio-inline">
-                                               <input type="radio" name="status" value="single" {{ (old('isMarried')) ? '' : 'checked' }} >Single
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="status" value="married" {{ (old('isMarried')) ? 'checked' : '' }} >Menikah
-                                            </label>
-                                        </div>
-
-
-                                       <!--  <div class="form-group">
-                                            <label>Member?</label>
-                                            <p class="form-control-static">Yes</p>
-                                        </div> -->
-
-                                        <div class="form-group">
-                                            <label>Lulus Engage?</label>
-                                            <select class="form-control">
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Nama Keluarga:</label>
-                                            <p class="form-control-static">XXXXXX</p>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Ministry</label>
-                                            <select multiple class="form-control">
-                                                <option>Worship</option>
-                                                <option>Kids</option>
-                                                <option>Comm</option>
-                                                <option>Ushers</option>
-                                                <option>5</option>
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Submit Button</button>
-                                        <button type="reset" class="btn btn-default">Reset Button</button>
-                                    
-                                    </div>
-                                    
-
-                                    <!-- /.col-lg-6 (nested) -->
-                                    <div class="col-lg-6">
-
-                                        <div class="form-group">
-                                            <label>Alamat</label>
-                                            <input class="form-control" placeholder="DOB">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Kota</label>
-                                            <input class="form-control" placeholder="DOB">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Provinsi</label>
-                                            <select class="form-control">
-                                                <option>Jabar</option>
-                                                <option>Blabla</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>PO Box</label>
-                                            <input class="form-control" placeholder="DOB">
-                                        </div>
-
-
-                                        <h1>Upload Picture</h1>
-
-                                        <div class="form-group">
-                                            <label>File input</label>
-                                            <input type="file">
-                                        </div>
-
-                                        <!-- <form role="form">
-                                            <div class="form-group has-success">
-                                                <label class="control-label" for="inputSuccess">Input with success</label>
-                                                <input type="text" class="form-control" id="inputSuccess">
-                                            </div>
-                                            <div class="form-group has-warning">
-                                                <label class="control-label" for="inputWarning">Input with warning</label>
-                                                <input type="text" class="form-control" id="inputWarning">
-                                            </div>
-                                            <div class="form-group has-error">
-                                                <label class="control-label" for="inputError">Input with error</label>
-                                                <input type="text" class="form-control" id="inputError">
-                                            </div>
-                                        </form> -->
-                                    </div>
-                                    <!-- /.col-lg-6 (nested) -->
-                                </div>
-                                <!-- /.row (nested) -->
-                            </form>
-                            <!-- /form -->
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-
     </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
+                                        
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Add New Family
+                </div>
+
+                <div class="panel-body">
+
+                    <!-- Display Validation Errors -->
+                    @include('common.errors')
+                    <!-- Add Member Form -->
+                    <form role="form" action="{{ $urls['save'] }}" method="POST">
+                        {{ csrf_field() }}
+                        {{ method_field('POST') }}
+                        {{ Form::hidden('_formaction', 'addMember') }}    
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12 form-box">                                
+                                <div class="form-bottom">
+                                    
+                                    <div class="form-group ">
+                                        <label class="required">Full Name</label>
+                                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Full Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <div class="radio">
+                                            <label>
+                                                <?php echo Form::radio('gender', 'male', true); ?> Male
+                                                <!-- <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Male -->
+                                            </label>
+
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <?php echo Form::radio('gender', 'female', true); ?> Female
+                                                <!-- <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Female -->
+                                            </label>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <div class="radio">
+                                            <label>
+                                                <?php echo Form::radio('status', 'single', true); ?> Single
+                                                <!-- <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" checked>Single -->
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <?php echo Form::radio('status', 'married', true); ?> Married
+                                                <!-- <input type="radio" name="optionsRadios" id="optionsRadios4" value="option4">Married -->
+                                            </label>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Upload Profile Picture</label>
+                                        <?php echo Form::file('image'); ?>
+                                        <p class="help-block">Please upload a picture to be displayed as your profile picture.</p> 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-12 form-box">
+
+                                <div class="form-group input-group">
+                                        <label>Cell Phone</label>
+                                        <input type="text" name="phone" value="{{ old('name') }}" class="form-control" placeholder="Cell Phone">
+                                        <!-- <p class="help-block">Example: 08112345678</p> -->
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" name="email" value="{{ old('name') }}" class="form-control" placeholder="Email">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" name="address" value="{{ old('name') }}" class="form-control" placeholder=" Address">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" name="city" value="{{ old('name') }}" class="form-control" placeholder="City">
+                                    </div>
+
+                                    <div class="form-group input-group">
+                                        <label>Postal Code</label>
+                                        <input type="text" name="zipcode" value="{{ old('name') }}" class="form-control" placeholder="Postal Code">
+                                    </div>
+                            </div>
+                        </div> 
+
+                    <div class="center"><button type="submit" class="btn">Submit</button></div>
+     
+                </form>
+                <!-- /form -->                           
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+    
 @endsection

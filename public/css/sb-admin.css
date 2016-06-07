@@ -231,7 +231,7 @@ ul.alert-dropdown {
 }
 
 
-/* DANIA EDIT */
+/**************************************** DANIA EDIT *******************************************/
 .dt-media {
     /*text-align: center;*/
     background-color: #f5f5f5;
@@ -254,14 +254,78 @@ ul.alert-dropdown {
     font-size:10em;height:150px;width:150px;margin:7px;
 }
 
+.media-heading {    text-align: right; }
+.media-heading > span {
+    background-color: #FFE14F; padding:5px;
+    border-radius: 10%;
+}
+
+.center {
+    text-align: center;
+}
+
+.well {
+    background-color: #D8CCCE;
+}
+
+.mty-btn {
+    background-color: #4659DE;
+    color:white;
+}
+
+.mty-update {
+    padding:6px 20px;
+}
+
+.mty-hidden {
+    display: none;
+}
+
+.mty-update-big {
+    padding: 6px 30px;
+    font-size: 18px;
+
+}
+.purple {
+    background-color: #922E8F;
+}
+.green {
+    background-color: green;
+}
+
+.red {
+    background-color: red;
+}
+
+.grey {
+    background-color: #969696;
+}
+
+.mty-note {
+    background-color: #F5DBAC;
+    text-align: center;
+    padding:20px;
+    margin-bottom: 20px;
+}
+
+.mty-bold {
+    font-weight: bold;
+}
+
+.required:after {
+    content:'*'; 
+    color:red; 
+}
+
+
 /*--------------------------- Form (start) ----------------------------*/
 form.registration-form fieldset {
     display: none;
 }
 
 a#mbr-chosen {
-    background-color : blue;
-    border-color:blue;
+    background-color : green;
+    border-color:green;
 }
 
 /*--------------------------- Form (end) ----------------------------*/

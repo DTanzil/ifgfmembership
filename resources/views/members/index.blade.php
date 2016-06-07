@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    
+
      <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
@@ -10,26 +10,29 @@
             </h1>
             <ol class="breadcrumb">
                 <li class="active">
-                    <i class="fa fa-dashboard"></i> Dashboard
+                    Home > All Families > 
                 </li>
             </ol>
+
         </div>
     </div>
-    <!-- /.row -->
 
-    <div class="row">
-
+    <div class="row">        
         <div class="col-lg-12">
             <!-- Display Notification & Validation Errors -->
             @include('common.errors')
 
             <div class="container">
     
-        <!-- <div class="col-sm-12"> -->
-
-            <!-- <button type="button" class="btn btn-primary "><a href="/ifgfbdg/public/groups/family/add"><i class="fa fa-btn fa-plus"></i>Add New {{ $title['singular'] }}</a></button> -->
-
-            <a href="{{ $urls['add'] }}"><i class="fa fa-btn fa-plus"></i>Add New {{ $title['singular'] }}</a>
+            <div class="mty-note"> 
+                <p>This page lists all the registered {{ $title['singular'] }} at IFGF Bandung.</p>
+                <p> <a class="mty-btn btn" href="{{ $urls['add'] }}"><i class="fa fa-btn fa-plus"></i>Add New {{ $title['singular'] }}</a></p>
+            </div>
+        
+            
+            <div class="alert alert-info" role="alert">
+                <?php echo trans('messages.search-group-instruction', ['group' => $title['singular']]); ?>
+            </div>
 
             <table id="example" class="display" cellspacing="0" width="100%">
                 <thead>
@@ -43,24 +46,17 @@
                         
                     </tr>
                 </thead>
-               <!--  <tfoot>
-                    <tr>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        
-                        <th>Phone</th>
-                        <th>Classes</th>
-                        <th>Member</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot> -->
+               
                 <tbody>
                     @if (count($results) > 0)
                         @foreach ($results as $item)
                             <tr>
                                 @foreach ($tableCols as $key => $col)
-                                    <td>{{ $item->$key }}</td>
+                                    @if($key == 'age') 
+                                        <td>{{ $item->birthdate->age }}</td>
+                                    @else
+                                        <td>{{ $item->$key }}</td>
+                                    @endif
                                 @endforeach
 
                                 <!-- Table actions: view,edit,delete -->
@@ -69,11 +65,12 @@
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         {{ Form::hidden('_fmid', $item->id) }}
-                                        <button type="submit" class="btn btn-danger">
+                                       
+                                        <a class="mty-btn btn green" href="{{ $urls['view'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> View </a>
+                                        <a class="mty-btn btn" href="{{ $urls['edit'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-pencil" aria-hidden="true"></i> Edit </a>
+                                        <button type="submit" class="btn btn-danger mty-delete">
                                             <i class="fa fa-btn fa-trash"></i>Delete
                                         </button>
-                                        <button> Edit </button>
-                                        <a href="{{ $urls['view'] }}/{{ $item->id }}"> View </a>
                                     </form>
                                 </td>
                             </tr>
@@ -87,10 +84,9 @@
                 </tbody>
             </table>
         <!-- </div> -->
-    </div>
-
         </div>
     </div>
+</div>
 
 
     

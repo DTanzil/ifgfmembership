@@ -16,14 +16,18 @@ class CreateFamiliesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('name');
+            $table->text('description');
         });
 
         // Insert some stuff
+
+        $info = '{"phone":"022-839281","city":"Bandung","address":"Jalan Kejaksaan XII no 8 Blok 3","zipcode":"32513"}';
+
         DB::table('families')->insert([
-            ['name' => 'GNH'],
-            ['name' => 'Widodo Fam'],
-            ['name' => 'Danbo fam'],
-            ['name' => 'AHJIOJFh']
+            ['name' => 'GNH', 'description' => $info],
+            ['name' => 'Widodo Fam', 'description' => $info],
+            ['name' => 'Danbo fam', 'description' => $info],
+            ['name' => 'AHJIOJFh', 'description' => $info]
         ]);
 
     }

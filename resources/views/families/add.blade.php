@@ -29,35 +29,50 @@
                         <div class="col-sm-8 form-box">
                             
                             <!-- Add Member Form -->
-                            <form role="form" action="{{ $urls['add'] }}" method="POST">
+                            <form role="form" action="{{ $urls['save'] }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('POST') }}
-
+                                {{ Form::hidden('_formaction', 'addFamily') }}
                                 <fieldset>
-                                    <div class="form-top">
-                                        <div class="form-top-left">
-                                            <!-- <h1> Informasi Keluarga </h1>  -->
-                                        </div>
-                                        
-                                    </div>
                                     <div class="form-bottom">
-                                        <div class="form-group">
-                                            <!-- <label>Nama Keluarga</label> -->
-                                            <!-- <input type="text" name="name" class="form-control" value="{{ old('username') }}"> -->
-                                        </div>
-                                        <p> Tulis nama keluarga di kolom di bawah: </p>
+                                        <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
+                                        
+                                        <p class="mty-bold required"> Name </p>
                                         <div class="form-group input-group">
-
-                                            <span class="input-group-addon">Keluarga</span>
-                                            <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Nama Keluarga">
+                                            <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Name">
+                                            <span class="input-group-addon">Family</span>
                                         </div>
-                                        <!-- <button type="button" class="btn btn-next">Next</button> -->
+
+                                        <div class="form-group input-group">
+                                            <label>Home Phone</label>
+                                            <input type="text" name="phone" value="{{ old('name') }}" class="form-control" placeholder="Home Phone">
+                                            <p class="help-block">Example: 022-1234567</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Home Address</label>
+                                            <input type="text" name="address" value="{{ old('name') }}" class="form-control" placeholder="Home Address">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>City</label>
+                                            <input type="text" name="city" value="{{ old('name') }}" class="form-control" placeholder="City">
+                                        </div>
+
+                                        <div class="form-group input-group">
+                                            <label>Postal Code</label>
+                                            <input type="text" name="zipcode" value="{{ old('name') }}" class="form-control" placeholder="Postal Code">
+                                        </div>
+                                
+                                        <!-- <div class="form-group">
+                                            <label for="disabledSelect">Country</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="Indonesia" disabled>
+                                        </div> -->
+
                                     </div>
 
                                 </fieldset>
-                                
-                               
-                                <!-- <button type="button" class="btn btn-previous">Previous</button> -->
+                                                               
                                 <button type="submit" class="btn">Submit</button>
  
                             </form>

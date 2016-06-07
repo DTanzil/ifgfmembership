@@ -6,164 +6,175 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Keluarga {{ $family->name }} 
+                {{ $family->name }} {{ $title['singular'] }}
             </h1>
-           <!--  <ol class="breadcrumb">
+            <ol class="breadcrumb">
                 <li class="active">
-                    <i class="fa fa-dashboard"></i> Dashboard
+                    Home > All Families > 
                 </li>
-            </ol> -->
+            </ol>
+
         </div>
     </div>
     <!-- /.row -->
 
-    <div class="row">   
-        <!-- Display Notification & Validation Errors -->
-        @include('common.errors')
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4 baseinfo">
-            <div class="well well-lg">
-                
-                        @if (!empty($member))
-                            <p> {{ $member->name }} saat ini terdaftar sebagai {{ $role }} dari Keluarga {{ $family->name }}. </p>
-
-                            <div class="dt-media">
-                                <div class="media">
-                                    <div class="media-left media-middle">
-                                        <a href="#">
-                                          <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px;">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                    <!-- <h4 class="media-heading">Bapak</h4> -->
-                                        <p>Nama: {{ $member->name }}</p>
-                                        <p>Umur: XXXXX</p>
-                                        <p>iCare: XXXXX</p>
-                                   
-
-                                    </div>
-                                </div>
-
-                                <p><b>Apakah kamu ingin mendaftarkan member lain sebagai {{ $role }} dari Keluarga {{ $family->name }}?</b></p>
-                                <p style="font-style:italic;">Jika iya, klik Next. Jika tidak, klik Cancel untuk kembali ke halaman keluarga.</p> 
-                                    <a id="next-step">Next</a>
-                                    <a href=" {{ $urls['edit'] }} " class="btn btn-next">Cancel</a>
-                            </div>
-
-                            
-                        @else
-                            <p> Saat ini belum ada member yang didaftarkan sebagai {{ $role }} dari Keluarga {{ $family->name }}.</p>
-
-                            <div class="dt-media">
-                                <div class="media">
-                                    <div class="media-left media-middle">
-                                        <!-- <a href="{{ $urls['edit'] }}/{{ $role }}"> -->
-                                            <i class="fa fa-user-plus dt-profile" aria-hidden="true"></i>                                        
-                                        <!-- </a> -->   
-                                    </div>
-                                    <div class="media-body">
-                                    <!-- <h4 class="media-heading">Bapak</h4> -->
-                                        <p>Nama: - </p>
-                                        <p>Umur: - </p>
-                                        <!-- <p>Nama: XXXXX</p>  -->                                  
-                                    </div>
-                                </div>
-
-                                <p> Apakah kamu ingin mendaftarkan seorang member sebagai {{ $role }} dari Keluarga {{ $family->name }}? </p>
-                                <p style="font-style:italic;">Jika iya, klik Next. Jika tidak, klik Cancel untuk kembali ke halaman keluarga.</p> 
-                                    <a id="next-step">Next</a>
-                                    <a href=" {{ $urls['edit'] }} " class="btn btn-next">Cancel</a>
-                            </div>     
-
-                        @endif
-
-                <!-- <p> Berikut adalah data Bapak dari Keluarga {{ $family->name }} : </p> -->
-
-                
-            
-                 
-                
-            </div>
-        </div>
-        <div class="col-lg-4"></div>
-
+    <div class="row">
+        
         <div class="col-lg-12">
+            <!-- Display Validation Errors -->
+            @include('common.errors')
 
-            <div class="exampletable" style="display:none;">
+            <!-- General Information -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    General Information 
+                </div>
 
-                <div class="col-lg-2"></div>
-                <div class="col-lg-8">
-                    <div class="alert alert-info" role="alert">
-                        Gunakan Search box di bawah untuk mencari Member yang diinginkan. Lalu klik tombol 'Pilih Member' dan Update untuk menyimpan pilihan Anda. 
-                    </div>
-                    <table id="example" class="display" cellspacing="0" width="100%" style="border:1px solid #ddd;" >
-                    <!-- <table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%" > -->
-                        <thead>
-                            <tr>
-                                @foreach ($tableCols as $key => $name)
-                                     <th>{{ $name }}</th>
-                                @endforeach
-                                
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                       
-                        <tbody>
-                            @if (count($results) > 0)
-                                @foreach ($results as $item)
-                                    <tr>
-                                        @foreach ($tableCols as $key => $col)
-                                            <td>{{ $item->$key }}</td>
-                                        @endforeach
-
-                                        <!-- Table actions: view,edit,delete -->
-                                        <td>
-                                            <!-- <form action="/user/profile/add" method="POST"> -->
-                                                <!-- {{ csrf_field() }} -->
-                                                <!-- {{ method_field('POST') }} -->
-                                                
-                                                
-                                                
-                                                <?php //echo Form::email($name, $value = null, $attributes = []); ?>
-                                                <span id="mbr-choice-{{ $item->id }}">
-                                                    <a name="mbr_selection" class="btn btn-danger">
-                                                    Pilih Member
-                                                    </a>
-                                                </span>
-
-                                            <!-- </form> -->
-                                        </td>
-                                    </tr>
-                                @endforeach
-                
-                            @else 
-                                <tr>
-                                    <td colspan"7">There is no data at this time.</td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-
-                    <form action="{{ $urls['save'] }}" method="POST" class="mbr-save-form">
+                <div class="panel-body">
+                    <form role="form" action="{{ $urls['save'] }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('POST') }}
+                        {{ Form::hidden('_formaction', 'editFamily') }}
                         {{ Form::hidden('_fmid', $family->id) }}
-                        {{ Form::hidden('_mbrole', 'father') }}
-                        {{ Form::hidden('_mbrid', '') }}
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fa fa-btn fa-trash"></i>Update
-                        </button>
-                    </form>
+
+
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-bottom">
+
+                                    <div class="form-group">
+                                        <label class="required">Family Name</label>
+                                        <input name="name" class="form-control" value="{{ $family->name }}" placeholder="Family Name">
+                                    </div>
+
+                                    <div class="form-group input-group">
+                                        <label>Home Phone</label>
+                                        <input type="text" name="phone" value="{{ $info['phone'] }}" class="form-control" placeholder="Home Phone">
+                                        <p class="help-block">Example: 022-1234567</p>
+                                    </div>
+
+                                    <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
+                                      
+                                </div>                                                                                               
+                            </div>
+
+                            <div class="col-lg-6 col-sm-12 ">
+                                <div class="form-group">
+                                    <label>Home Address</label>
+                                    <input type="text" name="address" value="{{ $info['address'] }}" class="form-control" placeholder="Home Address">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" name="city" value="{{ $info['city'] }}" class="form-control" placeholder="City">
+                                </div>
+
+                                <div class="form-group input-group">
+                                    <label>Postal Code</label>
+                                    <input type="text" name="zipcode" value="{{ $info['zipcode'] }}" class="form-control" placeholder="Postal Code">
+                                </div>
+                            </div>
+                        </div>
+                    <div class="center"><button type="submit" class="btn center">Update</button></div>
+                </form>
+            </div>
+        </div>
+
+            <!-- Family Member Information -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                   {{ trans('messages.family-member') }}
+                </div>
+
+                <div class="panel-body">
+
+                    <p> {{ trans('messages.family-welcome') }} </p>
+                            
+                    <div class="row">
+                        
+                        @foreach ($order as $role)
+
+                            @if (isset($members[$role]) && count($members[$role]) >= 1)
+                                @foreach ($members[$role] as $member)
+                                    <div class="col-lg-6 col-sm-12 form-box">
+                                        <div class="dt-media">
+                                            <div class="media">
+                                                <div class="media-left media-middle">
+                                                    <a href="{{ $urls['edit'] }}/{{ $role }}">
+                                                      <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px;">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                <h4 class="media-heading"><span>{{ $role }} </span></h4>
+                                                <p>{{ trans('messages.name') }}: {{ $member->name }}</p>
+                                                <p>{{ trans('messages.age') }}: {{ $member->age }}</p>
+                                                <p>{{ trans('messages.gender') }}: {{ $member->gender }}</p>
+                                                <p>{{ trans('messages.icare') }}: XXXXX</p>
+
+                                                <form action="{{ $urls['delete'] }}" method="POST">
+                                                    <a class="mty-btn btn green" href="#"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> {{ trans('messages.view') }} </a>
+                                                    <a class="mty-btn btn purple" href="{{ $urls['edit'] }}/{{ $role }}"> <i class="fa fa-btn fa-undo" aria-hidden="true"></i> {{ trans('messages.change') }}</a>
+
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
+                                                    {{ Form::hidden('_grpid', $member->groupid) }}
+                                                    <button type="submit" class="btn btn-danger mty-delete">
+                                                        <i class="fa fa-btn fa-trash"></i>Delete
+                                                    </button>
+                                                </form>
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                @endforeach
+                            @else
+                                <!-- <p>Skip {{ $role }}</p> -->
+                                
+                                <div class="col-lg-6 col-sm-12 form-box">
+                                    <div class="dt-media">
+                                        <div class="media">
+                                            <div class="media-left media-middle">
+                                                <a href="{{ $urls['edit'] }}/{{ $role }}">
+                                                    <i class="fa fa-user-plus dt-profile" aria-hidden="true"></i>
+                                                
+                                                  <!-- <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px;"> -->
+                                                </a>
+                                            </div>
+
+                                            <div class="media-body">
+                                            <h4 class="media-heading"><span>{{ $role }} </span></h4>
+
+                                            <p> <?php echo trans('messages.none-selected-2', ['role' => $role]); ?></p>
+                                            <p>{{ trans('messages.member-assign') }}</p>
+                                            <p>&nbsp;</p>
+                                            <p>&nbsp;</p>
+
+                                            <a class="mty-btn btn" href="{{ $urls['edit'] }}/{{ $role }}"><i class="fa fa-btn fa-bookmark-o" aria-hidden="true"></i> {{ trans('messages.assign') }}</a>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
 
                 </div>
-                <div class="col-lg-2"></div>
-            </div>
-                
-                    
-                 
+                    <!-- /.row (nested) -->                   
+                    <div class="mty-note">
+                        <p> {{ trans('messages.family-add-child') }}  </p>
+                        <a class="mty-btn btn" href="{{ $urls['addrole'] }}"><i class="fa fa-btn fa-plus"></i>Add Child</a>
+                    </div>
                 </div>
-                <!-- /.col-lg-12 -->
+                <!-- /.panel-body -->
             </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
 
     
 @endsection

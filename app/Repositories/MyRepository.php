@@ -7,7 +7,7 @@ namespace App\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
 use App\Member;
-
+use DB;
 /**
  * Class Repository
  */
@@ -88,11 +88,28 @@ abstract class MyRepository implements BaseRepositoryInterface {
      * @param array $columns
      * @return mixed
      */
-    public function all($columns = array('*')) {
-         // $columns = array('name', 'gender');
-        // $model = $this->model;
-        // return $model::all();
-        return $this->model->get($columns);
+    public function all($columns = array('*'), $countMembers = false) {
+        
+        if($countMembers) {
+
+            $model = $this->app->make($this->model());
+            $model_table = $model->getTable();
+            $model_key = $this->key();
+            // get member
+            $results = DB::table($model_table)
+                ->select(DB::raw("$model_table.id, $model_table.name, groups.group_id, COUNT(groups.id) as member_count"))
+                ->leftJoin('groups', function ($join) use ($model_table, $model_key) {
+                    $join->on("$model_table.id", '=', 'groups.group_id')
+                         ->where('groups.group_type', 'LIKE', $model_key );
+                })
+                ->groupBy("$model_table.id")
+                ->get();
+                
+            return $results;
+        } else {
+            return $this->model->get($columns);
+        }
+
 
     }
  
@@ -187,22 +204,31 @@ abstract class MyRepository implements BaseRepositoryInterface {
 
      /**
      * @param $request
-     * @param array $columns
-     * @return $familyinfo
+     * @param array $fields
+     * @return $results
      * json_encode address, phone, meta data and store it in 'description' field   
      */
-    public function castDescriptionField($request, $columns = array('phone', 'city', 'address', 'zipcode')) {
+    public function castDescriptionField($request, $fields = array('phone', 'city', 'address', 'zipcode')) {
 
         // place other fields information into one array
-                    // $fields = ;
-        $familyinfo = array();
-        foreach ($columns as $key => $value) {
-            $familyinfo[$value] = $request->$value;
+        $results = array();
+        foreach ($fields as $key => $value) {
+            $results[$value] = $request->$value;
         }
-
-        return json_encode($familyinfo);
-        // return $this->model->where($attribute, $value)->get($columns);
+        return json_encode($results);
     }
 
+    /**
+     * @param $values
+     * @return $results
+     * create associative array with the same value for its key and values    
+     */
+    public function castRoleField($validRoles) {
+
+        if(empty($validRoles)) return array();
+
+        $result = array_combine($validRoles->keys()->toArray(), $validRoles->keys()->toArray());
+        return $result;
+    }
 
 }

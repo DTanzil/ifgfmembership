@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('content')
+<!-- @section('content') -->
     
      <!-- Page Heading -->
     <div class="row">
@@ -243,4 +243,4 @@
             </div>
 
     
-@endsection
+<!-- @endsection -->

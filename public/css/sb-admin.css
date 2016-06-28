@@ -251,7 +251,18 @@ ul.alert-dropdown {
 }
 
 .dt-profile {
-    font-size:10em;height:150px;width:150px;margin:7px;
+    font-size:10em;height:150px;margin:10px;
+}
+
+.dt-circle {
+    padding:3px;
+    border: 1px solid #e3e3e3;
+    background:white;
+    border-radius: 50%;
+}
+
+.cap {
+    text-transform: capitalize;
 }
 
 .media-heading {    text-align: right; }
@@ -265,7 +276,7 @@ ul.alert-dropdown {
 }
 
 .well {
-    background-color: #D8CCCE;
+    background-color: #ffe1ab;
 }
 
 .mty-btn {
@@ -306,11 +317,13 @@ ul.alert-dropdown {
     text-align: center;
     padding:20px;
     margin-bottom: 20px;
+    border-radius:10px;
 }
 
-.mty-bold {
+
+/*.mty-bold {
     font-weight: bold;
-}
+}*/
 
 .required:after {
     content:'*'; 
@@ -318,6 +331,11 @@ ul.alert-dropdown {
 }
 
 
+
+/*.dt-view-img {
+    margin: auto;
+}
+*/
 /*--------------------------- Form (start) ----------------------------*/
 form.registration-form fieldset {
     display: none;
@@ -328,4 +346,21 @@ a#mbr-chosen {
     border-color:green;
 }
 
+a.mbr-mulchosen {
+    background-color : green;
+    border-color:green;    
+}
 /*--------------------------- Form (end) ----------------------------*/
+
+/*--------------------------- View Family (start) ----------------------------*/
+
+ul.dt-view {
+    list-style-type: none;
+    padding:0;
+}
+
+ul.dt-view li {
+    margin:10px;
+}
+
+/*--------------------------- View Family (end) ----------------------------*/

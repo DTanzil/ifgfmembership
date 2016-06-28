@@ -22,4 +22,5 @@ class Group extends Model
     {
         return $this->morphTo();
     }
+
 }

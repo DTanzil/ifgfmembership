@@ -20,10 +20,102 @@
 
     <div class="row">
         
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-sm-12">
+
             <!-- Display Validation Errors -->
             @include('common.errors')
             <p style="text-align:right;"> Member ID#: AAO393002XXU02 </p>
+            
+                        <div class="row">
+
+                            <div class="col-lg-6 col-sm-12">
+                                <!-- Profile Picture Information -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Profile Picture 
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        <div class="row">
+                                            <div class="col-lg-4 col-sm-12 center">
+
+                                                <div class="form-group">
+                                                        @if(!empty($member->image))
+                                                          <img class="media-object dt-profile dt-circle" src="{{ asset($member->image) }}">            
+                                                        @else
+                                                          <i class="fa fa-user dt-profile" aria-hidden="true"></i>
+                                                        @endif   
+                                                    <div> 
+                                                        <form action="{{ $urls['deletephoto'] }}" method="POST">
+                                                            {{ csrf_field() }}
+                                                            {{ method_field('DELETE') }}
+                                                            {{ Form::hidden('_mbrid', $member->id) }}
+                                                            {{ Form::hidden('_formaction', 'deleteMemberPhoto') }}
+
+                                                            <button type="submit" id="deletePhoto" class="btn btn-danger mty-delete {{{ !empty($member->image) ? '' : 'mty-hidden' }}}" style="margin-top:10px; margin-bottom:30px;">
+                                                                <i class="fa fa-btn fa-trash"></i>Delete
+                                                            </button>
+                                                        </form>                                            
+                                                    </div>    
+
+                                                    
+                                                </div>
+
+                                                
+
+                                            </div>  
+
+                                            <div class="col-lg-8 col-sm-12 form-box">
+                                                <div>
+                                                    <!-- <label>Upload Profile Picture</label> -->
+                                                    <form action="{{ $urls['updatephoto'] }}" method="POST" enctype="multipart/form-data">
+                                                        {{ csrf_field() }}
+                                                        {{ method_field('POST') }}
+                                                        {{ Form::hidden('_mbrid', $member->id) }}
+                                                        {{ Form::hidden('_formaction', 'updateMemberPhoto') }}
+                                                        <!-- {{ Form::hidden('photo', $member->image) }} -->
+
+                                                        <label>Upload Profile Picture</label>
+                                                        <p class="help-block">Please upload an image of the member for profile picture. <br/>You can change an existing picture by simply uploading a new image. <br/> </p>
+
+                                                        <p class="help-block">Accepted image file format: (.jpeg, .bmp, .png)</p>
+                                                        
+                                                        <?php echo Form::file('photo'); ?>
+                                                        
+                                                        <p style="margin-top:10px;">
+                                                            <button type="submit" class="btn mty-update center"><i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}</button>
+                                                        </p>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-12">
+                                
+                                <!-- Profile Picture Information -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Barcode 
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        <p class="center"><img src="{{ asset('img/barcode.jpg') }}" style="height:100px;width:auto;"></p>
+                                        <p class="center"> Member ID#: AAO393002XXU02 </p>
+            
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                     
+
+            <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
+             
             <!-- General Information -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -52,20 +144,47 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label class="required">Gender</label>
-                                        <?php echo Form::select('gender', array('male' => 'Male', 'female' => 'Female'), $member->gender, array('class' => 'form-control center')); ?>
+                                        <label class="required">Membership Status</label>
+                                        <?php $mbrstatus = $member->is_member ? 'member' : 'visitor'; ?>
+                                        <?php echo Form::select('mbrstatus', array('member' => 'Member', 'visitor' => 'Visitor'), $mbrstatus, array('class' => 'form-control center')); ?>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="required">Status</label>
-                                        <?php echo Form::select('status', array('single' => 'Single', 'married' => 'Married'), $member->status, array('class' => 'form-control center mty-cap')); ?>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="required">Gender</label>
+                                                <?php echo Form::select('gender', array('male' => 'Male', 'female' => 'Female'), $member->gender, array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="required">Status</label>
+                                                <?php echo Form::select('status', array('single' => 'Single', 'married' => 'Married'), $member->status, array('class' => 'form-control center mty-cap')); ?>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                     <div class="form-group input-group">
-                                        <label class="required">Cell Phone</label>
-                                        <input type="text" name="phone" value="{{ $info['phone'] }}" class="form-control" placeholder="Cell Phone">
-                                        <!-- <p class="help-block">Example: 08112345678</p> -->
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group input-group">
+                                                <label>Cell Phone</label>
+                                                <input type="text" name="phone" value="{{ $info['phone'] }}" class="form-control" placeholder="Cell Phone">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group input-group">
+                                                <label>Date of Birth</label>
+                                                <input type="text" id="datepicker" name="birthdate" value="{{ empty($member->birthdate) ? '' : $member->birthdate->format('d/m/Y') }}" class="form-control" placeholder="Date of Birth">
+                                            </div>
+                                        </div>
                                     </div>
+                                    
+
+                                    
+
+                                    
 
                                 </div>
                             </div>
@@ -89,46 +208,14 @@
                                         <input type="text" name="zipcode" value="{{ $info['zipcode'] }}" class="form-control" placeholder="Postal Code">
                                     </div>
 
-                                    <div class="form-group input-group">
-                                        <label>Date of Birth</label>
-                                        <input type="text" id="datepicker" name="birthdate" value="{{ $member->birthdate->toDateString() }}" class="form-control" placeholder="Date of Birth">
-                                    </div>
-
-
-                                    <div class="form-group {{{ empty($member->image) ? '' : 'mty-hidden' }}}">
-                                        <label>Upload Profile Picture</label>
-
-                                        <?php echo Form::file('photo'); ?>
-                                        <p class="help-block">Please upload an image of the member for profile picture. Accepted image file format: (.jpeg, .png)</p>
-                                    </div>
-
-                                    <div class="form-group {{{ !empty($member->image) ? '' : 'mty-hidden' }}}">
-                                        <p class="mty-bold"> Profile Picture</p>
-                                        <a href="{{ $urls['edit'] }}">
-                                          <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="height:150px;width:150px; display:inline-block;">
-                                        </a>
-
-                                        <span class="mty-btn btn purple" id="changePhoto"> <i class="fa fa-btn fa-camera" aria-hidden="true"></i> {{ trans('messages.change') }}</span>
-
-                                        <div>
-                                            <form action="{{ $urls['deletephoto'] }}" method="POST">
-                                                <!-- {{ csrf_field() }} -->
-                                                {{ method_field('DELETE') }}
-                                                {{ Form::hidden('_mbrid', $member->id) }}
-                                                {{ Form::hidden('_formaction', 'deleteMemberPhoto') }}
-                                               
-                                                <button type="submit" id="deletePhoto" class="btn btn-danger mty-delete">
-                                                    <i class="fa fa-btn fa-trash"></i>Delete
-                                                </button>
-                                            </form>
-                                        </div>                                        
-                                    </div>
+                                    
                             </div>
                     </div> 
                     <div class="center"><button type="submit" class="btn mty-update center"><i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}</button></div>
                 </form>
             </div>
         </div>
+
 
         <!-- Member Activities -->
         <div class="row">
@@ -197,6 +284,7 @@
                                     <p>&nbsp;</p>
 
                                     <a class="mty-btn btn" href="{{ $urls['edit'] }}/"><i class="fa fa-btn fa-bookmark-o" aria-hidden="true"></i> {{ trans('messages.assign') }}</a>
+                                    
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +299,7 @@
         
         </div>
 
-        
+<!--         
         <div class="panel panel-default">
             <div class="panel-heading">
                {{ trans('messages.family-member') }}
@@ -222,14 +310,14 @@
                 <p> {{ trans('messages.family-welcome') }} </p>
                         
                 
-                <!-- /.row (nested) -->                   
                 <div class="mty-note">
                     <p> {{ trans('messages.family-add-child') }}  </p>
                     <a class="mty-btn btn" href="{{ $urls['add'] }}"><i class="fa fa-btn fa-plus"></i>Add Child</a>
                 </div>
             </div>
-            <!-- /.panel-body -->
         </div>
+ -->
+
         <!-- /.panel -->
 
 

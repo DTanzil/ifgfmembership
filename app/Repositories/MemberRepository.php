@@ -42,27 +42,26 @@ class MemberRepository extends MyRepository
 
     function getAllGroups($id) {
         
-        $groups = Group::where('member_id', 2)
+        $groups = Group::where('member_id', $id)
                     ->orderBy('created_at', 'asc')
                     ->get();
 
         $activities = array();
         foreach ($groups as $key => $value) {
             $group = $value->group;
+            // var_dump($group);
+            // die();
             // var_dump(Family::class);
             // var_dump(is_a(Family::class, Family::class));
             $family = Family::class;
             $user = User::class;
             // var_dump($value->title);
             if($group instanceof $family) {
-                // var_dump("FAMILY");
-                
                 $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->description);
                 $activities['family'][] = $info;
             } else {
-                // var_dump($group);
-                $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->name);
-                $activities['other'][] = $info;
+                // $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->name);
+                // $activities['other'][] = $info;
             }
         }
 

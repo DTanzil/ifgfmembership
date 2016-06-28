@@ -21,59 +21,72 @@
     <div class="row">
         <div class="col-lg-12 col-sm-12 center" style="margin-bottom:20px;">
             <h3> {{ $family->name }} Family </h3>
-            <p> Address: {{ $info['address'] }}, {{ $info['city'] }} {{ $info['zipcode'] }} </p>
-            <p> Home Phone: {{ $info['phone'] }}</p>
+            <p> Address: 
+                @if(!empty($info['address']) && !empty($info['city']) && !empty($info['zipcode']))
+                    {{ $info['address'] }}, {{ $info['city'] }} {{ $info['zipcode'] }} 
+                @else
+                    N/A
+                @endif 
+            </p>
+            <p> Home Phone: {{ !empty($info['phone']) ?  $info['phone'] : 'N/A'}}</p>
             <p style="font-size:40px;"><i class="fa fa-users" aria-hidden="true"></i></p>
         </div>
     </div>
     
-    @foreach ($order as $role)
-        @if (isset($members[$role]) && count($members[$role]) >= 1)
-            @foreach ($members[$role] as $member)
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
 
-                <div class="row">
-                    <div class="col-lg-12 col-sm-12">
-                        <div class="col-lg-6">
-                            
-                            <p> 
-                                <a href="{{ $urls['edit'] }}/">
-                                    <img class="media-object" src="http://localhost/ifgfbdg/public/img/dan.jpg" alt="..." style="margin-right:30px;height:230px;width:230px;float:left;">
-                                </a>
-                                <div style="padding:5px;">
-                                <h3 style="margin-top:0;"> {{ $member->name}} </h3>
-                                <p> <span class="mty-bold"> Role in family: </span> {{ $role }} </p>
-                                <p> <span class="mty-bold"> Member ID: </span> A0083BDOF738209</p>
-                                <p> Member since XXXX or Not a member of IFGF Bandung</p>
-                                <p> <span class="mty-bold"> iCare:</span> The Awesome Breakthrough </p>
-                                <p> <span class="mty-bold"> Other Roles: </span>Bible Study Teacher, iCare Facilitator, Music Team </p>
-                                </div>
-                            </p>
+            @foreach ($order as $role)
+                @if (isset($members[$role]) && count($members[$role]) >= 1)
+                    @foreach ($members[$role] as $member)
 
+                        <div class="row" style="padding:30px;border-bottom:1px solid #eee;">
+                            <div class="col-lg-3">
+                                
+                                <p class="center"> 
+                                    @if(!empty($member->image))
+                                      <img class="media-object dt-profile dt-circle" style="margin:auto;" src="{{ asset($member->image) }}">
+                                    @else
+                                      <i class="fa fa-user dt-profile" aria-hidden="true" style="margin:auto;" ></i>
+                                    @endif 
+                                </p>
+                                    <h3 class="center" style="margin-bottom:30px;"> {{ $member->name}} </h3>
+                                    <p class="center" style="color:red;"><b>{{ $member->is_member ? "MEMBER" : "VISITOR" }} </b></p>
+
+                                    <p class="center"><i>First attended IFGF Bandung in XXXX</i></p>
+                            </div>
+                            <div class="col-lg-4">       
+                                <ul class="dt-view">
+                                    <li><b> Member ID</b> <br/>A0083BDOF738209</li>
+                                    <li><b> Role in Family</b> <br/><span class="cap">{{ $role }}</span></li>
+                                    <li><b> Cellphone</b> <br/>{{ $member->phone or 'N/A'}}  </li>
+                                    <li class="cap">{{ $member->status }} | {{ $member->gender }}  
+                                        @if(!empty($member->birthdate))
+                                            | {{ $member->birthdate->age }} years old
+                                        @endif
+                                    <li>{{ $member->email or ''}}</li>
+                                    <li>
+                                        @if(!empty($member->birthdate))
+                                            {{ $member->birthdate->format("d M Y") }}
+                                        @else
+                                            Date of birth not available
+                                        @endif
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-5">                            
+                                <ul class="dt-view">
+                                    <li><b> Address</b> <br/>Jalan Kejaksaan XII no 8 Blok 3, Bandung 32513</li>
+                                    <li><b> iCare</b> <br/>The Awesome Breakthrough </li>
+                                    <li><b> Other Activities</b> <br/>Bible Study Teacher, iCare Facilitator, Music Team  </li>
+                                    <li><b> Date Baptized</b> <br/>8 July 2013 </li>
+                                    <li><b> Date Baptized</b> <br/>8 July 2013 </li>                                        
+                                </ul>
+                            </div>
                         </div>
-                        <div class="col-lg-6" style="border-left: 3px solid blue;">
-                            <p> Date of birth: XXXXX (Age ##)</p>
-                            <p> Date of birth: XXXXX (Age ##)</p>
-                            <p> Address: XXXXX </p>
-                            <p> E-mail: XXXXX </p>
-                            <p> Cell phone: XXXXX </p>
-                            <p> Home Phone: XXXX </p>
-                            <p> Date Baptized: XXXX </p>
-                            <p> Home Phone: XXXX </p>
-                        </div>
-                    </div>
-            </div>
-
-
+                    @endforeach
+                @endif
             @endforeach
-
-        @else
-            <!-- <p> NONE </p> -->
-
-        @endif
-    @endforeach
-
-    
-    
-
-    
+        </div>
+    </div>
 @endsection

@@ -14,6 +14,8 @@ use App\MemberRole;
 use App\Http\Controllers\Controller;
 use App\Repositories\FamilyRepository as Family;
 
+
+use View;
 use PDF;
 use Barryvdh\Snappy;
 
@@ -34,6 +36,11 @@ class FamilyController extends Controller
      */
     protected $validRoles;
 
+    /**
+     * The default icare role.
+     */
+    protected $defaultRole;
+    
     /*
      * General title page
      */
@@ -54,12 +61,14 @@ class FamilyController extends Controller
         // get all valid roles
         $this->validRoles =  MemberRole::where('type', $this->family->model())
                      ->orderBy('priority', 'asc')
-                     ->get();
+                     ->lists('maxlimit', 'title');
 
         //TODO: organize valid roles
-        $this->validRoles = array('father','mother','children');
+        // $this->validRoles = array('father','mother','children');
 
         $this->title = array('header' => 'Families', 'singular' => 'Family');
+
+        $this->defaultRole = 'children';
     }
 
     /**
@@ -73,10 +82,10 @@ class FamilyController extends Controller
         // $pdf = PDF::loadView('pdf.invoice', $data);
         // return $pdf->download('invoice.pdf');
 
-        $results = $this->family->all();
-        $tableCols = array('name' => 'Name', 'people' => '# of Members');
+        $results = $this->family->all(array('*'), true);
+        $tableCols = array('name' => 'Name', 'member_count' => 'Number of Family Members');
         $urls = array('add' => route('addfamily'), 'delete' => route('deletefamily'), 'edit' => route('editfamily'), 'view' => route('viewfamily'));
-        return view('members.index', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls]);
+        return view('members.index', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'dlt_field' => '_fmid']);
     }
 
     /*
@@ -87,26 +96,93 @@ class FamilyController extends Controller
         return view('families.add', ['title' => $this->title, 'urls' => array('save' => route('savefamily'))]);   
     }
 
-    //TODO: NOT FINISHED
+    /*
+     * View family detail
+     * TODO: Print PDF option
+     */
     public function view(Request $request)
     {
-        $fam_id = 6;
-        $family = $this->family->find($fam_id);
+        $fam_id = $request->famid;
 
+        if ($this->family->findIfExist('id', $fam_id) ) { 
+            $family = $this->family->find($fam_id);
             $members = $this->family->getAllMembers($fam_id);
-            
-            foreach ($members as $key => $member) {
-                # code...
-            }
-                   
             $results = $this->family->all();
             $order = array('father', 'mother', 'children');
             $info = $family->description;
-            // $title = array('header' => 'Families', 'singular' => 'Keluarga');
-            // $results = $this->->all();
             $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age');
             $urls = array('add' => route('editfamilyrole', ['famid' => $fam_id, 'famrole' =>'father']), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]), 'addrole' => route('addfamilyrole', ['famid' => $fam_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savefamily'));
             return view('families.view', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order]);
+        } else {
+            return redirect()->route('allfamily');  
+        }
+    }
+
+    public function viewpdf(Request $request)
+    {
+        $fam_id = $request->famid;
+
+        if ($this->family->findIfExist('id', $fam_id) ) { 
+            // working pdf sample code
+
+
+            $family = $this->family->find($fam_id);
+            $members = $this->family->getAllMembers($fam_id);
+            $results = $this->family->all();
+            $order = array('father', 'mother', 'children');
+            $info = $family->description;
+            $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age');
+            $urls = array('add' => route('editfamilyrole', ['famid' => $fam_id, 'famrole' =>'father']), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]), 'addrole' => route('addfamilyrole', ['famid' => $fam_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savefamily'));
+            // // return view('families.view', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order]);
+
+
+           
+
+            // $view = View::make('families.view', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order]);
+
+            $view = View::make('pdf.dania', ['name' => 'Rishabh']);
+
+            // $sections = $view->renderSections(); // returns an associative array of 'content', 'head' and 'footer'
+
+            // var_dump($sections['content']); // this will only return whats in the content section
+            // die();
+            // $contents = (string) $view;
+            // or
+            $data = $view->render();
+// var_dump($data); 
+// die();
+            // $data = array('father','mother','children');
+            // // $data = ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order];
+            // $data = ['title' => 'MY TITLE'];
+
+        
+            // $pdf = PDF::loadView('pdf.family', $data);
+            
+            $pdf = PDF::loadHTML($data);
+            // $family = $this->family->find($fam_id);
+            // $members = $this->family->getAllMembers($fam_id);
+            // $results = $this->family->all();
+            // $order = array('father', 'mother', 'children');
+            // $info = $family->description;
+            // $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age');
+            // $urls = array('add' => route('editfamilyrole', ['famid' => $fam_id, 'famrole' =>'father']), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]), 'addrole' => route('addfamilyrole', ['famid' => $fam_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savefamily'));
+            
+            // // $data = array('father','mother','children');
+
+
+            // $pdf = PDF::loadView('pdf.family', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order]);
+
+            // $pdf = App::make('snappy.pdf.wrapper');
+// $pdf->loadHTML('<h1>Test</h1>');
+            return $pdf->inline();
+            return $pdf->inline('invoice.pdf');
+
+            // return view('families.view', );
+        } else {
+            return redirect()->route('allfamily');  
+        }
+
+        
     }
 
     /*
@@ -121,11 +197,10 @@ class FamilyController extends Controller
         if ($this->family->findIfExist('id', $fam_id) ) {  
             $family = $this->family->find($fam_id);
             $members = $this->family->getAllMembers($fam_id);
-            $order = array('father', 'mother', 'children');
             $info = $family->description; //other info
-            $urls = array('add' => route('editfamilyrole', ['famid' => $fam_id, 'famrole' =>'father']), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]), 'addrole' => route('addfamilyrole', ['famid' => $fam_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savefamily'));
+            $urls = array('add' => route('editfamilyrole', ['famid' => $fam_id, 'famrole' =>'father']), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]), 'addrole' => route('addfamilyrole', ['famid' => $fam_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savefamily'), 'editmultiple' => route('editfammultiple', ['famid' => $fam_id]));
 
-            return view('families.edit', ['title' => $this->title, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order]);
+            return view('families.edit', ['title' => $this->title, 'urls' => $urls, 'fellowship' => $family, 'info' => $info, 'members' => $members, 'order' => $this->validRoles->keys(), 'the_roles' => $this->validRoles->keys()->implode(","), 'default_role' => $this->defaultRole ]);
 
         } else {
             return redirect()->route('allfamily');            
@@ -146,10 +221,9 @@ class FamilyController extends Controller
             $family = $this->family->find($fam_id);
             $results = Member::all();
             $member = $this->family->getMember($fam_id, $fam_role);
-            $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age');
+            $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'icare' => 'iCare');
             $urls = array('save' => route('savefamily'), 'cancel' => route('editfamily', ['famid' => $fam_id]));
-
-            return view('families.editrole', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'member' => $member, 'role' => $fam_role]);
+            return view('families.editrole', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'item' => $family, 'member' => $member, 'role' => $fam_role, 'dlt_field' => '_fmid']);
 
         } else {
             return redirect()->route('allfamily');     
@@ -159,7 +233,7 @@ class FamilyController extends Controller
     /*
      * Assign a member to new role in a family
      */
-    public function addFamMemberRole(Request $request)
+    public function addRole(Request $request)
     {
         $fam_role = $request->famrole;
         $fam_id = $request->famid;
@@ -173,15 +247,48 @@ class FamilyController extends Controller
             $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age', 'gender' => 'Gender');
             $urls = array('save' => route('savefamily'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]));
 
-            foreach ($this->validRoles as $key => $value) {
-                $validRoles[$value] = $value;
-            }
-            return view('families.addrole', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'validRoles' => $validRoles, 'family' => $family, 'defaultrole' => $fam_role]); 
+            $validRoles = $this->family->castRoleField($this->validRoles);
+
+            return view('families.addrole', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'validRoles' => $validRoles, 'item' => $family, 'defaultrole' => $fam_role, 'dlt_field' => '_fmid']); 
 
         } else {
             return redirect()->route('allfamily');  
         }   
     }
+
+    /*
+     * Edit/assign a member to an existing role in a icare
+     */
+    public function editRoleMultiple(Request $request)
+    {
+        $item_role = $this->defaultRole; //set default role to member
+        $item_id = $request->famid;
+
+        if($this->family->findIfExist('id', $item_id)) {
+            
+            $results = Member::all();
+            $item = $this->family->find($item_id);
+            $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age', 'gender' => 'Gender');
+            $urls = array('save' => route('saveicare'), 'edit' => route('editicarerole', ['icareid' => $item_id]));
+
+            foreach ($this->validRoles->keys() as $key => $value) {
+                $validRoles[$value] = $value;
+            }
+
+            // get current members
+            $groups = Group::where(['title' => $this->defaultRole, 'group_id' => $item_id, 'group_type' => $this->family->model()])->get(); 
+            $current_members = array();
+            foreach ($groups as $group) {
+                array_push($current_members, $group->member_id);
+            }
+
+            return view('icares.editmultiple', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'validRoles' => $validRoles, 'item' => $item, 'defaultrole' => $item_role, 'dlt_field' => '_icrid', 'current_members' => $current_members]); 
+
+        } else {
+            return redirect()->route('allicare');  
+        }   
+    }
+
 
      /*
      * Delete a family
@@ -192,17 +299,12 @@ class FamilyController extends Controller
 
         // form validation
         $this->validate($request, [
-            '_fmid' => 'bail|required|integer',
+            '_fmid' => 'bail|required|integer|exists:families,id' 
         ]);
 
-        if ($this->family->findIfExist('id', $fam_id) ) { 
-            $this->authorize('destroy', $this->family->find($fam_id));
-            $this->family->delete($fam_id);
-            $request->session()->flash('message', 'One family has been successfully deleted.');
-        } else {
-            $request->session()->flash('message', 'Invalid family ID.');
-            $request->session()->flash('alert-class', 'alert-danger'); 
-        }
+        $this->authorize('destroy', $this->family->find($fam_id));
+        $this->family->delete($fam_id);
+        $request->session()->flash('message', 'One family has been successfully deleted.');
         
         return redirect()->route('allfamily');
 
@@ -223,7 +325,6 @@ class FamilyController extends Controller
             ]);
 
             $action = $request->_formaction;
-            $name = $request->old('name');
 
             switch ($action) {
 
@@ -238,15 +339,9 @@ class FamilyController extends Controller
                     ]);
 
                     // place other fields information into one array
-                    $fields = array('phone', 'city', 'address', 'zipcode');
-                    $familyinfo = array();
-                    foreach ($fields as $key => $value) {
-                        $familyinfo[$value] = $request->$value;
-                    }
-
-                    $fam_id = $this->family->create(['name' => $request->name, 'description' => json_encode($familyinfo)]);
+                    $familyinfo = $this->family->castDescriptionField($request);
+                    $fam_id = $this->family->create(['name' => $request->name, 'description' => $familyinfo]);
                     $request->session()->flash('message', 'You have successfully created a new family!');
-                    // return redirect()->route('editviewfamily', [$fam]);
                 break;
 
                 case 'editFamily':
@@ -263,26 +358,19 @@ class FamilyController extends Controller
                     ]);
 
                     // place other fields information into one array
-                    $fields = array('phone', 'city', 'address', 'zipcode');
-                    $familyinfo = array();
-                    foreach ($fields as $key => $value) {
-                        $familyinfo[$value] = $request->$value;
-                    }
-
-                    $this->family->update(['name' => $request->name, 'description' => json_encode($familyinfo)], $fam_id, 'id');
+                    $familyinfo = $this->family->castDescriptionField($request);
+                    $this->family->update(['name' => $request->name, 'description' => $familyinfo], $fam_id, 'id');
                     $request->session()->flash('message', 'Update successful!');                    
-                    // Session::flash('alert-class', 'alert-danger'); 
-
 
                 break;
 
                 case 'editRole':
                     // form validation
-                    $rule = implode(",", $this->validRoles);
+                    $rule = $this->validRoles->keys()->implode(",");
                     $roleRule = "required|in:{$rule}";
                     $this->validate($request, [
-                        '_fmid' => 'bail|required|integer|exists:families,id' 
-                        '_mbrid' => 'bail|required|integer|exists:members,id'
+                        '_fmid' => 'bail|required|integer|exists:families,id', 
+                        '_mbrid' => 'bail|required|integer|exists:members,id',
                         '_fmaction' => 'required|in:replace,add',
                         '_mbrole' => $roleRule
                     ]);
@@ -292,28 +380,29 @@ class FamilyController extends Controller
                     $member_role = $request->_mbrole;
                     $fam_action = $request->_fmaction;
                     
-                    // check if role is included in family, if family & member id is valid
-                    if ($this->family->findIfExist('id', $fam_id) ) {    
-
-                        // find if role already exists, whether replacing or creating it
-                        if($fam_action == 'replace') {
-                            $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model()]);
-                        } else {
-                            // add new role
-                            $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model(), 'member_id' => $member_id]);
-                        }
-                            
-                        $role->member_id = $member_id;
-                        $fam = $this->family->find($fam_id);
-                        $fam->roles()->save($role); 
-                        $request->session()->flash('message', 'Update successful!');                            
-
+                    // find if role already exists, whether replacing or creating it
+                    if($fam_action == 'replace') {
+                        $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model()]);
                     } else {
-                        // family does not exist
-                        // $request->session()->flash('message', 'Invalid request.');
-                        // $request->session()->flash('alert-class', 'alert-danger'); 
-                        return redirect()->route('allfamily');  
+                        // check if it's possible to add this role
+                        $num_current = Group::where(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model()])->count();
+                        $num_max = $this->validRoles[$member_role];
+                        if($num_max > 0 && $num_current == $num_max) {
+                            // error, cannot add this role anymore
+                            $request->session()->flash('message', "Invalid request. There cannot be more than $num_max $member_role for this family.");
+                            $request->session()->flash('alert-class', 'alert-danger'); 
+                            return redirect()->route('addfamilyrole', ['famid' => $fam_id, 'famrole' => $member_role]);
+                        }
+
+                        // add new role
+                        $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model(), 'member_id' => $member_id]);
                     }
+                        
+                    $role->member_id = $member_id;
+                    $fam = $this->family->find($fam_id);
+                    $fam->roles()->save($role); 
+                    $request->session()->flash('message', 'Update successful!');                            
+
                 break;
                 
                 default:

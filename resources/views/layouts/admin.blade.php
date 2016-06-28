@@ -202,7 +202,7 @@
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
     $(document).ready(function() {
-        $('#example,#example2').DataTable({
+        $('#itemtable,#itemtable2').DataTable({
                 lengthChange: false,
                 select:true,
                 // search: {
@@ -214,7 +214,7 @@
         );
 
         $( "#datepicker" ).datepicker({
-          dateFormat: 'yy-mm-dd',
+          dateFormat: 'dd/mm/yy',
           changeMonth: true,
           changeYear: true
         });

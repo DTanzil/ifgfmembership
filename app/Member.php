@@ -12,14 +12,14 @@ class Member extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'description', 'email', 'status', 'gender', 'birthdate', 'image'];
 
      /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'birthdate'];
+    protected $dates = ['birthdate'];
 
     /**
      * The attributes that should be casted to native types.
@@ -30,17 +30,16 @@ class Member extends Model
         'description' => 'array',
     ];
 
-
-    public $table = "members";
+    /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    // protected $dateFormat = 'U';
 
     public function roles()
     {
         return $this->morphMany('App\Group', 'group');
         // return $this->morphToMany('App\MemberRole', 'group');
     }
-
-    // public function groups()
-    // {
-    //     return $this->hasMany('App\Group');
-    // }
 }

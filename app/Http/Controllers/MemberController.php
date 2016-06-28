@@ -9,11 +9,12 @@ use App\Http\Requests;
 use App\Family;
 // use App\MemberRole;
 // use App\Member;
+use Storage;
+use Image;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\MemberRepository as Member;
 
-use Image;
 
 class MemberController extends Controller
 {
@@ -51,9 +52,9 @@ class MemberController extends Controller
     {
         $title = array('header' => 'Members', 'singular' => 'Member');
         $results = $this->members->all();
-        $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'phone' => 'Phone', 'engage' => 'Member', 'icare' => 'iCare');
-        $urls = array('add' => route('addmember'), 'delete' => '/member/delete/', 'edit' => '/member/edit/', 'view' => 'member/view/');
-        return view('members.index', ['title' => $title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls]);
+        $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'is_member' => 'Member Status', 'icare' => 'iCare');
+        $urls = array('add' => route('addmember'), 'delete' => '/member/delete/', 'edit' => route('editmember'), 'view' => 'member/view/');
+        return view('members.index', ['title' => $title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'dlt_field' => '_mbrid']);
     }
 
 
@@ -65,34 +66,15 @@ class MemberController extends Controller
      */
     public function add(Request $request)
     {
-        $username = $request->old('name');
-
-        // var_dump($request); die();
-        
-        // $this->validate($request, [
-        //     'name' => 'required|max:3',
-        //     'gender' => 'required|in:male,female'
-
-        // ]);
-
-        // $request->user()->members()->create([
-        //     'name' => $request->name,
-        // ]);
-
-
         $urls = array('add' => route('addmember'), 'delete' => '/member/delete/', 'save' => route('savemember'), 'view' => 'member/view/');
-        
-        $members = $this->members->all();
-        return view('members.add', ['tasks' => $this->members, 'urls' => $urls]);
-
-        // return redirect('/members');
+        return view('members.add', ['urls' => $urls]);
     }
 
-    public function display(Request $request)
-    {
-        $members = $this->members->all();
-        return view('members.add', ['tasks' => $this->members]);
-    }
+    // public function display(Request $request)
+    // {
+    //     $members = $this->members->all();
+    //     return view('members.add', ['tasks' => $this->members]);
+    // }
 
     /*
      * Delete member photo
@@ -101,17 +83,48 @@ class MemberController extends Controller
     {
         $mbr_id = $request->_mbrid;
         $this->validate($request, [
-            '_formaction' => 'bail|required|in:deleteMemberPhoto',
-            '_mbrid' => 'bail|required|integer|exists:members,id' 
+            '_formaction' => 'bail|required|in:deleteMemberPhoto,updateMemberPhoto',
+            '_mbrid' => 'bail|required|integer|exists:members,id'
         ]);
 
-        //TODO: delete existing member picture first
-        //TODO: separate form and layout for profile picture
-        $this->members->update(['image' => ''], $mbr_id, 'id');
+        $member = $this->members->find($mbr_id, array('image'));
+        $oldphoto = $member->image;
+
+        switch ($request->_formaction) {
+            case 'deleteMemberPhoto':
+                // delete old picture file
+                if(!empty($oldphoto) && Storage::disk('members')->has($oldphoto)) 
+                    Storage::disk('members')->delete($oldphoto);
+                
+                $this->members->update(['image' => ''], $mbr_id, 'id');  
+            break;
+        
+            case 'updateMemberPhoto':
+                //replace or upload picture
+                $this->validate($request, [
+                    'photo' => 'bail|required|mimes:jpeg,bmp,png'
+                ]);
+                // delete old picture file
+                if(!empty($oldphoto) && Storage::disk('members')->has($oldphoto)) 
+                    Storage::disk('members')->delete($oldphoto);
+                // user upload a profile picture
+                if ($request->hasFile('photo'))
+                    $photourl = $this->sanitizeFile($request);
+                $this->members->update(['image' => $photourl], $mbr_id, 'id');
+
+            break;
+
+            default:
+                return redirect()->route('allmember');
+                break;
+        }
+
+        $request->session()->flash('message', 'Update successful!');  
+        return redirect()->route('editmember', [$mbr_id]);
     }
 
     /*
-     * Function to handle all save process like add, edit and updates in family
+     * Function to handle all save process like add, edit and updates in members
      */
     public function save(Request $request)
     {
@@ -123,14 +136,10 @@ class MemberController extends Controller
                 '_formaction' => 'bail|required|in:addMember,editRole,editMember',
             ]);
 
-            $action = $request->_formaction;
-            $name = $request->old('name');
-
-            switch ($action) {
+            switch ($request->_formaction) {
 
                 case 'addMember':
-                    // var_dump($request);
-                    // die();
+
                     // form validation
                     $this->validate($request, [
                         'name' => 'bail|required|unique:members|max:255',
@@ -138,22 +147,30 @@ class MemberController extends Controller
                         'city' => 'max:255',
                         'address' => 'max:255',
                         'zipcode' => 'digits_between:0,8',
+                        'birthdate' => 'date_format:d/m/Y',
                         'email' => 'required|email|unique:members',
                         'status' => 'required|in:single,married',
                         'gender' => 'required|in:male,female',
-                        // 'image' => ''
+                        'photo' => 'mimes:jpeg,bmp,png',
+                        // 'mbrstatus' => 'required|in:member,visitor'
                     ]);
-
+                    
                     // place other fields information into one array
-                    $fields = array('phone', 'city', 'address', 'zipcode');
-                    $memberinfo = array();
-                    foreach ($fields as $key => $value) {
-                        $memberinfo[$value] = $request->$value;
-                    }
+                    $description = $this->sanitizeDescription($request);
+                    //sanitize birthdate field
+                    $birth_date = $this->sanitizeDate($request->birthdate);
+                    $mbrstatus = $request->mbrstatus == 'member' ? true : false;
 
-                    $mbr_id = $this->members->create(['name' => $request->name, 'email' => 'aaa@gmail.com', 'status' => 'single', 'gender' => 'female', 'description' => json_encode($memberinfo)]);
+                    $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'gender' => $request->gender, 'status' => $request->status, 'description' => $description, 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now(), 'is_member' => $mbrstatus];
+
+                     // check photo upload
+                    if ($request->hasFile('photo')) {
+                        $photourl = $this->sanitizeFile($request);
+                        $data['image'] = $photourl; 
+                    } 
+
+                    $mbr_id = $this->members->create($data);
                     $request->session()->flash('message', 'You have successfully created a new member!');
-                    // return redirect()->route('editviewfamily', [$fam]);
                 break;
 
                 case 'editMember':
@@ -171,37 +188,17 @@ class MemberController extends Controller
                         'email' => 'required|email|unique:members,email,'.$mbr_id,
                         'status' => 'required|in:single,married',
                         'gender' => 'required|in:male,female',
-                        'birthdate' => 'date',
-                        'photo' => 'mimes:jpeg,bmp,png',
+                        'birthdate' => 'date_format:d/m/Y',
                         '_mbrid' => 'bail|required|integer|exists:members,id'
                     ]);                    
 
                     // place other fields information into one array
-                    $fields = array('phone', 'city', 'address', 'zipcode');
-                    $memberinfo = array();
-                    foreach ($fields as $key => $value) {
-                        $memberinfo[$value] = $request->$value;
-                    }
+                    $description = $this->sanitizeDescription($request);
 
-                    $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $request->birthdate, 'gender' => $request->gender, 'status' => $request->status, 'description' => json_encode($memberinfo)];
-
-                    // check photo upload
-                    $file = $request->file('photo');
-                    if ($request->hasFile('photo')) {
-                        // user upload a profile picture                        
-                        if(!$request->file('photo')->isValid()) {
-                            // redirect to photo error
-                            $request->session()->flash('message', 'Error uploading photo, please try again.');                  
-                            $request->session()->flash('alert-class', 'alert-danger');
-                            return redirect()->route('editmember', [$mbr_id]); 
-                        }
-                       
-                        $filename = "bar2." . $file->getClientOriginalExtension(); //TODO: randomize or systemize the naming
-                        $path = public_path('img/members/' . $filename);
-                        Image::make($file->getRealPath())->resize('200','200')->save($path);
-                        $photourl = 'img/members/' . $filename;
-                        $data['image'] = $photourl; 
-                    } 
+                    //sanitize birthdate field
+                    $birth_date = $this->sanitizeDate($request->birthdate);
+                    
+                    $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'gender' => $request->gender, 'status' => $request->status, 'description' => $description];
 
                     $this->members->update($data, $mbr_id, 'id');
                     $request->session()->flash('message', 'Update successful!');                    
@@ -210,51 +207,51 @@ class MemberController extends Controller
 
                 case 'editRole':
                     // form validation
-                    $rule = implode(",", $this->validRoles);
-                    $roleRule = "required|in:{$rule}";
-                    $this->validate($request, [
-                        '_fmid' => 'bail|required|integer',
-                        '_mbrid' => 'required|integer',
-                        '_fmaction' => 'required|in:replace,add',
-                        '_mbrole' => $roleRule
-                    ]);
+                    // $rule = implode(",", $this->validRoles);
+                    // $roleRule = "required|in:{$rule}";
+                    // $this->validate($request, [
+                    //     '_fmid' => 'bail|required|integer',
+                    //     '_mbrid' => 'required|integer',
+                    //     '_fmaction' => 'required|in:replace,add',
+                    //     '_mbrole' => $roleRule
+                    // ]);
 
-                    $fam_id = $request->_fmid;
-                    $member_id = $request->_mbrid;
-                    $member_role = $request->_mbrole;
-                    $fam_action = $request->_fmaction;
+                    // $fam_id = $request->_fmid;
+                    // $member_id = $request->_mbrid;
+                    // $member_role = $request->_mbrole;
+                    // $fam_action = $request->_fmaction;
                     
-                    // check if role is included in family, if family & member id is valid
-                    if ($this->family->findIfExist('id', $fam_id) ) {    
+                    // // check if role is included in family, if family & member id is valid
+                    // if ($this->family->findIfExist('id', $fam_id) ) {    
 
-                        // find if role already exists, whether replacing or creating it
-                        if($fam_action == 'replace') {
-                            $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model()]);
-                        } else {
-                            // add new role
-                            $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model(), 'member_id' => $member_id]);
-                        }
+                    //     // find if role already exists, whether replacing or creating it
+                    //     if($fam_action == 'replace') {
+                    //         $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model()]);
+                    //     } else {
+                    //         // add new role
+                    //         $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model(), 'member_id' => $member_id]);
+                    //     }
                             
-                        $role->member_id = $member_id;
-                        $fam = $this->family->find($fam_id);
-                        $fam->roles()->save($role); 
-                        $request->session()->flash('message', 'Update successful!');                            
+                    //     $role->member_id = $member_id;
+                    //     $fam = $this->family->find($fam_id);
+                    //     $fam->roles()->save($role); 
+                    //     $request->session()->flash('message', 'Update successful!');                            
 
-                    } else {
-                        // family does not exist
-                        // $request->session()->flash('message', 'Invalid request.');
-                        // $request->session()->flash('alert-class', 'alert-danger'); 
-                        return redirect()->route('allfamily');  
-                    }
+                    // } else {
+                    //     // family does not exist
+                    //     // $request->session()->flash('message', 'Invalid request.');
+                    //     // $request->session()->flash('alert-class', 'alert-danger'); 
+                    //     return redirect()->route('allfamily');  
+                    // }
                 break;
                 
                 default:
-                    return redirect()->route('allfamily');    
+                    return redirect()->route('allmember');    
                 break;
             }
             return redirect()->route('editmember', [$mbr_id]);
         }
-        return redirect()->route('allfamily');
+        return redirect()->route('allmember');
     }
 
 
@@ -268,28 +265,10 @@ class MemberController extends Controller
         
         // check if family, member id is valid
         if ($this->members->findIfExist('id', $mbr_id) ) {  
-            $member = $this->members->find(2);
-            
-            // $this->members->get
-            // var_dump($member->roles); 
-            // $fam = Family::find(2);
-            // foreach ($fam->roles as $role) {
-            //     var_dump($role);
-            // }
-
-            // die();
-            $groups = $this->members->getAllGroups(2);
-            
-            // $info = $this->members->castDescriptionField($request);
-
+            $member = $this->members->find($mbr_id);
+            $groups = $this->members->getAllGroups($mbr_id);
             $info = $member->description;
-            // var_dump($groups); 
-
-            // die();
-            // $members = $this->members->getAllMembers(2);
-            // $order = array('father', 'mother', 'children');
-            // $info = $family->description; //other info
-            $urls = array('deletephoto' => route('deletephoto'), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $mbr_id]), 'add' => route('addfamilyrole', ['famid' => $mbr_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savemember'));
+            $urls = array('deletephoto' => route('deletephoto'), 'updatephoto' => route('updatephoto'), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $mbr_id]), 'add' => route('addfamilyrole', ['famid' => $mbr_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savemember'));
 
             return view('members.editgeneral', ['title' => 'aijiea', 'info' => $info, 'urls' => $urls, 'member' => $member, 'groups' => $groups]);
 
@@ -297,6 +276,50 @@ class MemberController extends Controller
             return redirect()->route('allfamily');            
         }
         
+    }
+
+    // check uploaded file and return its name
+    private function sanitizeFile(Request $request)
+    {
+        $file = $request->file('photo');
+        // user upload a profile picture                        
+        if(!$request->file('photo')->isValid()) {
+            // redirect to photo error
+            $request->session()->flash('message', 'Error uploading photo, please try again.');                  
+            $request->session()->flash('alert-class', 'alert-danger');
+            return redirect()->route('editmember', [$request->_mbrid]); 
+        }
+        
+        $filename =  str_random(30) . "." .$file->getClientOriginalExtension(); 
+        $path = public_path('img/members/' . $filename);
+        Image::make($file->getRealPath())->resize('200','200')->save($path);
+        $photourl = 'img/members/' . $filename;
+ 
+        return $photourl;
+
+    }
+
+    // change easy to read date format to Y-m-d for database
+    private function sanitizeDate($date) 
+    {
+        if(empty($date)) {
+            return null;
+        } else {
+            $formattedDate = \Carbon\Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+            return $formattedDate;
+        }
+    }
+
+    // change multiple fields into json format 
+    private function sanitizeDescription(Request $request) 
+    {
+        $fields = array('phone', 'city', 'address', 'zipcode');
+        $memberinfo = array();
+        foreach ($fields as $key => $value) {
+            $memberinfo[$value] = $request->$value;
+        }
+
+        return json_encode($memberinfo);
     }
 
 }

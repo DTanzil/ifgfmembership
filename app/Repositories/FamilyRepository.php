@@ -40,6 +40,12 @@ class FamilyRepository extends MyRepository
         return 'App\Family';
     }
 
+    function key()
+    {
+        return 'App%Family';
+    }
+
+    
     // function getMembers($famid)
     // {
         

@@ -34,6 +34,17 @@ class CreateGroupsTable extends Migration
             $table->timestamps();
         });
 
+        // Insert some stuff
+        DB::table('groups')->insert([
+            ['title' => 'father', 'group_type' => 'App\Family', 'member_id' => '1', 'group_id' => '1'],
+            ['title' => 'mother', 'group_type' => 'App\Family', 'member_id' => '4', 'group_id' => '2'],
+            ['title' => 'facilitator', 'group_type' => 'App\Icare', 'member_id' => '1', 'group_id' => '1'],
+            ['title' => 'member', 'group_type' => 'App\Icare', 'member_id' => '3', 'group_id' => '1'],
+            ['title' => 'mother', 'group_type' => 'App\Family', 'member_id' => '2', 'group_id' => '4'],
+            ['title' => 'facilitator', 'group_type' => 'App\Icare', 'member_id' => '1', 'group_id' => '2'],
+            ['title' => 'core-teams', 'group_type' => 'App\Icare', 'member_id' => '4', 'group_id' => '3'],
+        ]);
+
     }
 
     /**

@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                {{ $item->name }} family > Select {{ $role }}
+                {{ $icare->name }} iCare > Select {{ $role }}
             </h1>
            <ol class="breadcrumb">
                 <li class="active">
@@ -26,7 +26,7 @@
             <div class="well well-lg center">
                 
                 @if (!empty($member))
-                    <p> <?php echo trans('messages.member-selected', ['member' => $member->name, 'role' => $role, 'group-name' => $item->name, 'group' => $title['singular']]); ?></p>
+                    <p> <?php echo trans('messages.member-selected', ['member' => $member->name, 'role' => $role, 'group-name' => $icare->name, 'group' => 'family']); ?></p>
                     <p class="media-heading"> <span>{{ $role }} </span></p>
                     
                     <div>
@@ -39,7 +39,7 @@
                                 @endif
                             </p>    
                 @else
-                    <p> <?php echo trans('messages.none-selected', ['role' => $role, 'group-name' => $item->name, 'group' => $title['singular']]); ?> </p>
+                    <p> <?php echo trans('messages.none-selected', ['role' => $role, 'group-name' => $icare->name, 'group' => 'iCare']); ?> </p>
                     <p class="media-heading"> <span>{{ $role }} </span></p>
                     
                     <div>
@@ -54,8 +54,8 @@
                         </div>
                     </div>
 
-                <p><b><?php echo trans('messages.select-member', ['role' => $role, 'group-name' => $item->name, 'group' => $title['singular']]); ?></b></p>
-                <p style="font-style:italic;">{{ trans('messages.back-prev-page') }}</p> 
+                <p><b><?php echo trans('messages.select-member', ['role' => $role, 'group-name' => $icare->name, 'group' => 'family']); ?></b></p>
+                <p><i>{{ trans('messages.back-prev-page') }}</i></p> 
 
                 <p class="center">
                     <a id="next-step" class="mty-btn btn" href="#"> Next </a>
@@ -78,7 +78,7 @@
                     <form action="{{ $urls['save'] }}" method="POST" class="mbr-save-form center">
                         {{ csrf_field() }}
                         {{ method_field('POST') }}
-                        {{ Form::hidden($dlt_field, $item->id) }}
+                        {{ Form::hidden('_icrid', $icare->id) }}
                         {{ Form::hidden('_mbrole', $role) }}
                         {{ Form::hidden('_fmaction', 'replace') }}
                         {{ Form::hidden('_mbrid', '') }}

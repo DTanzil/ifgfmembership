@@ -25,9 +25,9 @@ class CreateFamiliesTable extends Migration
 
         DB::table('families')->insert([
             ['name' => 'GNH', 'description' => $info],
-            ['name' => 'Widodo Fam', 'description' => $info],
-            ['name' => 'Danbo fam', 'description' => $info],
-            ['name' => 'AHJIOJFh', 'description' => $info]
+            ['name' => 'Widodo', 'description' => $info],
+            ['name' => 'Hartanto', 'description' => $info],
+            ['name' => 'Sutanto', 'description' => $info]
         ]);
 
     }

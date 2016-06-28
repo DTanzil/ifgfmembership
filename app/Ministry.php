@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Family extends Model
+class Ministry extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
     protected $fillable = ['name', 'description'];
 
     /**
@@ -21,13 +21,12 @@ class Family extends Model
     protected $casts = [
         'description' => 'array',
     ];
-    
-    /**
-     * Get all of the family's roles.
+
+     /**
+     * Get all of the icare roles.
      */
     public function roles()
     {
         return $this->morphMany('App\Group', 'group');
     }
-
 }

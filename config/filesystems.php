@@ -62,6 +62,12 @@ return [
             'bucket' => 'your-bucket',
         ],
 
+        'members' => [
+            'driver' => 'local',
+            'root' => public_path('img/members'),            
+            'visibility' => 'public',
+        ],
+
     ],
 
 ];

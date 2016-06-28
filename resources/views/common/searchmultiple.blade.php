@@ -13,7 +13,6 @@
             <th>Action</th>
         </tr>
     </thead>
-
     <tbody>
         @if (count($results) > 0)
             @foreach ($results as $item)
@@ -28,19 +27,20 @@
 
                     @endforeach
 
-                    <td>                            
-                        <span id="mbr-choice-{{ $item->id }}">
-                            @if(in_array($item->id, $current_members))
-                                <a name="mbr_selection" class="btn mty-btn grey" id="mbr-chosen">
-                                    <i class="fa fa-check" aria-hidden="true"></i> Selected
-                                </a>                                    
-                            @else
-                                <a name="mbr_selection" class="btn mty-btn grey">
+                    <td>
+                            <span id="mbr-choice-{{ $item->id }}">
+                                @if(in_array($item->id, $current_members))
+                                    <a name="mbr_mulselection" class="btn mty-btn grey mbr-mulchosen">
+                                        <i class="fa fa-check" aria-hidden="true"></i> Selected
+                                    </a>
+                                @else
+                                    <a name="mbr_mulselection" class="btn mty-btn grey">
                                     Choose Member
-                                </a>
-                            @endif
-
-                        </span>
+                                    </a>                                    
+                                @endif
+                                
+                            </span>
+                        <!-- </form> -->
                     </td>
                 </tr>
             @endforeach

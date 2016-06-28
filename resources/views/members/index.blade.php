@@ -34,7 +34,7 @@
                 <?php echo trans('messages.search-group-instruction', ['group' => $title['singular']]); ?>
             </div>
 
-            <table id="example" class="display" cellspacing="0" width="100%">
+            <table id="itemtable" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
 
@@ -53,9 +53,11 @@
                             <tr>
                                 @foreach ($tableCols as $key => $col)
                                     @if($key == 'age') 
-                                        <td>{{ $item->birthdate->age }}</td>
+                                        <td> {{ !empty($item->birthdate) ? $item->birthdate->age : '-' }} </td>                           
+                                    @elseif($key == 'is_member')
+                                        <td>{{ $item->$key ? 'Member' : 'Visitor'}}</td>
                                     @else
-                                        <td>{{ $item->$key }}</td>
+                                        <td>{{ $item->$key or 'N/A'}}</td>
                                     @endif
                                 @endforeach
 
@@ -64,7 +66,7 @@
                                     <form action="{{ $urls['delete'] }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
-                                        {{ Form::hidden('_fmid', $item->id) }}
+                                        {{ Form::hidden($dlt_field, $item->id) }}
                                        
                                         <a class="mty-btn btn green" href="{{ $urls['view'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> View </a>
                                         <a class="mty-btn btn" href="{{ $urls['edit'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-pencil" aria-hidden="true"></i> Edit </a>

@@ -92,6 +92,16 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        '_mbrid' => [
+            'required' => "Please choose a member for this role"
+        ],
+        '_icrid' => [
+            'required' => "Please select a valid iCare"
+        ],
+        '_mbrids' => [
+            'required' => "Invalid request.",
+            'json' => "Invalid request."
+        ]
     ],
 
     /*
@@ -105,6 +115,19 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'Name',
+        'email' => 'Email',
+        'gender' => 'Gender',
+        'phone' => 'Cell Phone',
+        'birthdate' => 'Date of Birth',
+        'status' => 'Status',
+        'address' => 'Address',
+        'city' => 'City',
+        'zipcode' => 'Postal Code',
+        'gender' => 'Gender',
+        'photo' => 'Photo'
+
+    ],
 
 ];

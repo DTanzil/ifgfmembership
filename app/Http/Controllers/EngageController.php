@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Config;
-use App\Repositories\IcareRepository as Icare;
+use App\Repositories\EngageRepository as Engage;
 
-class IcareController extends Controller
+class EngageController extends Controller
 {
 
     /**
@@ -54,7 +54,7 @@ class IcareController extends Controller
      * @param  IcareRepository  $icare
      * @return void
      */
-    public function __construct(Icare $icare)
+    public function __construct(Engage $icare)
     {
         $this->middleware('auth');
         $this->baseModel = $icare;

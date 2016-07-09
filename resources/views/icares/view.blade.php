@@ -7,19 +7,44 @@
     <div class="row">
         <div class="col-lg-12 col-sm-12 center" style="margin-bottom:20px;">
             <h3> {{ $fellowship->name }} {{ $title['singular'] }} </h3>
-            <p> Address: 
+            <p>
                 @if(!empty($info['address']) && !empty($info['city']) && !empty($info['zipcode']))
                     {{ $info['address'] }}, {{ $info['city'] }} {{ $info['zipcode'] }} 
-                @else
-                    N/A
                 @endif 
             </p>
-            <p> Home Phone: {{ !empty($info['phone']) ?  $info['phone'] : 'N/A'}}</p>
+            
+            <?php 
+                $time = $fellowship->time;
+                $hours = intval($time/60) < 10 ? "0".intval($time/60) : intval($time/60);
+                $minutes = $time%60 == 0 ? '00' : $time%60; 
+            ?>
+
+            <p><b>Meets Every:</b> <br/>{{ $fellowship->day }} @ {{ $hours }}:{{ $minutes }}</p>
+            <p><b>Contact:</b> <br/>{{ $info['phone'] or ''}} {{ empty($info['phone']) ? '' : ' | ' }} {{ $fellowship->email or ''}} </p>
+
             <p style="font-size:40px;"><i class="fa fa-users" aria-hidden="true"></i></p>
         </div>
     </div>
     
     <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+
+        <!-- List of Members -->
+        @include('common.viewtable')
+        
+        <div class="center">
+            <a class="btn mty-btn mty-update-big" href="{{ $urls['cancel'] }}"> 
+                <i class="fa fa-btn fa-arrow-left" aria-hidden="true"></i><?php echo trans('messages.return-to-group', ['name' => $fellowship->name, 'group' => $title['singular']]); ?>
+            </a>
+        </div>
+
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+
+    <!-- <div class="row">
         <div class="col-lg-12 col-sm-12">
 
             @foreach ($order as $role)
@@ -74,5 +99,5 @@
                 @endif
             @endforeach
         </div>
-    </div>
+    </div> -->
 @endsection

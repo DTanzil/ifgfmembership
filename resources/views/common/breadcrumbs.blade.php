@@ -2,12 +2,23 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            {{ $fellowship->name }} {{ $title['singular'] }}
+            @if(!isset($fellowship)) 
+                {{ $title['header'] }} 
+            @else
+                {{ $fellowship->name or '' }} {{ $title['singular'] or '' }}
+            @endif
+ 
         </h1>
-        <ol class="breadcrumb">
-            <li class="active">
-                Home > All Families > 
-            </li>
-        </ol>
+        <!-- Breadcrumbs -->
+        @if(isset($defaultrole))
+            {!! Breadcrumbs::render(Request::route()->getName(), $fellowship, $defaultrole) !!}
+        @elseif(isset($fellowship))
+            {!! Breadcrumbs::render(Request::route()->getName(), $fellowship) !!}
+        @elseif(isset($member))
+            {!! Breadcrumbs::render(Request::route()->getName(), $member) !!}
+        @else
+            {!! Breadcrumbs::render(Request::route()->getName()) !!}
+        @endif
     </div>
 </div>
+

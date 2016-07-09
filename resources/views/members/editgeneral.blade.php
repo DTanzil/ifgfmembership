@@ -1,117 +1,94 @@
 @extends('layouts.admin')
 
 @section('content')
-    
-     <!-- Page Heading -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                Edit Member Information : {{ $member->name }}
-            </h1>
-            <ol class="breadcrumb">
-                <li class="active">
-                    Home > All Families > 
-                </li>
-            </ol>
 
-        </div>
-    </div>
-    <!-- /.row -->
+@include('common.breadcrumbs')
 
     <div class="row">
         
         <div class="col-lg-12 col-sm-12">
 
             <!-- Display Validation Errors -->
-            @include('common.errors')
-            <p style="text-align:right;"> Member ID#: AAO393002XXU02 </p>
-            
-                        <div class="row">
+            @include('common.errors')            
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <!-- Profile Picture Information -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Profile Picture 
+                            </div>
 
-                            <div class="col-lg-6 col-sm-12">
-                                <!-- Profile Picture Information -->
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        Profile Picture 
-                                    </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-12 center">
+                                        <div class="form-group">
+                                            @if(Storage::disk('img')->exists("{$member->image}"))
+                                                <img class="media-object dt-profile dt-circle" src="{{ asset($member->image) }}"> 
+                                            @else
+                                                <i class="fa fa-user dt-profile" aria-hidden="true"></i>
+                                            @endif
+                                            <div> 
+                                                <form action="{{ $urls['deletephoto'] }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
+                                                    {{ Form::hidden('_mbrid', $member->id) }}
+                                                    {{ Form::hidden('_formaction', 'deleteMemberPhoto') }}
 
-                                    <div class="panel-body">
+                                                    <button type="submit" id="deletePhoto" class="btn btn-danger mty-delete {{{ !empty($member->image) ? '' : 'mty-hidden' }}}" style="margin-top:10px; margin-bottom:30px;">
+                                                        <i class="fa fa-btn fa-trash"></i>Delete
+                                                    </button>
+                                                </form>                                            
+                                            </div>    
+                                        </div>
+                                    </div>  
 
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-12 center">
+                                    <div class="col-lg-8 col-sm-12 form-box">
+                                        <div>
+                                            <!-- <label>Upload Profile Picture</label> -->
+                                            <form action="{{ $urls['updatephoto'] }}" method="POST" enctype="multipart/form-data">
+                                                {{ csrf_field() }}
+                                                {{ method_field('POST') }}
+                                                {{ Form::hidden('_mbrid', $member->id) }}
+                                                {{ Form::hidden('_formaction', 'updateMemberPhoto') }}
+                                                <!-- {{ Form::hidden('photo', $member->image) }} -->
 
-                                                <div class="form-group">
-                                                        @if(!empty($member->image))
-                                                          <img class="media-object dt-profile dt-circle" src="{{ asset($member->image) }}">            
-                                                        @else
-                                                          <i class="fa fa-user dt-profile" aria-hidden="true"></i>
-                                                        @endif   
-                                                    <div> 
-                                                        <form action="{{ $urls['deletephoto'] }}" method="POST">
-                                                            {{ csrf_field() }}
-                                                            {{ method_field('DELETE') }}
-                                                            {{ Form::hidden('_mbrid', $member->id) }}
-                                                            {{ Form::hidden('_formaction', 'deleteMemberPhoto') }}
+                                                <label>Upload Profile Picture</label>
+                                                <p class="help-block">Please upload an image of the member for profile picture. <br/>You can change an existing picture by simply uploading a new image. <br/> </p>
 
-                                                            <button type="submit" id="deletePhoto" class="btn btn-danger mty-delete {{{ !empty($member->image) ? '' : 'mty-hidden' }}}" style="margin-top:10px; margin-bottom:30px;">
-                                                                <i class="fa fa-btn fa-trash"></i>Delete
-                                                            </button>
-                                                        </form>                                            
-                                                    </div>    
-
-                                                    
-                                                </div>
-
+                                                <p class="help-block">Accepted image file format: (.jpeg, .bmp, .png)</p>
                                                 
-
-                                            </div>  
-
-                                            <div class="col-lg-8 col-sm-12 form-box">
-                                                <div>
-                                                    <!-- <label>Upload Profile Picture</label> -->
-                                                    <form action="{{ $urls['updatephoto'] }}" method="POST" enctype="multipart/form-data">
-                                                        {{ csrf_field() }}
-                                                        {{ method_field('POST') }}
-                                                        {{ Form::hidden('_mbrid', $member->id) }}
-                                                        {{ Form::hidden('_formaction', 'updateMemberPhoto') }}
-                                                        <!-- {{ Form::hidden('photo', $member->image) }} -->
-
-                                                        <label>Upload Profile Picture</label>
-                                                        <p class="help-block">Please upload an image of the member for profile picture. <br/>You can change an existing picture by simply uploading a new image. <br/> </p>
-
-                                                        <p class="help-block">Accepted image file format: (.jpeg, .bmp, .png)</p>
-                                                        
-                                                        <?php echo Form::file('photo'); ?>
-                                                        
-                                                        <p style="margin-top:10px;">
-                                                            <button type="submit" class="btn mty-update center"><i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}</button>
-                                                        </p>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                                <?php echo Form::file('photo'); ?>
+                                                
+                                                <p style="margin-top:10px;">
+                                                    <button type="submit" class="btn mty-update center"><i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}</button>
+                                                </p>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="col-lg-6 col-sm-12">
-                                
-                                <!-- Profile Picture Information -->
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        Barcode 
-                                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        
+                        <!-- Profile Picture Information -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                QR Code 
+                            </div>
 
-                                    <div class="panel-body">
-
-                                        <p class="center"><img src="{{ asset('img/barcode.jpg') }}" style="height:100px;width:auto;"></p>
-                                        <p class="center"> Member ID#: AAO393002XXU02 </p>
-            
-                                    </div>
-                                </div>
-
+                            <div class="panel-body">
+                                <p class="center"><i>Scan this QR Code to view all information about this member.</i></p>
+                                @if(Storage::disk('img')->exists("{$member->qr_image}"))
+                                    <img class="media-object" style="height:197px; margin:auto;" src="{{ asset($member->qr_image) }}"> 
+                                @else
+                                    <!-- <i class="fa fa-user dt-profile" aria-hidden="true"></i> -->
+                                @endif
                             </div>
                         </div>
+                    </div>
+                </div>
                      
 
             <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
@@ -138,23 +115,59 @@
                                         <input type="text" name="name" value="{{ $member->name }}" class="form-control" placeholder="Full Name">
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="required">Email</label>
-                                        <input type="text" name="email" value="{{ $member->email }}" class="form-control" placeholder="Email">
-                                    </div>
                                     
-                                    <div class="form-group">
-                                        <label class="required">Membership Status</label>
-                                        <?php $mbrstatus = $member->is_member ? 'member' : 'visitor'; ?>
-                                        <?php echo Form::select('mbrstatus', array('member' => 'Member', 'visitor' => 'Visitor'), $mbrstatus, array('class' => 'form-control center')); ?>
-                                    </div>
-
+                                    
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="form-group">
-                                                <label class="required">Gender</label>
-                                                <?php echo Form::select('gender', array('male' => 'Male', 'female' => 'Female'), $member->gender, array('class' => 'form-control center')); ?>
+                                                <label class="required">Email</label>
+                                                <input type="text" name="email" value="{{ $member->email }}" class="form-control" placeholder="Email">
                                             </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="required">Attended IFGF Bandung Since:</label>
+                                                <?php 
+                                                    $years = array();
+                                                    for($i = Config::get('constants.JOIN_START') ; $i<= Config::get('constants.JOIN_END'); $i++) {
+                                                        $years[$i] = $i;
+                                                    }
+                                                ?>
+                                                <?php echo Form::select('date_joined', $years, $member->date_joined, array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="required">Ibadah</label>
+                                                <?php echo Form::select('service', Config::get('constants.IBADAH'), $member->service, array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            
+                                            <div class="form-group {{ $member->service == 'kids' ? '' : 'mty-hidden' }}" id="sundayschool">
+                                                <label class="required">Sunday School Class</label>
+                                                <?php echo Form::select('kids_class', Config::get('constants.KIDS_CLASSES'), $info['kids_class']  , array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>
+
+                                        
+                                    </div>
+
+                                    
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <fieldset disabled>
+                                                <div class="form-group">
+                                                    <label class="required">Gender</label>
+                                                    <?php echo Form::select('gender', array('male' => 'Male', 'female' => 'Female'), $member->gender, array('class' => 'form-control center', 'id' => 'disabledSelect')); ?>
+                                                </div>
+                                            </fieldset>
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-12">
@@ -180,19 +193,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-
-                                    
-
-                                    
-
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-sm-12 form-box">
-
-                                    
-
                                     <div class="form-group">
                                         <label>Address</label>
                                         <input type="text" name="address" value="{{ $info['address'] }}" class="form-control" placeholder=" Address">
@@ -219,84 +223,60 @@
 
         <!-- Member Activities -->
         <div class="row">
-            <h2 class="center"> MEMBER ACTIVITIES </h2>
-            
+            <h2 class="center mty-heading"> MEMBER ACTIVITIES </h2>
             <div>
-                @foreach ($groups as $type => $data)
-                    
-                    @if($type == 'family') 
-                        
-                        <div class="col-lg-6 col-sm-12 form-box">
-                            <div class="dt-media">
-                                <div class="media">
-                                    
-                                    <div class="media-left media-middle center">
-                                        <a href="{{ $urls['edit'] }}">
-                                            <i class="fa fa-home dt-profile" aria-hidden="true"></i> FAMILY                                         
-                                        </a>
-                                    </div>
-                                    
-                                    <div class="media-body">
+                <?php $icons = Config::get('constants.GROUPS_ICONS'); ?>
+                @foreach ($groups as $group)
+                    <div class="col-lg-12 col-sm-12 form-box">
+                        <div class="dt-media">
+                            <div class="media">
+                                
+                                <?php $icon = $icons[$group]; ?>
+                                <div class="media-left media-middle center">
+                                    <span style="background-color:yellow; border-radius:10px;">
+                                        <i class="fa fa-<?=$icons[$group]?> dt-profile" aria-hidden="true"></i> 
+                                    </span>
+                                   
+                                </div>
+                                
+                                <div class="media-body">
 
-                                    @foreach ($data as $key => $group)
-                                    
-                                        <p> {{ $member->name }} is a {{ $group['title'] }} of {{ $group['name'] }} Family </p>
-                                        <p><a class="mty-btn btn purple" href="{{ $urls['edit'] }}"> <i class="fa fa-btn fa-undo" aria-hidden="true"></i> {{ trans('messages.change') }}</a></p>
+                                <h3 style="text-transform:uppercase; margin-top:0px;">{{ $group }}</h3>
 
+                                @if(count($member->$group) == 0)
+                                    <p> {{ $member->name }} is not associated with any {{ $group }}. </p>                                    
+                                    <a class="mty-btn btn green" href="{{ $urls['view'] }}"> {{ trans('messages.view') }} All <span class="cap">{{ $group }}</span></a>
+                                                
+                                @else
+                                    @foreach($member->$group as $role)                                
+                                        <form action="{{ $urls['delete'] }}" method="POST">
+                                            <p style="background-color: #ecec7a;padding: 10px;display: inline-block;border-radius: 10px;"> 
+                                                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> 
+                                                <span style="margin:0 10px; vertical-align:baseline;">{{ $member->name }} is a {{ $role->pivot->title }} of {{ $role->name }} {{ $group }}</span>
+
+                                                <a class="mty-btn btn green" href="{{ $urls['view'] }}/{{ $member->id }}"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> {{ trans('messages.view') }} {{ $group }}</a>
+                                                <!-- <a class="mty-btn btn purple" href="{{ $urls['view'] }}/{{ $role }}"> <i class="fa fa-btn fa-undo" aria-hidden="true"></i> {{ trans('messages.edit') }} {{ $group }}</a> -->
+                                                
+                                                {{ csrf_field() }}
+                                                {{ method_field('DELETE') }}
+                                                {{ Form::hidden('_grpid', $member->groupid) }}
+                                                
+                                                <button type="submit" class="btn btn-danger mty-delete">
+                                                    <i class="fa fa-btn fa-trash"></i>Remove Activity
+                                                </button>
+                                            </p>
+                                        </form>
                                     @endforeach
 
-                                    <p>{{ trans('messages.member-assign') }}</p>
-                                    <p>&nbsp;</p>
-                                    <p>&nbsp;</p>
+                                @endif
 
-                                    
 
-                                    <a class="mty-btn btn" href="{{ $urls['edit'] }}/"><i class="fa fa-btn fa-bookmark-o" aria-hidden="true"></i> {{ trans('messages.assign') }}</a>
-                                    </div>
-                                </div>
+                               </div>
                             </div>
                         </div>
-                            
-                        
-                    @else 
-                        @foreach ($data as $key => $group)
-                            <div class="col-lg-6 col-sm-12 form-box">
-                            <div class="dt-media">
-                                <div class="media">
-                                    
-                                    <div class="media-left media-middle center">
-                                        <a href="{{ $urls['edit'] }}">
-                                            <i class="fa fa-users dt-profile" aria-hidden="true"></i> ICARE                                         
-                                        </a>
-                                    </div>
-                                    
-                                    <div class="media-body">
-
-                                    @foreach ($data as $key => $group)
-                                    
-                                        <p> {{ $member->name }} is a {{ $group['title'] }} of {{ $group['name'] }} iCare </p>
-                                        <p><a class="mty-btn btn purple" href="{{ $urls['edit'] }}"> <i class="fa fa-btn fa-undo" aria-hidden="true"></i> {{ trans('messages.change') }}</a></p>
-
-                                    @endforeach
-
-                                    <p>{{ trans('messages.member-assign') }}</p>
-                                    <p>&nbsp;</p>
-                                    <p>&nbsp;</p>
-
-                                    <a class="mty-btn btn" href="{{ $urls['edit'] }}/"><i class="fa fa-btn fa-bookmark-o" aria-hidden="true"></i> {{ trans('messages.assign') }}</a>
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    @endif
-                   
-                @endforeach
-                
+                    </div>
+                @endforeach                
             </div>
-                
-        
         </div>
 
 <!--         
@@ -327,3 +307,20 @@
 
     
 @endsection
+
+@section('myscript')
+    <script>
+        jQuery(document).ready(function(){
+            // make sunday school classes dropdown to appear if kids service is chosen
+            $('select[name="service"]').on('change', function (e) {
+                var optionSelected = $("option:selected", this);
+                if(this.value == 'kids') {
+                    $("#sundayschool").fadeIn('slow').removeClass("mty-hidden");
+                } else {
+                    $("#sundayschool").fadeOut('slow');
+                }
+            });
+        });
+    </script>
+@endsection
+

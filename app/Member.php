@@ -31,15 +31,50 @@ class Member extends Model
     ];
 
     /**
-     * The storage format of the model's date columns.
-     *
-     * @var string
+     * Get all of the icares that are assigned to this member
      */
-    // protected $dateFormat = 'U';
-
-    public function roles()
+    public function icare()
     {
-        return $this->morphMany('App\Group', 'group');
-        // return $this->morphToMany('App\MemberRole', 'group');
+        return $this->morphedByMany('App\Icare', 'group')->withPivot('title');
     }
+
+    /**
+     * Get all of the families that are assigned to this member
+     */
+    public function family()
+    {
+        return $this->morphedByMany('App\Family', 'group')->withPivot('title');
+    }
+
+    /**
+     * Get all of the ministries that are assigned to this member
+     */
+    public function ministry()
+    {
+        return $this->morphedByMany('App\Ministry', 'group')->withPivot('title');
+    }
+
+    /**
+     * Get all of engage classes assigned to this member
+     */
+    public function engage()
+    {
+        return $this->morphedByMany('App\Engage', 'discipleship')->withPivot('status');
+    }
+
+    // /**
+    //  * Get all of engage classes assigned to this member
+    //  */
+    // public function classes()
+    // {
+    //     // return $this->morphedByMany('App\Engage', 'lesson', 'lessons', 'teacher_id', 'teacher_id');
+
+    //     return $this->morphedByMany('App\Engage', 'lesson');
+
+    //     // return $this->morphedByMany('App\Engage', 'lesson', 'lessons', 'lesson_id', 'teacher_id');
+    // }
+
+
+
+
 }

@@ -11,7 +11,8 @@
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "barryvdh/laravel-snappy": "^0.3.0",
         "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "davejamesmiller/laravel-breadcrumbs": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

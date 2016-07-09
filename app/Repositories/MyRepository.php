@@ -2,12 +2,19 @@
 
 namespace App\Repositories;
 
-// use Bosnadev\Repositories\Contracts\RepositoryInterface;
-// use Bosnadev\Repositories\Exceptions\RepositoryException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
+
 use App\Member;
-use DB;
+use App\MemberRole;
+
+// use App\Group;
+// use App\Family;
+// use App\Icare;
+// use App\Ministry;
+
+// use DB;
+
 /**
  * Class Repository
  */
@@ -24,6 +31,16 @@ abstract class MyRepository implements BaseRepositoryInterface {
     protected $model;
  
     /**
+     * Model Table name
+     */
+    protected $model_table;
+
+    /**
+     * Model type
+     */
+    protected $model_type;
+
+    /**
      * @param App $app
      */
     public function __construct(App $app) {
@@ -39,47 +56,239 @@ abstract class MyRepository implements BaseRepositoryInterface {
     abstract function model();
     
     /**
-     * Get all members in the group (family,icare,bible study)
+     * Get all members in the fellowship (Family,iCare, Ministry)
      *
      * @return mixed
      */
-    public function getAllMembers($id) {
-        $group = $this->model->find($id);
+    public function getMyMembers(Model $mdl, $validRoles) {
+        $members = array();
+        foreach ($validRoles as $role => $limit) {
+            $members[$role] = $mdl->members()->getQuery()->get()->filter(function ($mdl) use ($role) {
+                return $mdl->title == $role;
+            });
+        }
 
-        $results = array();
-        foreach ($group->roles as $roles) {
-            // var_dump($roles);
-            // var_dump($roles->id);
-            $member = Member::find($roles->member_id);
-            $member->groupid = $roles->id;
-            $member->age = $member->birthdate->age;
+        return $members;
+    }
+
+    /**
+     * Get all valid roles in the fellowship (Family,iCare, Ministry)
+     *
+     * @return mixed
+     */
+    public function getValidRoles() {
+        return MemberRole::where('type', $this->model())->orderBy('priority', 'asc')->lists('maxlimit', 'title'); 
+    }
+
+    /**
+     * Get all registered members
+     *
+     * @return mixed
+     */
+    public function getAllMembers() {
+        return Member::all();
+    }
+
+
+
+//     // get members and their ministry to display on a table
+//     function dandan($fellowship_id) {
+//         // $group = $this->model->find($fellowship_id);
+
+//         $results = array();
+        
+//         $groups = Group::where('group_id', $fellowship_id)
+//                     ->where('group_type', 'LIKE', $this->model_type)
+//                     ->orderBy('created_at', 'asc')
+//                     ->lists('title', 'member_id')->toArray();
+//         // var_dump($groups); 
+//         // die();
+        
+//         if(empty($groups)) return $results;
+
+//         // find all roles of each member that belongs to one Icare/Family/Ministry
+//         $ministries = DB::table('groups')
+//                 ->select('groups.title', 'groups.member_id', 'ministries.name')
+//                 ->join('ministries', function ($join) use ($groups) {
+//                     $join->on("groups.group_id", '=', 'ministries.id')
+//                          ->where('groups.group_type', 'LIKE', 'App%Ministry' )
+//                           ->whereIn('groups.member_id', array_keys($groups));
+//                 })
+//                 ->groupBy('groups.member_id')
+//                 ->orderBy('groups.member_id', 'asc')
+//                 ->get();
+        
+// //         var_dump($ministries);
+// // die();
+//         foreach ($ministries as $key => $item) {
+//             $member = Member::find($item->member_id);
+//             // $member->groupid = $item->id;
+//             $member->age = $member->birthdate->age;
+//             $member->ministry = $item->name;
+//             $member->title = $groups[$item->member_id];
+
+//             if(array_key_exists($groups[$item->member_id], $results)) {
+//                 //include in results
+//                 array_push($results[$groups[$item->member_id]], $member);
+//             } else {
+//                 //create new key
+//                 $results[$groups[$item->member_id]] = array($member);                
+//             }
+//             // array_push($results[$groups[$item->member_id]], $member);
+//         }
+
+
+
+//         // die();
+//         // foreach ($groups as $item) {
+//         //     // var_dump($roles);
+//         //     // var_dump($roles->id);
+//         //     $member = Member::find($item->member_id);
+//         //     $member->groupid = $item->id;
+//         //     $member->age = $member->birthdate->age;
             
-            if(array_key_exists($roles->title, $results)) {
-                //include in results
-                array_push($results[$roles->title], $member);
-            } else {
-                //create new key
-                $results[$roles->title] = array($member);                
-            }
-        }
-        // var_dump($group->roles);
-        // var_dump($results);
-        // die();
+//         //     if(array_key_exists($item->title, $results)) {
+//         //         //include in results
+//         //         array_push($results[$item->title], $member);
+//         //     } else {
+//         //         //create new key
+//         //         $results[$item->title] = array($member);                
+//         //     }
+//         // }
 
-        return $results;
+//         // var_dump($group->roles);
+//         // var_dump($results);
+//         // die();
 
-    }
+//         return $results;
 
-    public function getMember($id, $role) {
-        $group = $this->model->find($id);
-        foreach ($group->roles as $roles) {
-            if($roles->group_id == $id && $roles->title === $role && $roles->group_type == $this->model()) {
-                $member = Member::find($roles->member_id);
-                return $member;
-            }
-        }
-        return null;
-    }
+//     }
+
+    // get members and their ministry to display on a table
+    // function getMembersData($groups = array('icare', 'family', 'ministry')) {
+        
+    //     $results = $this->model->orderBy('id', 'asc')->get(array('*'));
+
+    //     // if(empty($groups)) return $results;
+
+    //     foreach ($results as $member) {
+            
+    //         foreach ($member->icares as $icare) {                
+    //             if(isset($member->icare)) {
+    //                 $data = $member->icare;
+    //                 $data .= ", ".$icare->name;
+    //             } else {
+    //                 $data = $icare->name;
+    //             }
+    //             $member->icare = $data;
+    //         }
+
+    //         // foreach ($member->ministry as $icare) {                
+    //         //     if(isset($member->icare)) {
+    //         //         $data = $member->icare;
+    //         //         $data .= ", ".$icare->name;
+    //         //     } else {
+    //         //         $data = $icare->name;
+    //         //     }
+    //         //     $member->icare = $data;
+    //         // }
+
+
+    //         // foreach ($member->families as $fam) {                
+    //         //     if(isset($member->family)) {
+    //         //         $data = $member->family;
+    //         //         array_push($data, $fam->name);
+    //         //     } else {
+    //         //         $data = array($fam->name);
+    //         //     }
+    //         //     $member->family = $data;
+    //         // }            
+    //     }
+    //     return $results;
+    // }
+
+    // // get members and their ministry to display on a table
+    // function getAMemberData($id, $groups = array('icare', 'family', 'ministry')) {
+        
+    //     $member = $this->model->where('id', $id)->orderBy('id', 'asc')->first();
+
+    //     // if(empty($groups)) return $results;
+
+    //     // foreach ($results as $member) {
+            
+    //         foreach ($member->icares as $icare) {                
+    //             if(isset($member->icare)) {
+    //                 $data = $member->icare;
+    //                 $data .= ", ".$icare->name;
+    //             } else {
+    //                 $data = $icare->name;
+    //             }
+    //             $member->icare = $data;
+    //         }
+
+    //         // foreach ($member->ministry as $icare) {                
+    //         //     if(isset($member->icare)) {
+    //         //         $data = $member->icare;
+    //         //         $data .= ", ".$icare->name;
+    //         //     } else {
+    //         //         $data = $icare->name;
+    //         //     }
+    //         //     $member->icare = $data;
+    //         // }
+
+
+    //         // foreach ($member->families as $fam) {                
+    //         //     if(isset($member->family)) {
+    //         //         $data = $member->family;
+    //         //         array_push($data, $fam->name);
+    //         //     } else {
+    //         //         $data = array($fam->name);
+    //         //     }
+    //         //     $member->family = $data;
+    //         // }            
+    //     // }
+    //     // var_dump($member->icare);
+    //     return $member;
+    // }
+
+
+
+
+    // function getAllGroups($member_id) {
+        
+    //     $groups = Group::where('member_id', $member_id)
+    //                 ->orderBy('created_at', 'asc')
+    //                 ->get();
+    //     $activities = array('family' => array(), 'ministry' => array(), 'icare' => array());
+    //     $family = Family::class;
+    //     $icare = Icare::class;
+    //     $ministry = Ministry::class;
+        
+        
+    //     foreach ($groups as $key => $value) {
+    //         $group = $value->group;
+    //         $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->description);
+    //         if($group instanceof $family) {
+    //             $activities['family'][] = $info;
+    //         } else if($group instanceof $icare) {
+    //             $activities['icare'][] = $info;
+    //         } else if($group instanceof $ministry) {
+    //             $activities['ministry'][] = $info;
+    //         } 
+    //     }
+    //     return $activities;
+    // }
+
+    // public function getMember($id, $role) {
+    //     $group = $this->model->find($id);
+    //     foreach ($group->roles as $roles) {
+    //         if($roles->group_id == $id && $roles->title === $role && $roles->group_type == $this->model()) {
+    //             $member = Member::find($roles->member_id);
+    //             return $member;
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
 
@@ -88,29 +297,8 @@ abstract class MyRepository implements BaseRepositoryInterface {
      * @param array $columns
      * @return mixed
      */
-    public function all($columns = array('*'), $countMembers = false) {
-        
-        if($countMembers) {
-
-            $model = $this->app->make($this->model());
-            $model_table = $model->getTable();
-            $model_key = $this->key();
-            // get member
-            $results = DB::table($model_table)
-                ->select(DB::raw("$model_table.id, $model_table.name, groups.group_id, COUNT(groups.id) as member_count"))
-                ->leftJoin('groups', function ($join) use ($model_table, $model_key) {
-                    $join->on("$model_table.id", '=', 'groups.group_id')
-                         ->where('groups.group_type', 'LIKE', $model_key );
-                })
-                ->groupBy("$model_table.id")
-                ->get();
-                
-            return $results;
-        } else {
-            return $this->model->get($columns);
-        }
-
-
+    public function all($columns = array('*')) {
+        return $this->model->get($columns);
     }
  
     /**
@@ -167,17 +355,15 @@ abstract class MyRepository implements BaseRepositoryInterface {
     public function findBy($attribute, $value, $columns = array('*')) {
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
-    
-    /**
-     * @param $attribute
-     * @param $value
-     * @return mixed
-     */
-    public function findIfExist($attribute, $value) {
-        //findOrFail(1)
-        return $this->model->where($attribute, '=', $value)->exists();
-    }
 
+    // /**
+    //  * @param $attribute
+    //  * @param $value
+    //  * @return mixed
+    //  */
+    // public function findOrFail($id) {
+    //     return $this->model->findOrFail($id);
+    // }
 
      /**
      * @param $attribute
@@ -198,7 +384,10 @@ abstract class MyRepository implements BaseRepositoryInterface {
  
         if (!$model instanceof Model)
             throw new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
- 
+
+        $this->model_table = $model->getTable();
+        $this->model_type = $this->key();
+
         return $this->model = $model->newQuery();
     }
 

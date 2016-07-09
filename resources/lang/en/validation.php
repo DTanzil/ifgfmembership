@@ -93,7 +93,8 @@ return [
             'rule-name' => 'custom-message',
         ],
         '_mbrid' => [
-            'required' => "Please choose a member for this role"
+            'required' => "Please choose a valid member for this role",
+            'required_if' => "Please choose a valid member"
         ],
         '_icrid' => [
             'required' => "Please select a valid iCare"
@@ -126,7 +127,8 @@ return [
         'city' => 'City',
         'zipcode' => 'Postal Code',
         'gender' => 'Gender',
-        'photo' => 'Photo'
+        'photo' => 'Photo',
+        'kids_class' => 'Sunday School Class'
 
     ],
 

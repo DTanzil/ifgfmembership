@@ -29,9 +29,11 @@ class IcarePolicy
      */
     public function destroy(User $user, Family $family)
     {
-        // if($user->hasRole('edit_family')) {
-        //     var_dump("YESS");
-        // }
+        if($user->hasRole('edit_family')) {
+            var_dump("YESS");
+        }
+
+
         return $user->hasRole('edit_family');
 
     }

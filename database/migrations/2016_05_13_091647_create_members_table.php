@@ -14,31 +14,31 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('member_id')->index();
+            $table->string('member_id', 10)->unique()->nullable();
             $table->string('name');
             $table->string('email', 100);
-            $table->enum('status', ['single', 'married']);
+            $table->enum('status', array_keys(Config::get('constants.MARITAL_STATUS')));
             
             // $table->string('phone', 15);
-            $table->enum('gender', ['male', 'female']);
+            $table->enum('gender', array_keys(Config::get('constants.GENDER')));
             $table->date('birthdate')->nullable();
             $table->text('description');
             $table->boolean('is_member'); 
-            $table->integer('family_id');
+            // $table->integer('family_id');
             $table->date('date_baptized')->nullable();
-            $table->date('date_joined')->nullable();
+            $table->integer('date_joined')->nullable();
 
             // $table->integer('icare');   
             // $table->integer('ministry');
             $table->string('image');
-
+            $table->string('qr_image');
             // $table->boolean('is_engage'); 
             // $table->boolean('is_establish'); 
             // $table->boolean('is_empower'); 
             // $table->boolean('is_equip'); 
 
             // $table->string('city');
-
+            $table->enum('service', array_keys(Config::get('constants.IBADAH')));
             // $table->string('classes');
             // $table->boolean('finish_engage');
             $table->timestamps();

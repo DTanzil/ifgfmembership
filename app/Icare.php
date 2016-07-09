@@ -23,10 +23,12 @@ class Icare extends Model
     ];
 
      /**
-     * Get all of the icare roles.
+     * Get all of the icare members.
      */
-    public function roles()
+    public function members()
     {
-        return $this->morphMany('App\Group', 'group');
+        return $this->morphToMany('App\Member', 'group')->withPivot('title');
     }
+
+
 }

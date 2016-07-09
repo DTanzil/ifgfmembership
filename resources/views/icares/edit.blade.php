@@ -9,7 +9,7 @@
         <!-- Display Validation Errors -->
         @include('common.errors')
 
-        <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
+        <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required</i></p>
                          
         <!-- General Information -->
         <div class="panel panel-default">
@@ -22,7 +22,7 @@
                     {{ csrf_field() }}
                     {{ method_field('POST') }}
                     {{ Form::hidden('_formaction', 'editIcare') }}
-                    {{ Form::hidden('_icrid', $fellowship->id) }}
+                    {{ Form::hidden($dlt_field, $fellowship->id) }}
 
                     <div class="row">
                         <div class="col-lg-6 col-sm-12">
@@ -35,7 +35,7 @@
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="form-group">
                                             <label class="required">iCare Meeting Day</label>
-                                            <?php echo Form::select('day', array('Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday', 'Saturday' => 'Saturday', 'Sunday' => 'Sunday'), $fellowship->day, array('class' => 'form-control center')); ?>
+                                            <?php echo Form::select('day', Config::get('constants.DAYS'), $fellowship->day, array('class' => 'form-control center')); ?>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-sm-12">
@@ -82,13 +82,17 @@
                             </div>
                         </div>
                     </div>
-                <div class="center"><button type="submit" class="btn mty-update center"><i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}</button></div>
+                <div class="center">
+                    <button type="submit" class="btn mty-update-big center">
+                        <i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- List of Members -->
-    @include('common.dania')
+    @include('common.memberlist')
     </div>
 </div>
 

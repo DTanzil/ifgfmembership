@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Repositories\MyRepository;
 
 // class MemberRepository implements BaseRepositoryInterface
-class IcareRepository extends MyRepository
+class EngageRepository extends MyRepository
 {
 
     // /**
@@ -34,7 +34,7 @@ class IcareRepository extends MyRepository
      */
     function model()
     {
-        return 'App\Icare';
+        return 'App\Engage';
     }
 
 }

@@ -12,15 +12,17 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['description', 'title', 'member_id'];
+    protected $fillable = ['description', 'title', 'member_id', 'group_type', 'group_id'];
 
 
     /**
      * Get all of the owning group models.
      */
-    public function group()
-    {
-        return $this->morphTo();
-    }
+    // public function group()
+    // {
+    //     return $this->morphTo();
+    // }
+
+    
 
 }

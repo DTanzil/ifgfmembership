@@ -34,13 +34,16 @@ Route::group(['middleware' => ['web']], function () {
 
 
     // MEMBERS ROUTES
+    Route::model('mbr', 'App\Member');
     Route::get('/members', ['as' => 'allmember', 'uses' => 'MemberController@index']);
     Route::get('/members/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
 
-    Route::get('/members/view/{mbrid?}', ['as' => 'viewmember', 'uses' => 'MemberController@editMember']); // not yet
+    Route::get('/members/view/{mbr?}', ['as' => 'viewmember', 'uses' => 'MemberController@view']); // not yet
 
     Route::post('/members/save', ['as' => 'savemember', 'uses' => 'MemberController@save']);
-    Route::get('/members/edit/{mbrid?}', ['as' => 'editmember', 'uses' => 'MemberController@editMember']);
+    Route::get('/members/edit/{mbr?}', ['as' => 'editmember', 'uses' => 'MemberController@edit']);
+
+    
     // Route::post('/member/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
     Route::delete('/members/photo/delete', ['as' => 'deletephoto', 'uses' => 'MemberController@deletePhoto']);
     Route::post('/members/photo/update', ['as' => 'updatephoto', 'uses' => 'MemberController@deletePhoto']);
@@ -62,29 +65,30 @@ Route::group(['middleware' => ['web']], function () {
 
 
     // ICARE ROUTES
+    Route::model('icare', 'App\Icare');
     Route::get('/icares', ['as' => 'allicare', 'uses' => 'IcareController@index']);
     Route::get('/icares/add', ['as' => 'addicare', 'uses' => 'IcareController@add']);
-    Route::get('/icares/edit/{icareid?}', ['as' => 'editicare', 'uses' => 'IcareController@edit']);
-    Route::get('/icares/assign/{icareid}/{icarerole?}', ['as' => 'assignicarerole', 'uses' => 'IcareController@assign']);
-
-    Route::get('/icares/view/{icareid?}', ['as' => 'viewicare', 'uses' => 'MemberController@editMember']); // not yet
-
-
+    Route::get('/icares/edit/{icare?}', ['as' => 'editicare', 'uses' => 'IcareController@edit']);
+    Route::get('/icares/assign/{icare}/{icarerole?}', ['as' => 'assignicarerole', 'uses' => 'IcareController@assign']);
+    Route::get('/icares/view/{icare?}', ['as' => 'viewicare', 'uses' => 'IcareController@view']);
     Route::post('/icares/save', ['as' => 'saveicare', 'uses' => 'IcareController@save']);
-    Route::delete('/icares/delete', ['as' => 'deleteicare', 'uses' => 'IcareController@destroy']);
-
-    // Route::get('/icares/edit/{icareid}/{icarerole?}', ['as' => 'editicarerole', 'uses' => 'IcareController@editRole']);
-    // Route::get('/icares/new/{icareid}/{icarerole?}', ['as' => 'addicarerole', 'uses' => 'IcareController@addRole']);
+    Route::delete('/icares/delete/{icare?}', ['as' => 'deleteicare', 'uses' => 'IcareController@destroy']);
     
     // MINISTRY ROUTES
     Route::get('/ministry', ['as' => 'allministry', 'uses' => 'MinistryController@index']);
-    Route::get('/ministry/edit/{mstid?}', ['as' => 'editministry', 'uses' => 'MinistryController@edit']);
+    Route::get('/ministry/edit/{minid?}', ['as' => 'editministry', 'uses' => 'MinistryController@edit']);
     
 
-    Route::delete('/group/deletearole', ['as' => 'deletearole', 'uses' => 'GroupController@destroy']);
-
-
+    // MEMBER ROLES ROUTE
+    Route::get('/mbrroles', ['as' => 'allmemberroles', 'uses' => 'MemberRoleController@index']);
+    Route::get('/mbrroles/add', ['as' => 'addmemberroles', 'uses' => 'MemberRoleController@add']);
+    Route::post('/mbrroles/save', ['as' => 'savememberroles', 'uses' => 'MemberRoleController@save']);
+    // Route::get('/mbrroles/edit/{mbrrole?}', ['as' => 'editmemberroles', 'uses' => 'MemberRoleController@edit']);
+    // Route::delete('/mbrroles/delete/{mbrrole?}', ['as' => 'deletememberrole', 'uses' => 'MemberRoleController@destroy']);
     
+
+
+    // Route::delete('/group/deletearole', ['as' => 'deletearole', 'uses' => 'GroupController@destroy']);
 
     // BLA BLA 
     Route::get('/family/user/profile/add', ['as' => 'boboho', 'uses' => 'FamilyController@index']);

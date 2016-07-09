@@ -27,7 +27,8 @@ class Family extends Model
      */
     public function roles()
     {
-        return $this->morphMany('App\Group', 'group');
+        // return $this->morphMany('App\Group', 'group');
+        return $this->morphToMany('App\Member', 'group');
     }
 
 }

@@ -18,7 +18,7 @@
                                         
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Add New Family
+                    Add New Member
                 </div>
 
                 <div class="panel-body">
@@ -26,7 +26,7 @@
                     <!-- Display Validation Errors -->
                     @include('common.errors')
                     <!-- Add Member Form -->
-                    <form role="form" action="{{ $urls['save'] }}" method="POST">
+                    <form role="form" action="{{ $urls['save'] }}" method="POST" enctype='multipart/form-data'>
                         {{ csrf_field() }}
                         {{ method_field('POST') }}
                         {{ Form::hidden('_formaction', 'addMember') }}    
@@ -39,23 +39,62 @@
                                         <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Full Name">
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="required">Email</label>
-                                        <input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="Email">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="required">Email</label>
+                                                <input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="Email">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                                <label class="required">Attended IFGF Bandung Since:</label>
+                                                <?php 
+                                                    $years = array();
+                                                    for($i = Config::get('constants.JOIN_START') ; $i<= Config::get('constants.JOIN_END'); $i++) {
+                                                        $years[$i] = $i;
+                                                    }
+                                                ?>
+                                                <?php echo Form::select('date_joined', $years, "{{ old('date_joined') }}", array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>                                        
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="form-group">
+                                                <label class="required">Ibadah</label>
+                                                <?php echo Form::select('service', Config::get('constants.IBADAH'), "{{ old('service') }}", array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            
+                                            <div class="form-group {{ old('service') == 'kids' ? '' : 'mty-hidden' }}" id="sundayschool">
+                                                <label class="required">Sunday School Class</label>
+                                                <?php echo Form::select('kids_class', Config::get('constants.KIDS_CLASSES'), "{{ old('kids_class') }}", array('class' => 'form-control center')); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    
+                                    
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group">
                                                 <label class="required">Gender</label>
-                                                <?php echo Form::select('gender', array('male' => 'Male', 'female' => 'Female'), "{{ old('gender') }}", array('class' => 'form-control center')); ?>
+                                                <?php echo Form::select('gender', Config::get('constants.GENDER'), "{{ old('gender') }}", array('class' => 'form-control center')); ?>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="form-group">
                                                 <label class="required">Status</label>
-                                                <?php echo Form::select('status', array('single' => 'Single', 'married' => 'Married'), "{{ old('status') }}", array('class' => 'form-control center')); ?>
+                                                <?php echo Form::select('status', Config::get('constants.MARITAL_STATUS'), "{{ old('status') }}", array('class' => 'form-control center')); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -123,4 +162,20 @@
 </div>
 
     
+@endsection
+
+@section('myscript')
+    <script>
+        jQuery(document).ready(function(){
+            // make sunday school classes dropdown to appear if kids service is chosen
+            $('select[name="service"]').on('change', function (e) {
+                var optionSelected = $("option:selected", this);
+                if(this.value == 'kids') {
+                    $("#sundayschool").fadeIn('slow').removeClass("mty-hidden");
+                } else {
+                    $("#sundayschool").fadeOut('slow');
+                }
+            });
+        });
+    </script>
 @endsection

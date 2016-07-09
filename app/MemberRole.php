@@ -12,8 +12,14 @@ class MemberRole extends Model
      *
      * @var string
      */
-    protected $table = 'memberroles';
+    protected $table = 'members_roles';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['title', 'type', 'priority', 'maxlimit'];
     
     /**
      * Indicates if the model should be timestamped.

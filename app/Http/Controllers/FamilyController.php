@@ -102,17 +102,32 @@ class FamilyController extends Controller
      */
     public function view(Request $request)
     {
-        $fam_id = $request->famid;
+        // $fam_id = $request->famid;
+        $fellowship_id = $request->famid;
 
-        if ($this->family->findIfExist('id', $fam_id) ) { 
-            $family = $this->family->find($fam_id);
-            $members = $this->family->getAllMembers($fam_id);
+        if ($this->family->findIfExist('id', $fellowship_id) ) { 
+            
+            $fellowship = $this->family->find($fellowship_id);
+            $members = $this->family->getAllMembers($fellowship_id);
+
+            $allmembers = $this->family->dandan($fellowship_id);
+// var_dump($members); die();
             $results = $this->family->all();
-            $order = array('father', 'mother', 'children');
-            $info = $family->description;
-            $tableCols = array('name' => 'Name', 'icare' => 'iCare', 'age' => 'Age');
-            $urls = array('add' => route('editfamilyrole', ['famid' => $fam_id, 'famrole' =>'father']), 'delete' => route('deletearole'), 'edit' => route('editfamilyrole', ['famid' => $fam_id]), 'addrole' => route('addfamilyrole', ['famid' => $fam_id, 'famrole' => 'children'] ), 'view' => 'family/view/', 'save' => route('savefamily'));
-            return view('families.view', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'family' => $family, 'info' => $info, 'members' => $members, 'order' => $order]);
+            // $order = array('father', 'mother', 'children');
+            $info = $fellowship->description;
+            $tableCols = array('pic' => 'Pic', 'name' => 'Name', 'role' => 'Role in iCare', 'email' => 'Email', 'age' => 'Age', 'gender' => 'Gender', 'ministry' => 'Ministry', 'is_member' => 'Church Member');
+
+            $validRoles = $this->family->castRoleField($this->validRoles);
+
+            $urls = array(
+                'add' => route('editfamilyrole', ['famid' => $fellowship_id, 'famrole' =>'father']), 
+                'delete' => route('deletearole'), 
+                'edit' => route('editfamilyrole', ['famid' => $fellowship_id]), 
+                'addrole' => route('addfamilyrole', ['famid' => $fellowship_id, 'famrole' => 'children'] ), 
+                'view' => 'family/view/', 
+                'save' => route('savefamily')
+            );
+            return view('families.view', ['title' => $this->title, 'tableCols' => $tableCols, 'urls' => $urls, 'fellowship' => $fellowship, 'info' => $info, 'members' => $members, 'allmembers' => $allmembers, 'order' => $validRoles]);
         } else {
             return redirect()->route('allfamily');  
         }

@@ -199,29 +199,29 @@
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
     
+    @yield('myscript')
+    
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
-    $(document).ready(function() {
-        $('#itemtable,#itemtable2').DataTable({
-                lengthChange: false,
-                select:true,
-                // search: {
-                //    search: "ora"
-                // },
-                responsive: true,
-                 "pagingType": "full_numbers"
-                }
-        );
+        $(document).ready(function() {
+            $('#itemtable,#itemtable2').DataTable({
+                    lengthChange: false,
+                    select:true,
+                    // search: {
+                    //    search: "ora"
+                    // },
+                    responsive: true,
+                     "pagingType": "full_numbers"
+                    }
+            );
 
-        $( "#datepicker" ).datepicker({
-          dateFormat: 'dd/mm/yy',
-          changeMonth: true,
-          changeYear: true
+            $( "#datepicker" ).datepicker({
+              dateFormat: 'dd/mm/yy',
+              changeMonth: true,
+              changeYear: true
+            });
         });
-    });
     </script>
 
-
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>
 </html>

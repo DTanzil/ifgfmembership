@@ -1,50 +1,40 @@
 <div class="alert alert-info" role="alert">
-    {{ trans('messages.search-instruction') }}
+    <?php echo trans('messages.search-instruction', ['role' => $defaultrole]); ?>
 </div>
-
+        
 <table id="itemtable" class="display" cellspacing="0" width="100%" style="border:1px solid #ddd;" >
-<!-- <table id="example2" class="table table-striped table-bordered" cellspacing="0" width="100%" > -->
     <thead>
         <tr>
             @foreach ($tableCols as $key => $name)
-                 <th>{{ $name }}</th>
+                <th>{{ $name }}</th>
             @endforeach
-            
-            <th>Action</th>
+                <th>Action</th>
         </tr>
     </thead>
-
     <tbody>
+        <?php $selected = array(); ?>
         @if (count($results) > 0)
             @foreach ($results as $item)
+                <tr class="cap">
 
-                <tr>
-                    @foreach ($tableCols as $key => $col)
-                        @if($key == 'age') 
-                            <td> {{ !empty($item->birthdate) ? $item->birthdate->age : '-' }} </td>                           
-                        @else
-                            <td>{{ $item->$key }}</td>
-                        @endif
-
-                    @endforeach
-
-                    <td>                            
+                    @include('common.tablecols', ['multiple' => true])
+                    
+                    <td>
                         <span id="mbr-choice-{{ $item->id }}">
                             @if(in_array($item->id, $current_members))
-                                <a name="mbr_selection" class="btn mty-btn grey" id="mbr-chosen">
+                                <?php $selected[$item->id] = $item->name; ?>
+                                <a name="mbr_mulselection" class="btn mty-btn grey mbr-mulchosen">
                                     <i class="fa fa-check" aria-hidden="true"></i> Selected
-                                </a>                                    
-                            @else
-                                <a name="mbr_selection" class="btn mty-btn grey">
-                                    Choose Member
                                 </a>
+                            @else
+                                <a name="mbr_mulselection" class="btn mty-btn grey">
+                                Choose Member
+                                </a>                                    
                             @endif
-
                         </span>
                     </td>
                 </tr>
             @endforeach
-
         @else 
             <tr>
                 <td colspan"7">{{ trans('messages.no-data') }}</td>
@@ -52,3 +42,12 @@
         @endif
     </tbody>
 </table>
+
+<div class="center" style="margin:30px; border:1px solid #3aa0b7; border-top:3px solid #3aa0b7; padding:10px;">
+    <p> Currently selected <span class="cap">{{ $defaultrole }}</span> from this list: </p> 
+    <p id="selectedmembers"> 
+        @foreach($selected as $id => $person)
+            <span id="mbr_chs_{{ $id }}" class="chosen">{{ $person }}</span>
+        @endforeach
+    </p>
+</div>

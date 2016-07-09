@@ -6,6 +6,8 @@ use App\User;
 use App\Member;
 use App\Group;
 use App\Family;
+use App\Icare;
+use App\Ministry;
 use App\Repositories\MyRepository;
 
 // class MemberRepository implements BaseRepositoryInterface
@@ -40,33 +42,31 @@ class MemberRepository extends MyRepository
         return 'App\Member';
     }
 
-    function getAllGroups($id) {
-        
-        $groups = Group::where('member_id', $id)
-                    ->orderBy('created_at', 'asc')
-                    ->get();
-
-        $activities = array();
-        foreach ($groups as $key => $value) {
-            $group = $value->group;
-            // var_dump($group);
-            // die();
-            // var_dump(Family::class);
-            // var_dump(is_a(Family::class, Family::class));
-            $family = Family::class;
-            $user = User::class;
-            // var_dump($value->title);
-            if($group instanceof $family) {
-                $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->description);
-                $activities['family'][] = $info;
-            } else {
-                // $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->name);
-                // $activities['other'][] = $info;
-            }
-        }
-
-        return $activities;
-
-        return 'DANIA';
+    function key()
+    {
+        return 'App%Member';
     }
+    // function getAllGroups($id) {
+        
+    //     $groups = Group::where('member_id', $id)
+    //                 ->orderBy('created_at', 'asc')
+    //                 ->get();
+    //     $activities = array('family' => array(), 'ministry' => array(), 'icare' => array());
+    //     $family = Family::class;
+    //     $icare = Icare::class;
+    //     $ministry = Ministry::class;
+     
+    //     foreach ($groups as $key => $value) {
+    //         $group = $value->group;
+    //         $info = array('name' => $group->name, 'title' => $value->title, 'description' => $group->description);
+    //         if($group instanceof $family) {
+    //             $activities['family'][] = $info;
+    //         } else if($group instanceof $icare) {
+    //             $activities['icare'][] = $info;
+    //         } else if($group instanceof $ministry) {
+    //             $activities['ministry'][] = $info;
+    //         } 
+    //     }
+    //     return $activities;
+    // }
 }

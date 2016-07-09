@@ -2,10 +2,16 @@
 
 @section('content')
     
-@include('common.breadcrumbs')
+     <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Add New {{ $title['singular'] }} 
+            </h1>
+        </div>
+    </div>
+    <!-- /.row -->
 
-    
-    
     <div class="row">
         <div class="col-lg-12">
             <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
@@ -16,6 +22,7 @@
                 </div>
 
                 <div class="panel-body">
+
                     <!-- Display Validation Errors -->
                     @include('common.errors')
                     <form role="form" action="{{ $urls['save'] }}" method="POST">
@@ -28,20 +35,23 @@
 
                             <div class="col-lg-6 col-sm-12">
                                 <div class="form-bottom">
+
                                     <div class="form-group">
-                                        <label class="required">iCare Name</label>
+                                        <label class="required">Ministry Name</label>
                                         <input name="name" class="form-control" value="{{ old('name') }}" placeholder="iCare Name">
                                     </div>
+
                                     <div class="row">
                                         <div class="col-lg-6 col-sm-12">
                                             <div class="form-group">
-                                                <label class="required">iCare Meeting Day</label>
-                                                <?php echo Form::select('day', Config::get('constants.DAYS'), "{{ old('day') }}", array('class' => 'form-control center')); ?>
+                                                <label class="required">Ministry Meeting Day</label>
+                                                <?php echo Form::select('day', array('Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday', 'Saturday' => 'Saturday', 'Sunday' => 'Sunday'), "{{ old('day') }}", array('class' => 'form-control center')); ?>
                                             </div>
                                         </div>
+
                                         <div class="col-lg-6 col-sm-12">
                                             <div class="form-group">
-                                                <label class="required">iCare Meeting Time</label>
+                                                <label class="required">Ministry Meeting Time</label>
                                                 <?php 
                                                 $time = array();
                                                 $increment = 30;
@@ -57,7 +67,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="required">iCare Email</label>
+                                        <label class="required">Ministry Email</label>
                                         <input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="iCare Email">
                                     </div>
 
@@ -66,6 +76,8 @@
                                         <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" placeholder="iCare Contact Phone">
                                         <p class="help-block">Example: 0812345678</p>
                                     </div>
+
+                                     
                                 </div>                                                                                               
                             </div>
 
@@ -74,30 +86,29 @@
                                     <label class="required">iCare Address</label>
                                     <input type="text" name="address" value="{{ old('address') }}" class="form-control" placeholder="iCare Address">
                                 </div>
+
                                 <div class="form-group">
                                     <label class="required">iCare City</label>
                                     <input type="text" name="city" value="{{ old('city') }}" class="form-control" placeholder="iCare City">
                                 </div>
+
                                 <div class="form-group input-group">
                                     <label class="required">iCare Postal Code</label>
                                     <input type="text" name="zipcode" value="{{ old('zipcode') }}" class="form-control" placeholder="iCare Postal Code">
                                 </div>
                             </div>
                         </div>
-                        <div class="center">
-                          
 
-                            <button type="submit" class="btn mty-btn mty-update-big">
-                                <i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.submit') }}
-                            </button>
-                            <a class="btn mty-btn mty-update-big grey" href="{{ $urls['cancel'] }}"> 
-                                <i class="fa fa-btn fa-times" aria-hidden="true"></i>{{ trans('messages.cancel') }}
-                            </a>
-                        </div>       
+                        <div class="center"><button type="submit" class="btn mty-update center"><i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.submit') }}</button></div>       
                     </form>
+                    <!-- /form -->
                 </div>                  
+                <!-- /.panel-body -->
             </div>
+            <!-- /.panel -->
         </div>
+        <!-- /.col-lg-12 -->
     </div>
+
     
 @endsection

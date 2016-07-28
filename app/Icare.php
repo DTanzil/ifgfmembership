@@ -22,12 +22,23 @@ class Icare extends Model
         'description' => 'array',
     ];
 
-     /**
+    /**
      * Get all of the icare members.
      */
     public function members()
     {
         return $this->morphToMany('App\Member', 'group')->withPivot('title');
+    }
+
+    public function getMeetingTime()
+    {
+        $time = $this->time;
+        $hours = intval($time/60) < 10 ? "0".intval($time/60) : intval($time/60);
+        $minutes = $time%60 == 0 ? '00' : $time%60; 
+
+        $this->hours = $hours;
+        $this->minutes = $minutes;
+        return $this;
     }
 
 

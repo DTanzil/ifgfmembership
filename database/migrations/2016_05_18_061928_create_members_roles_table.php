@@ -30,7 +30,12 @@ class CreateMembersRolesTable extends Migration
             ['name' => 'Facilitator', 'title' => 'facilitator', 'type' => 'App\Icare', 'priority' => '1', 'maxlimit' => '1'],
             ['name' => 'Cg Leader', 'title' => 'cg-leader', 'type' => 'App\Icare', 'priority' => '2', 'maxlimit' => '4'],
             ['name' => 'Core Teams', 'title' => 'core-teams', 'type' => 'App\Icare', 'priority' => '3', 'maxlimit' => '6'],
-            ['name' => 'Member', 'title' => 'member', 'type' => 'App\Icare', 'priority' => '4', 'maxlimit' => '0']
+            ['name' => 'Member', 'title' => 'member', 'type' => 'App\Icare', 'priority' => '4', 'maxlimit' => '0'],
+            ['name' => 'Student', 'title' => 'student', 'type' => 'App\Engage', 'priority' => '1', 'maxlimit' => '0'],
+            ['name' => 'Teacher', 'title' => 'teacher', 'type' => 'App\ClassSchedules', 'priority' => '1', 'maxlimit' => Config::get('constants.TEACHERS_MAX_NUM')],
+            ['name' => 'Member', 'title' => 'member', 'type' => 'App\Ministry', 'priority' => '2', 'maxlimit' => '0'],
+            ['name' => 'Head Department', 'title' => 'head-department', 'type' => 'App\Ministry', 'priority' => '1', 'maxlimit' => '1'],
+
         ]);
     }
 

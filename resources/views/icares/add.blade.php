@@ -4,15 +4,13 @@
     
 @include('common.breadcrumbs')
 
-    
-    
     <div class="row">
         <div class="col-lg-12">
             <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required </i></p>
                                         
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    General Information
+                    Add New {{ $title['singular'] }} 
                 </div>
 
                 <div class="panel-body">
@@ -85,8 +83,6 @@
                             </div>
                         </div>
                         <div class="center">
-                          
-
                             <button type="submit" class="btn mty-btn mty-update-big">
                                 <i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.submit') }}
                             </button>

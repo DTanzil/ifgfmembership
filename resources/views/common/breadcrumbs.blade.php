@@ -10,7 +10,9 @@
  
         </h1>
         <!-- Breadcrumbs -->
-        @if(isset($defaultrole))
+        @if(isset($defaultclass))
+            {!! Breadcrumbs::render(Request::route()->getName(), $fellowship, $defaultclass) !!}
+        @elseif(isset($defaultrole))
             {!! Breadcrumbs::render(Request::route()->getName(), $fellowship, $defaultrole) !!}
         @elseif(isset($fellowship))
             {!! Breadcrumbs::render(Request::route()->getName(), $fellowship) !!}

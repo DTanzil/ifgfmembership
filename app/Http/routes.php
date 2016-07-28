@@ -33,12 +33,18 @@ Route::group(['middleware' => ['web']], function () {
     Route::delete('/task/{task}', 'TaskController@destroy');
 
 
+    // KIDS ROUTES
+    Route::get('/kids', ['as' => 'allkids', 'uses' => 'MemberController@kids']);
+
+
     // MEMBERS ROUTES
     Route::model('mbr', 'App\Member');
     Route::get('/members', ['as' => 'allmember', 'uses' => 'MemberController@index']);
+
+    
     Route::get('/members/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
 
-    Route::get('/members/view/{mbr?}', ['as' => 'viewmember', 'uses' => 'MemberController@view']); // not yet
+    Route::get('/members/view/{mbr?}', ['as' => 'viewmember', 'uses' => 'MemberController@view']); 
 
     Route::post('/members/save', ['as' => 'savemember', 'uses' => 'MemberController@save']);
     Route::get('/members/edit/{mbr?}', ['as' => 'editmember', 'uses' => 'MemberController@edit']);
@@ -46,22 +52,8 @@ Route::group(['middleware' => ['web']], function () {
     
     // Route::post('/member/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
     Route::delete('/members/photo/delete', ['as' => 'deletephoto', 'uses' => 'MemberController@deletePhoto']);
-    Route::post('/members/photo/update', ['as' => 'updatephoto', 'uses' => 'MemberController@deletePhoto']);
+    Route::post('/members/photo/update', ['as' => 'updatephoto', 'uses' => 'MemberController@updatePhoto']);
 
-
-    // FAMILY ROUTES 
-    Route::get('/family', ['as' => 'allfamily', 'uses' => 'FamilyController@index']);
-    Route::get('/family/add', ['as' => 'addfamily', 'uses' => 'FamilyController@add']);
-    Route::get('/family/edit/{famid?}', ['as' => 'editfamily', 'uses' => 'FamilyController@editFamily']);
-    Route::get('/family/edit/{famid}/{famrole?}', ['as' => 'editfamilyrole', 'uses' => 'FamilyController@editRole']);
-    Route::get('/family/new/{famid}/{famrole?}', ['as' => 'addfamilyrole', 'uses' => 'FamilyController@addRole']);
-    Route::get('/family/view/{famid?}', ['as' => 'viewfamily', 'uses' => 'FamilyController@view']);
-    Route::get('/family/viewpdf/{famid?}', ['as' => 'viewpdffamily', 'uses' => 'FamilyController@viewpdf']);
-    Route::get('/family/editmultiple/{famid}', ['as' => 'editfammultiple', 'uses' => 'FamilyController@editRoleMultiple']);
-
-    // Route::post('/family/add', ['as' => 'addfamily', 'uses' => 'FamilyController@add']);           
-    Route::post('/family/save', ['as' => 'savefamily', 'uses' => 'FamilyController@save']);
-    Route::delete('/family/delete', ['as' => 'deletefamily', 'uses' => 'FamilyController@destroy']);
 
 
     // ICARE ROUTES
@@ -74,20 +66,75 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/icares/save', ['as' => 'saveicare', 'uses' => 'IcareController@save']);
     Route::delete('/icares/delete/{icare?}', ['as' => 'deleteicare', 'uses' => 'IcareController@destroy']);
     
+    // FAMILY ROUTES 
+    Route::model('fam', 'App\Family');
+    Route::get('/family', ['as' => 'allfamily', 'uses' => 'FamilyController@index']);
+    Route::get('/family/add', ['as' => 'addfamily', 'uses' => 'FamilyController@add']);
+    Route::get('/family/edit/{fam?}', ['as' => 'editfamily', 'uses' => 'FamilyController@edit']);
+    Route::get('/family/assign/{fam}/{famrole?}', ['as' => 'assignfamrole', 'uses' => 'FamilyController@assign']);
+    Route::get('/family/view/{fam?}', ['as' => 'viewfamily', 'uses' => 'FamilyController@view']);
+    Route::post('/family/save', ['as' => 'savefamily', 'uses' => 'FamilyController@save']);
+    Route::delete('/family/delete/{fam?}', ['as' => 'deletefamily', 'uses' => 'FamilyController@destroy']);
+
     // MINISTRY ROUTES
+    Route::model('mstry', 'App\Ministry');
     Route::get('/ministry', ['as' => 'allministry', 'uses' => 'MinistryController@index']);
-    Route::get('/ministry/edit/{minid?}', ['as' => 'editministry', 'uses' => 'MinistryController@edit']);
+    Route::get('/ministry/add', ['as' => 'addministry', 'uses' => 'MinistryController@add']);
+    Route::get('/ministry/edit/{mstry?}', ['as' => 'editministry', 'uses' => 'MinistryController@edit']);
+    Route::get('/ministry/assign/{mstry}/{mstrole?}', ['as' => 'assignmstrole', 'uses' => 'MinistryController@assign']);
+    Route::get('/ministry/view/{mstry?}', ['as' => 'viewministry', 'uses' => 'MinistryController@view']);
+    Route::post('/ministry/save', ['as' => 'saveministry', 'uses' => 'MinistryController@save']);
+    Route::delete('/ministry/delete/{mstry?}', ['as' => 'deleteministry', 'uses' => 'MinistryController@destroy']);
+
+    // Route::get('/family/edit/{famid}/{famrole?}', ['as' => 'editfamilyrole', 'uses' => 'FamilyController@editRole']);
+    // Route::get('/family/new/{famid}/{famrole?}', ['as' => 'addfamilyrole', 'uses' => 'FamilyController@addRole']);
+    // Route::get('/family/viewpdf/{famid?}', ['as' => 'viewpdffamily', 'uses' => 'FamilyController@viewpdf']);
+    // Route::get('/family/editmultiple/{famid}', ['as' => 'editfammultiple', 'uses' => 'FamilyController@editRoleMultiple']);
+
+
+
+
+
+
+    // APPROVE MEMBERS ROUTES
+    Route::model('mbr', 'App\Member');
+    Route::get('/mymembers', ['as' => 'mymember', 'uses' => 'ApproveMemberController@index']);
+    Route::get('/mymembers/edit/{mbr?}', ['as' => 'editmymember', 'uses' => 'ApproveMemberController@edit']);
+    // Route::get('/members/add', ['as' => 'addmember', 'uses' => 'MemberController@add']);
+
+
+
+
+
+
+
+
+
+
+
+
     
 
     // MEMBER ROLES ROUTE
     Route::get('/mbrroles', ['as' => 'allmemberroles', 'uses' => 'MemberRoleController@index']);
     Route::get('/mbrroles/add', ['as' => 'addmemberroles', 'uses' => 'MemberRoleController@add']);
     Route::post('/mbrroles/save', ['as' => 'savememberroles', 'uses' => 'MemberRoleController@save']);
+
     // Route::get('/mbrroles/edit/{mbrrole?}', ['as' => 'editmemberroles', 'uses' => 'MemberRoleController@edit']);
     // Route::delete('/mbrroles/delete/{mbrrole?}', ['as' => 'deletememberrole', 'uses' => 'MemberRoleController@destroy']);
     
-
-
+    // ENGAGE ROUTE
+    Route::model('eng', 'App\Engage');
+    Route::get('/engage', ['as' => 'allengage', 'uses' => 'EngageController@index']);
+    Route::get('/engage/add', ['as' => 'addengage', 'uses' => 'EngageController@add']);
+    Route::post('/engage/save', ['as' => 'saveengage', 'uses' => 'EngageController@save']);
+    Route::get('/engage/edit/{eng?}', ['as' => 'editengage', 'uses' => 'EngageController@edit']);
+    Route::get('/engage/view/{eng?}', ['as' => 'viewengage', 'uses' => 'EngageController@view']);
+    Route::get('/engage/assign/{eng}/{engrole?}', ['as' => 'assignengrole', 'uses' => 'EngageController@assign']);
+    Route::get('/engage/assign/{eng}/teacher/{eclass?}', ['as' => 'assignengteacher', 'uses' => 'EngageController@assignteacher']);
+    Route::get('/engage/attend/{eng}/{eclass?}', ['as' => 'attendengage', 'uses' => 'EngageController@attend']);
+    Route::delete('/engage/delete/{eng?}', ['as' => 'deleteengage', 'uses' => 'EngageController@destroy']);
+    
     // Route::delete('/group/deletearole', ['as' => 'deletearole', 'uses' => 'GroupController@destroy']);
 
     // BLA BLA 

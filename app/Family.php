@@ -23,12 +23,11 @@ class Family extends Model
     ];
     
     /**
-     * Get all of the family's roles.
+     * Get all of the family members.
      */
-    public function roles()
+    public function members()
     {
-        // return $this->morphMany('App\Group', 'group');
-        return $this->morphToMany('App\Member', 'group');
+        return $this->morphToMany('App\Member', 'group')->withPivot('title');
     }
 
 }

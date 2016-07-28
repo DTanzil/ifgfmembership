@@ -6,9 +6,9 @@
     </div>
 
     <div class="panel-body">
-        <p class="center" style="margin-bottom:20px;"><?php echo trans('messages.panel-welcome', ['group' => $title['singular'], 'member' => $default_role]); ?></p>
+        <p class="center mty-heading"><?php echo trans('messages.panel-welcome', ['group' => $title['singular'], 'member' => $default_role]); ?></p>
         <div class="row listbuttons">
-            @foreach($order as $role => $limit)
+            @foreach($validRoles as $role => $limit)
                 <div class="col-lg-3 col-sm-12" >
                     <div class="mty-note"> 
                         <p><?php echo trans('messages.panel-add-a-member', ['role' => $role, 'group' => $title['singular']]); ?></p>
@@ -18,10 +18,9 @@
                 </div>
             @endforeach
         </div>
-        <div class="row" style="margin-bottom:40px;">
-            @foreach ($order->keys() as $role)
+        <div class="row">
+            @foreach ($validRoles->keys() as $role)
                 @if(isset($members[$role]) && count($members[$role]) > 0)
-
                     @foreach($members[$role] as $member)
                         <div class="col-lg-4 col-sm-12 form-box">
                             <div class="dt-media">
@@ -31,7 +30,7 @@
                                             @if(!empty($member->image))
                                               <img class="media-object dt-profile dt-circle"src="{{ asset($member->image) }}">
                                             @else
-                                              <i class="fa fa-user dt-profile" style="color:orange;" aria-hidden="true"></i>
+                                              <i class="fa fa-user dt-profile orn" aria-hidden="true"></i>
                                             @endif 
                                         </a>
                                     </div>
@@ -48,13 +47,12 @@
                                     </div>
                                 </div>
                                 <form action="{{ $urls['delete'] }}/{{ $fellowship->id }}" method="POST" class="center">
-                                    <a class="mty-btn btn green" href="{{ $urls['view'] }}/{{ $member->id }}"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> {{ trans('messages.view') }} </a>
+                                    <a class="mty-btn btn green" href="{{ $urls['viewmember'] }}/{{ $member->id }}"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> {{ trans('messages.view') }} </a>
                                     <a class="mty-btn btn purple" href="{{ $urls['assign'] }}/{{ $role }}"> <i class="fa fa-btn fa-undo" aria-hidden="true"></i> {{ trans('messages.change') }}</a>
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     {{ Form::hidden('_formaction', 'deleteMember') }}
-                                    {{ Form::hidden('_mbrid', $member->member_id) }}
-                                    <!-- {{ Form::hidden($dlt_field, $fellowship->id) }} -->
+                                    {{ Form::hidden('_mbrid', $member->id) }}
                                     <button type="submit" class="btn btn-danger mty-delete">
                                         <i class="fa fa-btn fa-times" aria-hidden="true"></i>Dismiss
                                     </button>

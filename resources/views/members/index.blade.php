@@ -4,13 +4,12 @@
 
 @include('common.breadcrumbs')
 
-    <div class="row">        
-        <div class="col-lg-12">
-            <!-- Display Notification & Validation Errors -->
-            @include('common.errors')
+<div class="row">        
+    <div class="col-lg-12">
+        <!-- Display Notification & Validation Errors -->
+        @include('common.errors')
 
-            <div class="container">
-    
+        <div class="container">    
             <div class="mty-note"> 
                 <p>This page lists all the registered {{ $title['singular'] }} at IFGF Bandung.</p>
                 <p> <a class="mty-btn btn" href="{{ $urls['add'] }}"><i class="fa fa-btn fa-plus"></i>Add New {{ $title['singular'] }}</a></p>
@@ -43,7 +42,7 @@
                                         {{ method_field('DELETE') }}
                                         {{ Form::hidden('_formaction', $dlt_act) }}
                                         <a class="mty-btn btn green" href="{{ $urls['view'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-info" aria-hidden="true"></i> View </a>
-                                        <a class="mty-btn btn" href="{{ $urls['edit'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-pencil" aria-hidden="true"></i> Edit </a>
+                                        <a class="mty-btn btn" href="{{ $urls['edit'] }}/{{ $item->id }}"> <i class="fa fa-btn fa-pencil" aria-hidden="true"></i> {{ isset($editbutton) ? $editbutton : 'Edit' }} </a>
                                         <button type="submit" class="btn btn-danger mty-delete">
                                             <i class="fa fa-btn fa-trash"></i>Delete
                                         </button>

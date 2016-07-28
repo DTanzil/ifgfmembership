@@ -24,6 +24,13 @@ jQuery(document).ready(function() {
         }
     });
 
+    // $("button.mty-delete").click( function(e) {
+    //     var proceed = confirm("Are you sure you would like to delete this item ?");
+    //     if(!proceed) {
+    //         e.preventDefault();            
+    //     }
+    // });
+
     // SINGLE SELECT
     // update hidden input for 1 selected member from list of member in a table 
     // $(".mbr-save-form").on('submit', function(e){
@@ -47,12 +54,20 @@ jQuery(document).ready(function() {
     $(".mbr-save-mul-form").on('submit', function(e){
         // e.preventDefault();
         var result = [];
-        $( ".mbr-mulchosen" ).each(function( index ) {
-            // var mbr = $(this).parent().attr("id");
-            // var res = mbr.split("mbr-choice-");
-            var item_id = getId($(this));
+        // $( ".mbr-mulchosen" ).each(function( index ) {
+        //     // var mbr = $(this).parent().attr("id");
+        //     // var res = mbr.split("mbr-choice-");
+        //     // console.log($(this));
+        //     var item_id = getId($(this));
+        //     // console.log(item_id);
+        //     result.push(item_id);
+        // });
+
+        $( ".chosen" ).each(function( index ) {
+            var item_id = getMyId($(this));
             result.push(item_id);
         });
+        
         result = JSON.stringify(result);
         $("input[name='_mbrids']").attr("value", result);
     });
@@ -84,6 +99,17 @@ jQuery(document).ready(function() {
         var mbr = item.parent().attr("id");
         var res = mbr.split("mbr-choice-");
         return res[1];
+    }
+
+     // extract id from list of #selectedmembers
+    function getMyId(item)
+    {   
+        var mbr = item.attr("id");
+        var res = mbr.split("mbr_chs_");
+        // var a = Number(res[1]);
+        // console.log(a);
+        // console.log(res[1]);
+        return Number(res[1]);
     }
 
     

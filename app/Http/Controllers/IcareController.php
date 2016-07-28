@@ -19,12 +19,12 @@ class IcareController extends Controller
     protected $baseModel;
 
     /**
-     * The valid Icare roles instance.
+     * The valid roles instance.
      */
     protected $validRoles;
     
     /**
-     * The default Icare role.
+     * The default role.
      */
     protected $defaultRole;
     
@@ -67,13 +67,16 @@ class IcareController extends Controller
     }
 
     /**
-     * Show a list of all available icares.
+     * Show a list of all available items.
      *
      */
     public function index(Request $request)
     {   
-        $results = $this->baseModel->all();
-        $tableCols = array('name' => 'Name', 'member_count' => 'Number of iCare Members', 'day' => 'Meetup Day', 'leader' => 'CG Leader');
+        $results = $this->baseModel->all()->each(function($item){
+            $item->getMeetingTime();
+        });
+
+        $tableCols = array('name' => 'Name', 'member_count' => sprintf("Number of %s Members", $this->title['singular']), 'day' => 'Meetup Day', 'hours' => 'Meetup Time');
 
         $urls = array(
             'add' => route('addicare'), 
@@ -87,7 +90,7 @@ class IcareController extends Controller
     }
 
     /*
-     * Add a new icare
+     * Add a new item
      */
     public function add(Request $request)
     {        
@@ -97,29 +100,34 @@ class IcareController extends Controller
     }
 
     /*
-     * Edit icare general information
+     * Edit general information
      */
     public function edit(Request $request)
     {   
         $fellowship = $request->{$this->paramid};
         $fellowship_id = $fellowship->id;
-        $members = $this->baseModel->getMyMembers($fellowship, $this->validRoles); //get all members associated with this fellowship
+        $members = $this->baseModel->getMyMembers($fellowship); //get all members associated with this fellowship
         $info = $fellowship->description; //other info
+        $tableCols = array('name' => 'Name', 'role' => sprintf("Role in %s", $this->title['singular']), 'email' => 'Email', 'age' => 'Age', 'gender' => 'Gender', 'is_member' => 'Church Member');
+        $validRoles = $this->baseModel->castRoleField($this->validRoles);
 
         $urls = array(
             'add' => route('addicare'),
             'delete' => route('deleteicare'), 
-            'view' => route('viewmember'),  
+            'view' => route('viewicare', ["$this->paramid" => $fellowship_id]),   
+            'viewmember' => route('viewmember'),
             'save' => route('saveicare'), 
+            'cancel' => route('allicare'),
             'assign' => route('assignicarerole', ["$this->paramid" => $fellowship_id])
         );
+        
         return view('icares.edit', 
-            ['title' => $this->title, 'urls' => $urls, 'members' => $members, 'fellowship' => $fellowship, 'info' => $info, 'order' => $this->validRoles, 'default_role' => $this->defaultRole, 'dlt_field' => $this->hdninput]
+            ['title' => $this->title, 'tableCols' => $tableCols, 'urls' => $urls, 'members' => $members, 'fellowship' => $fellowship, 'info' => $info, 'validRoles' => $this->validRoles, 'order' => $validRoles, 'default_role' => $this->defaultRole, 'dlt_field' => $this->hdninput]
         );
     }
 
     /*
-     * Edit/Assign members to a role in an icare
+     * Edit/Assign members to a role
      */
     public function assign(Request $request)
     {
@@ -132,7 +140,7 @@ class IcareController extends Controller
         $fellowship = $request->{$this->paramid};
         $fellowship_id = $fellowship->id;
         $results = $this->baseModel->getAllMembers();
-        $tableCols = array('name' => 'Name', 'ministries' => 'Ministry', 'age' => 'Age', 'gender' => 'Gender');
+        $tableCols = array('name' => 'Name', 'ministry' => 'Ministry', 'age' => 'Age', 'gender' => 'Gender');
 
         // get current members
         $current_members = $fellowship->members()->getQuery()->where('title', $fellowship_role)->get()->lists('member_id')->toArray(); 
@@ -149,16 +157,18 @@ class IcareController extends Controller
     }
 
     /*
-     * View Icare detail
+     * View item detail
      * TODO: Print PDF option
      */
     public function view(Request $request)
     {
         $fellowship = $request->{$this->paramid};
         $fellowship_id = $fellowship->id;
-        $members = $this->baseModel->getMyMembers($fellowship, $this->validRoles);
+        $members = $this->baseModel->getMyMembers($fellowship);
         $info = $fellowship->description;
-        $tableCols = array('name' => 'Name', 'role' => 'Role in iCare', 'email' => 'Email', 'age' => 'Age', 'gender' => 'Gender', 'ministries' => 'Ministry', 'is_member' => 'Church Member');
+        $fellowship->getMeetingTime();
+
+        $tableCols = array('name' => 'Name', 'role' => sprintf("Role in %s", $this->title['singular']), 'email' => 'Email', 'age' => 'Age', 'gender' => 'Gender', 'is_member' => 'Church Member');
         $validRoles = $this->baseModel->castRoleField($this->validRoles);
         $urls = array(
             'cancel' => route('editicare', ["$this->paramid" => $fellowship_id]), 
@@ -171,7 +181,7 @@ class IcareController extends Controller
 
     /*
      * Delete one icare or delete a member of the icare
-     * TODO: authorize which users can destroy [$this->authorize('destroy', $icare)];
+     * TODO: authorize which users can destroy [$this->authorize('destroy', $item)];
      */
     public function destroy(Request $request)
     {
@@ -187,16 +197,19 @@ class IcareController extends Controller
 
         switch ($action) {
             case 'deleteIcare':
+                $member_ids = $fellowship->members->lists('id')->toArray();
                 $fellowship->members()->detach();
                 $fellowship->delete();
-                $request->session()->flash('message', 'One iCare has been successfully deleted.');
+                $this->baseModel->evaluateMembership($member_ids); //evaluate member status
+                $request->session()->flash('message', sprintf("One %s has been successfully deleted.", $this->title['singular']));
                 return redirect()->route('allicare');
             break;
 
             case 'deleteMember':
-                $memberid = $request->_mbrid;
-                $fellowship->members()->detach($memberid);
-                $request->session()->flash('message', 'One member has been successfully deleted.');
+                $member_ids = array($request->_mbrid);
+                $fellowship->members()->detach($request->_mbrid);                
+                $this->baseModel->evaluateMembership($member_ids); //evaluate member status
+                $request->session()->flash('message', sprintf("One member has been successfully dismissed from this %s.", $this->title['singular']));
                 return redirect()->route('editicare', [$fellowship_id]);
             break;
         }
@@ -204,7 +217,7 @@ class IcareController extends Controller
 
 
     /*
-     * Function to handle all save process like add, edit and updates in icare
+     * Function to handle all save process like add, edit and updates 
      * TODO: AUTHORIZE SAVE
      */
     public function save(Request $request)
@@ -233,7 +246,7 @@ class IcareController extends Controller
 
                 $info = $this->baseModel->castDescriptionField($request);
                 $fellowship_id = $this->baseModel->create(['name' => $request->name, 'time' => $request->time, 'day' => $request->day, 'email' => $request->email, 'description' => $info]);
-                $request->session()->flash('message', 'You have successfully created a new icare!');
+                $request->session()->flash('message', sprintf("You have successfully created a new %s!", $this->title['singular']));                
             break;
 
             case 'editIcare':
@@ -292,6 +305,10 @@ class IcareController extends Controller
                 foreach ($member_ids as $id) {                       
                     $fellowship->members()->attach($id, ['title' => $member_role]);
                 }
+               
+                // evaluate member status 
+                $allids =  array_merge($previous_ids, $member_ids);
+                $this->baseModel->evaluateMembership($allids);
 
                 $request->session()->flash('message', 'Update successful!');                            
             break;

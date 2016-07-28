@@ -32,7 +32,7 @@
                                                     {{ csrf_field() }}
                                                     {{ method_field('DELETE') }}
                                                     {{ Form::hidden('_mbrid', $member->id) }}
-                                                    {{ Form::hidden('_formaction', 'deleteMemberPhoto') }}
+                                                    {{ Form::hidden('_formaction1', 'deleteMemberPhoto') }}
 
                                                     <button type="submit" id="deletePhoto" class="btn btn-danger mty-delete {{{ !empty($member->image) ? '' : 'mty-hidden' }}}" style="margin-top:10px; margin-bottom:30px;">
                                                         <i class="fa fa-btn fa-trash"></i>Delete
@@ -49,7 +49,7 @@
                                                 {{ csrf_field() }}
                                                 {{ method_field('POST') }}
                                                 {{ Form::hidden('_mbrid', $member->id) }}
-                                                {{ Form::hidden('_formaction', 'updateMemberPhoto') }}
+                                                {{ Form::hidden('_formaction2', 'updateMemberPhoto') }}
                                                 <!-- {{ Form::hidden('photo', $member->image) }} -->
 
                                                 <label>Upload Profile Picture</label>
@@ -100,7 +100,7 @@
                 </div>
 
                 <div class="panel-body">
-                    <form role="form" action="{{ $urls['save'] }}" method="POST" enctype="multipart/form-data">
+                    <form role="form" action="{{ $urls['save'] }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('POST') }}
                         {{ Form::hidden('_formaction', 'editMember') }}

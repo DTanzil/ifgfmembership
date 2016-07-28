@@ -5,11 +5,8 @@
 @include('common.breadcrumbs')
 
 <div class="row">
-    <div class="col-lg-12">
-        <!-- Display Validation Errors -->
-        @include('common.errors')
-
-        <p><i>Fields marked with asterisk (<span style="color:red;">*</span>) are required</i></p>
+    <div class="col-lg-12">        
+        @include('common.pagetop')
                          
         <!-- General Information -->
         <div class="panel panel-default">
@@ -18,6 +15,8 @@
             </div>
 
             <div class="panel-body">
+                <!-- Display Validation Errors -->
+                @include('common.errors')
                 <form role="form" action="{{ $urls['save'] }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('POST') }}
@@ -83,13 +82,40 @@
                         </div>
                     </div>
                 <div class="center">
-                    <button type="submit" class="btn mty-update-big center">
+                    <button type="submit" class="btn mty-btn mty-update-big center">
                         <i class="fa fa-btn fa-check" aria-hidden="true"></i>{{ trans('messages.update') }}
                     </button>
+                    <a class="btn mty-btn mty-update-big grey" href="{{ $urls['cancel'] }}"> 
+                        <i class="fa fa-btn fa-times" aria-hidden="true"></i>{{ trans('messages.cancel') }}
+                    </a>
                 </div>
             </form>
         </div>
     </div>
+
+    <!--========================================== Table list of Members ==========================================-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+           List of Members
+        </div>
+        <div class="panel-body">
+            <div class="row">                            
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <!-- List of Members -->
+                    @include('common.viewtable')
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
+            <div class="center">
+                <a class="btn mty-btn mty-update-big" href="{{ $urls['assign'] }}/{{ $default_role }}"> 
+                    <i class="fa fa-btn fa-undo" aria-hidden="true"></i>Add/Edit <span class="cap">{{ $default_role }}</span>
+                </a>         
+            </div>  
+        </div>                  
+    </div>
+
+<!--========================================== Detailed List of Members ==========================================-->
 
     <!-- List of Members -->
     @include('common.memberlist')

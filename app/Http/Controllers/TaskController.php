@@ -40,6 +40,13 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
+
+         // working pdf sample code
+        // $data = array('father','mother','children');
+        // $pdf = PDF::loadView('pdf.invoice', $data);
+        // return $pdf->download('invoice.pdf');
+
+        
         // return view('tasks.index', [
         //     'tasks' => $this->tasks->forUser($request->user()),
         // ]);

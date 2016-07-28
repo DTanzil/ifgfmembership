@@ -19,22 +19,30 @@ class CreateGroupsTable extends Migration
             $table->string('description');
             $table->integer('group_id');
             $table->string('group_type');
-            $table->timestamps();
         });
 
         // Insert some stuff
         DB::table('groups')->insert([
-            ['title' => 'father', 'group_type' => 'App\Family', 'member_id' => '1', 'group_id' => '1'],
-            ['title' => 'mother', 'group_type' => 'App\Family', 'member_id' => '4', 'group_id' => '2'],
-            ['title' => 'facilitator', 'group_type' => 'App\Icare', 'member_id' => '1', 'group_id' => '1'],
-            ['title' => 'member', 'group_type' => 'App\Icare', 'member_id' => '3', 'group_id' => '1'],
-            ['title' => 'mother', 'group_type' => 'App\Family', 'member_id' => '2', 'group_id' => '4'],
-            ['title' => 'facilitator', 'group_type' => 'App\Icare', 'member_id' => '1', 'group_id' => '2'],
-            ['title' => 'core-teams', 'group_type' => 'App\Icare', 'member_id' => '4', 'group_id' => '3'],
-            ['title' => 'member', 'group_type' => 'App\Ministry', 'member_id' => '1', 'group_id' => '2'],
-            ['title' => 'member', 'group_type' => 'App\Ministry', 'member_id' => '3', 'group_id' => '3'],
-            ['title' => 'member', 'group_type' => 'App\Ministry', 'member_id' => '2', 'group_id' => '4'],
-            ['title' => 'member', 'group_type' => 'App\Ministry', 'member_id' => '1', 'group_id' => '4'],
+            ['title' => 'father', 'description' => '', 'group_type' => 'App\Family', 'member_id' => '1', 'group_id' => '1'],
+            ['title' => 'mother', 'description' => '', 'group_type' => 'App\Family', 'member_id' => '4', 'group_id' => '2'],
+            ['title' => 'facilitator', 'description' => '', 'group_type' => 'App\Icare', 'member_id' => '1', 'group_id' => '1'],
+            ['title' => 'member', 'description' => '', 'group_type' => 'App\Icare', 'member_id' => '3', 'group_id' => '1'],
+            ['title' => 'mother', 'description' => '', 'group_type' => 'App\Family', 'member_id' => '2', 'group_id' => '4'],
+            ['title' => 'facilitator', 'description' => '', 'group_type' => 'App\Icare', 'member_id' => '1', 'group_id' => '2'],
+            ['title' => 'core-teams', 'description' => '', 'group_type' => 'App\Icare', 'member_id' => '4', 'group_id' => '3'],
+            ['title' => 'member', 'description' => '', 'group_type' => 'App\Ministry', 'member_id' => '1', 'group_id' => '2'],
+            ['title' => 'member', 'description' => '', 'group_type' => 'App\Ministry', 'member_id' => '3', 'group_id' => '3'],
+            ['title' => 'member', 'description' => '', 'group_type' => 'App\Ministry', 'member_id' => '2', 'group_id' => '4'],
+            ['title' => 'member', 'description' => '', 'group_type' => 'App\Ministry', 'member_id' => '1', 'group_id' => '4'],
+
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '5', 'group_id' => '1'],
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '3', 'group_id' => '1'],
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '2', 'group_id' => '1'],
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '8', 'group_id' => '1'],
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '7', 'group_id' => '1'],
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '4', 'group_id' => '1'],
+            ['title' => 'student', 'description' => 'Attending', 'group_type' => 'App\Engage', 'member_id' => '12', 'group_id' => '1'],
+
         ]);
 
     }

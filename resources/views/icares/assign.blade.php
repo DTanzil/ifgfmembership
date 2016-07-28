@@ -22,11 +22,10 @@
                                 <!-- Add Member Form -->
                                 <fieldset class="center">                                
                                     <div class="form-bottom">
-                                        <p> Assigning Members of: </p>
-                                        <div class="form-group input-group" style="margin:auto;" >
+                                        <div class="form-group">
+                                            <label>Assigning Members of: </label>
                                             <input class="form-control center" value="{{ $fellowship->name }} {{ $title['singular'] }}" id="disabledInput" type="text" disabled>
                                         </div>
-                                        <br/>
                                         <div class="form-group">
                                             <label>AS:</label>
                                             <?php echo Form::select('_mbrole', $validRoles, $defaultrole, array('class' => 'form-control center cap')); ?>

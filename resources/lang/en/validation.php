@@ -102,7 +102,13 @@ return [
         '_mbrids' => [
             'required' => "Invalid request.",
             'json' => "Invalid request."
-        ]
+        ],
+        '_mbrole' => [
+            'required' => "Please choose a valid role",
+        ],
+        'session_*' => [
+            'required' => "Please enter a date for each sessions"
+        ],
     ],
 
     /*
@@ -128,7 +134,9 @@ return [
         'zipcode' => 'Postal Code',
         'gender' => 'Gender',
         'photo' => 'Photo',
-        'kids_class' => 'Sunday School Class'
+        'kids_class' => 'Sunday School Class',
+        '_formaction' => 'Action',
+        'mtrname' => 'Ministry Name'
 
     ],
 

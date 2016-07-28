@@ -166,7 +166,7 @@ class MemberController extends Controller
     }
 
     /*
-     * Edit family general information
+     * Edit member general information
      */
     public function edit(Request $request)
     {   
@@ -182,13 +182,73 @@ class MemberController extends Controller
             'deletephoto' => route('deletephoto'), 
             'updatephoto' => route('updatephoto'), 
             'delete' => route('deleteicare'), 
-            'edit' => route('editfamilyrole', ['famid' => $mbr_id]), 
-            'add' => route('addfamilyrole', ['famid' => $mbr_id, 'famrole' => 'children'] ), 
+            'edit' => route('editmember', ['famid' => $mbr_id]), 
+            'add' => route('editmember', ['famid' => $mbr_id] ), 
             'view' => 'family/view/', 
             'save' => route('savemember')
         );
         return view('members.editgeneral', ['title' => $this->title, 'info' => $info, 'groups' => $groups, 'urls' => $urls, 'member' => $member]);
     }
+
+    /*
+     * View member information
+     */
+    public function view(Request $request)
+    {   
+        $member = $request->{$this->paramid};
+        $mbr_id = $member->id;
+        $info = $member->description;
+
+        $groups = array_keys(Config::get('constants.GROUPS'));
+
+        // $groups = array('families', 'icares');
+
+        $urls = array(
+            'deletephoto' => route('deletephoto'), 
+            'updatephoto' => route('updatephoto'), 
+            'delete' => route('deleteicare'), 
+            'edit' => route('editmember', ['famid' => $mbr_id]), 
+            'add' => route('editmember', ['famid' => $mbr_id] ), 
+            'view' => 'family/view/', 
+            'save' => route('savemember')
+        );
+        $urls = array(
+            'cancel' => route('editicare', ["$this->paramid" => $mbr_id]), 
+        );
+        return view('members.view', ['title' => $this->title, 'info' => $info, 'groups' => $groups, 'urls' => $urls, 'member' => $member]);
+    }
+
+
+
+
+    /*
+     * Show all kids
+     */
+    public function kids(Request $request)
+    {
+
+        $now = \Carbon\Carbon::now();
+        $base_date = $now->subYears(14)->format('Y-m-d');
+        $results = \App\Member::where('birthdate', '>', $base_date)->orWhere('service', '=', 'kids')->get()->each(function($item){
+            $data = $item->description;
+            $class = '-';
+            if(!empty($data) && isset($data['kids_class']))
+                $class = $data['kids_class'];
+            $item->kids_class = $class;
+        });
+
+        $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'service' => 'Ibadah', 'kids_class' => 'Kids Class');
+        $urls = array(
+            'add' => route('addmember'), 
+            'delete' => '/member/delete/', 
+            'edit' => route('editmember'), 
+            'view' => route('viewmember')
+        );
+        $title = array('header' => 'Kids', 'singular' => 'Kids');
+
+        return view('members.index', ['title' => $title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'dlt_field' => "$this->hdninput", 'dlt_act' => 'deleteMember']);
+    }
+
 
 
     /*
@@ -197,7 +257,7 @@ class MemberController extends Controller
     public function deletePhoto(Request $request)
     {
         $this->validate($request, [
-            '_formaction' => 'bail|required|in:deleteMemberPhoto,updateMemberPhoto',
+            '_formaction1' => 'bail|required|in:deleteMemberPhoto',
             "$this->hdninput" => 'bail|required|integer|exists:members,id'
         ]);
 
@@ -205,27 +265,38 @@ class MemberController extends Controller
         $member = $this->baseModel->find($mbr_id);
         $oldphoto = $member->image;
         $photourl = "";
-
-        switch ($request->_formaction) {
-            case 'deleteMemberPhoto':
-                $photourl = "";
-            break;
-        
-            case 'updateMemberPhoto':
-                $photo_rule = Config::get('constants.VALID_IMAGE_TYPES');
-                // form validation
-                $this->validate($request, [
-                    'photo' => "bail|required|mimes:$photo_rule"
-                ]);
-                // user upload a profile picture
-                if($request->hasFile('photo')) $photourl = $this->sanitizePhotoUpload($request);
-            break;
-
-            default:
-                return redirect()->route('allmember');
-            break;
-        }
        
+        // delete old picture file
+        if(!empty($oldphoto) && Storage::disk('img')->has($oldphoto)) {
+            Storage::disk('img')->delete($oldphoto);  
+        } 
+        // update profile pic information
+        $this->baseModel->update(['image' => $photourl], $mbr_id, 'id');
+        $request->session()->flash('message', 'Update successful!');  
+        return redirect()->route('editmember', [$mbr_id]);
+    }
+
+    /*
+     * Delete member photo
+     */
+    public function updatePhoto(Request $request)
+    {
+        $photo_rule = Config::get('constants.VALID_IMAGE_TYPES');
+        
+        $this->validate($request, [
+            '_formaction2' => 'bail|required|in:updateMemberPhoto',
+            "$this->hdninput" => 'bail|required|integer|exists:members,id',
+            'photo' => "bail|required|max:3500|mimes:$photo_rule"
+        ]);
+
+        $mbr_id = $request->{$this->hdninput};
+        $member = $this->baseModel->find($mbr_id);
+        $oldphoto = $member->image;
+        $photourl = "";
+
+        // user upload a profile picture
+        if($request->hasFile('photo')) $photourl = $this->sanitizePhotoUpload($request);
+
         // delete old picture file
         if(!empty($oldphoto) && Storage::disk('img')->has($oldphoto)) {
             Storage::disk('img')->delete($oldphoto);  

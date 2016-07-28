@@ -4,29 +4,8 @@ namespace App\Repositories;
 
 use App\Repositories\MyRepository;
 
-// class MemberRepository implements BaseRepositoryInterface
 class MinistryRepository extends MyRepository
 {
-
-    // /**
-    //  * Get all of the tasks for a given user.
-    //  *
-    //  * @param  User  $user
-    //  * @return Collection
-    //  */
-    // public function forUser(User $user)
-    // {
-    //     // return Member::all();
-    //     return Member::where('id', $user->id)
-    //                 ->orderBy('created_at', 'asc')
-    //                 ->get();
-    // }
-
-    // public function all()
-    // {
-    //     return Member::all();
-    // }
-
     /**
      * Specify Model class name
      *
@@ -37,15 +16,31 @@ class MinistryRepository extends MyRepository
         return 'App\Ministry';
     }
 
-    function key()
+    /**
+     * Delete Ministry and all of its associated ministry
+     */
+    function deleteMyMinistry($base_id)
     {
-        return 'App%Ministry';
+    	$ministry_ids = \App\Ministry::where('parent_ministry_id', $base_id)->get();
+	    foreach ($ministry_ids as $key => $value) {
+	    	$id = $value->id;
+		    $this->deleteMyMinistry($id);
+		    $this->deleteMinistry($id);
+	    }
+	    $this->deleteMinistry($base_id);
     }
 
-    
-    // function getMembers($famid)
-    // {
-        
-    // }
+    /**
+     * Delete a Ministry
+     */
+    function deleteMinistry($id)
+    {
+    	$item = \App\Ministry::find($id);
+
+    	if($item) {
+    		$item->members()->detach();
+    		$item->delete();
+    	}
+    }
 
 }

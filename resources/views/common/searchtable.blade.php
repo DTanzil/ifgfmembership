@@ -2,7 +2,7 @@
     <?php echo trans('messages.search-instruction', ['role' => $defaultrole]); ?>
 </div>
         
-<table id="itemtable" class="display" cellspacing="0" width="100%" style="border:1px solid #ddd;" >
+<table id="itemtable" class="display" cellspacing="0" width="100%">
     <thead>
         <tr>
             @foreach ($tableCols as $key => $name)
@@ -16,9 +16,30 @@
         @if (count($results) > 0)
             @foreach ($results as $item)
                 <tr class="cap">
-
-                    @include('common.tablecols', ['multiple' => true])
-                    
+                    @foreach ($tableCols as $key => $col)
+                        @if($key == 'age') 
+                            <td> {{ !empty($item->birthdate) ? $item->birthdate->age : '-' }} </td> 
+                        @elseif($key == 'role')
+                            <td>{{ $item->title }}</td>
+                        @elseif($key == 'is_member')
+                            <td>{{ $item->$key ? 'Member' : 'Visitor'}}</td>
+                        @elseif($key == 'ministry' || $key == 'icare' || $key == 'family')            
+                             <td>
+                               <?php 
+                                    $list = $item->$key->toArray();
+                                    if(count($list) == 0) echo "-"; 
+                                    for ($i=0; $i < count($list); $i++) { 
+                                        echo $list[$i]['name'];
+                                        if(next($list) !== FALSE) echo ", ";                                                    
+                                    }                                        
+                                ?>
+                            </td>    
+                        @elseif($key == 'name')
+                            <td class="dtname">{{ $item->$key }}</td>
+                        @else
+                            <td>{{ $item->$key or ''}}</td>
+                        @endif
+                    @endforeach
                     <td>
                         <span id="mbr-choice-{{ $item->id }}">
                             @if(in_array($item->id, $current_members))
@@ -35,10 +56,7 @@
                     </td>
                 </tr>
             @endforeach
-        @else 
-            <tr>
-                <td colspan"7">{{ trans('messages.no-data') }}</td>
-            </tr>
+    
         @endif
     </tbody>
 </table>

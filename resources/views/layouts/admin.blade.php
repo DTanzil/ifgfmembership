@@ -73,11 +73,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">IFGF Bandung Membership System v1.0</a>
+                <a class="navbar-brand" href="index.html">{{ Config::get('constants.GLOBAL.product_name') }} {{ Config::get('constants.GLOBAL.version') }}</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-                <li class="dropdown">
+                <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu message-dropdown">
                         <li class="message-preview">
@@ -129,8 +129,8 @@
                             <a href="#">Read All New Messages</a>
                         </li>
                     </ul>
-                </li>
-                <li class="dropdown">
+                </li> -->
+                <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu alert-dropdown">
                         <li>
@@ -156,7 +156,7 @@
                             <a href="#">View All</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth::user()->name }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -175,25 +175,17 @@
         </nav>
 
         <div id="page-wrapper">
-
             <div class="container-fluid">
                 @yield('content')
-              
-
             </div>
-            <!-- /.container-fluid -->
-
         </div>
-        <!-- /#page-wrapper -->
+
     </div>
-    <!-- /#wrapper -->
     
 
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://localhost/ifgfbdg/public/js/scripts.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
@@ -205,17 +197,26 @@
     <script>
         $(document).ready(function() {
             $('#itemtable,#itemtable2').DataTable({
-                    lengthChange: false,
+                    // lengthChange: false,
                     select:true,
                     // search: {
                     //    search: "ora"
                     // },
                     responsive: true,
-                     "pagingType": "full_numbers"
-                    }
+                    "pagingType": "full_numbers",
+                    "lengthMenu": [ [25, 50, -1], [25, 50, "All"] ]
+                }
             );
 
-            $( "#datepicker" ).datepicker({
+            $('#attendancetable').DataTable({
+                    select:true,
+                    responsive: true,
+                    "pagingType": "full_numbers",
+                    "lengthMenu": [ [-1, 50], ["All", 50] ]
+                }
+            );
+
+            $( "#datepicker, .mydate").datepicker({
               dateFormat: 'dd/mm/yy',
               changeMonth: true,
               changeYear: true

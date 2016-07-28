@@ -15,16 +15,14 @@ class CreateMinistriesTable extends Migration
         Schema::create('ministries', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
-            $table->tinyInteger('level');
+            $table->string('description');
+            $table->integer('level');
             $table->integer('parent_ministry_id');
-            $table->string('leader');
-            $table->timestamps();
         });
 
         // Insert some stuff
         DB::table('ministries')->insert([
-            ['name' => 'Senior Pastor', 'parent_ministry_id' => '0', 'level' => '1'],
+            ['name' => 'Senior Pastor', 'parent_ministry_id' => '1', 'level' => '1'],
             ['name' => 'iServe', 'parent_ministry_id' => '1', 'level' => '2'],
             ['name' => 'Event Management', 'parent_ministry_id' => '2', 'level' => '3'],
             ['name' => 'Finance', 'parent_ministry_id' => '3', 'level' => '4'],

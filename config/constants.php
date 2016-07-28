@@ -1,9 +1,10 @@
 <?php 
 
 return [
-    'global' => [
-        'version' => '1.0',
-        'en' => 'www.domain.us'
+    'GLOBAL' => [
+        'version' => 'v1.0',
+        'en' => 'www.domain.us',
+        'product_name' => 'IFGF Bandung Membership System'
         // etc
     ],
     'DAYS' => [
@@ -50,6 +51,31 @@ return [
         'ministry' => 'university',
         'icare' => 'users'
     ],
+
+    'ENGAGE_CLASSES' => [
+        '0' => 'Keselamatan',
+        '1' => 'Transformasi Kehidupan',
+        '2' => 'Baptisan Air',
+        '3' => 'Setiap Hari Bersama Kristus',
+        '4' => 'Ikatan Perjanjian',
+        '5' => 'Spiritual Formation',
+        '6' => 'IFGF DNA Dan Icare Group'
+    ],
+    'FINISH_ENGAGE' => 6,
+
+    'ESTABLISH_CLASSES' => [
+        '0' => 'Session',
+        '1' => 'Session',
+        '2' => 'Session Air',
+        '3' => 'Session Hari Bersama Kristus',
+        '4' => 'Session Perjanjian',
+        '5' => 'Session Formation',
+        '6' => 'Session DNA Dan Icare Group'
+    ],
+    'FINISH_ESTABLISH' => 6,
+
+    
+    'TEACHERS_MAX_NUM' => 2,
     
     'JOIN_START' => '2000',
     'JOIN_END' => '2016',

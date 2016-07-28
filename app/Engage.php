@@ -13,53 +13,28 @@ class Engage extends Model
      */
     protected $table = 'engage';
 
-
-	// *
-	//  * The attributes that are mass assignable.
-	//  *
-	//  * @var array
-	 
- //    protected $fillable = ['name', 'description'];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    // protected $casts = [
-    //     'description' => 'array',
-    // ];
-
      /**
      * Get all of the engage students.
      */
     public function students()
     {
-        return $this->morphToMany('App\Member', 'discipleship')->withPivot('status');
+        return $this->morphToMany('App\Member', 'group')->withPivot('description');
     }
 
-
     /**
-     * Get all of the staff member's photos.
+     * Get all of the classes.
      */
     public function classes()
     {
-        return $this->morphMany('App\ClassSchedule', 'lesson');
+        return $this->morphMany('App\ClassSchedules', 'lesson');
     }
 
-    // /**
-    //  * Get all of the icare roles.
-    //  */
-    // public function lessons()
-    // {
-    //     return $this->morphToMany('App\Member', 'lesson');
-
-    //     // return $this->morphToMany('App\Member', 'lesson', 'lessons', 'teacher_id');
-
-    //     // return $this->morphToMany('App\Member', 'lesson', 'lessons', 'lesson_id', 'teacher_id'); // this work for getting teachers
-    // }
-
-    
-
+    /**
+     * Get all of the attendances for the class.
+     */
+    public function attendances()
+    {
+        return $this->hasManyThrough('App\Attendance', 'App\ClassSchedules', 'lesson_id', 'class_schedules_id');
+    }
 
 }

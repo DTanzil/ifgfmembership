@@ -11,21 +11,17 @@ class Ministry extends Model
 	 *
 	 * @var array
 	 */
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'detail', 'level', 'parent_ministry_id'];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
+    /*
+     * Set timestamp to false
      */
-    protected $casts = [
-        'description' => 'array',
-    ];
+    public $timestamps = false;
 
      /**
-     * Get all of the icare roles.
+     * Get all of the ministry members.
      */
-    public function roles()
+    public function members()
     {
         return $this->morphToMany('App\Member', 'group')->withPivot('title');
     }

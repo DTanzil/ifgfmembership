@@ -22,15 +22,14 @@ class AppServiceProvider extends ServiceProvider
 
         // Generate Sidebar Menu
         $menu = array(
-            'Home' => array('url' => 'allfamily', 'icon' => 'fa-dashboard'),
-            'Members' => array('url' => 'allmember', 'icon' => 'fa-user', 'child_urls' => array('allmember', 'addmember'),
+            // 'Home' => array('url' => 'allfamily', 'icon' => 'fa-dashboard'),
+            'Members' => array('url' => 'allmember', 'icon' => 'fa-user', 'child_urls' => array('allmember', 'addmember', 'editmember', 'viewmember'),
                                 'child' => array(
                                     'All Members' => array('url' => 'allmember', 'icon' => 'fa-home'), 
                                     'Add New Member' => array('url' => 'addmember', 'icon' => 'fa-home'))),
-            'Kids' => array('url' => 'allmember', 'icon' => 'fa-child', 'child_urls' => array('allmember', 'addmember'),
+            'Kids' => array('url' => 'allkids', 'icon' => 'fa-child', 'child_urls' => array('allkids'),
                                 'child' => array(
-                                    'All Kids' => array('url' => 'allmember', 'icon' => 'fa-home'), 
-                                    'Add New Kids' => array('url' => 'addmember', 'icon' => 'fa-home'))),
+                                    'All Kids' => array('url' => 'allkids', 'icon' => 'fa-home'))),
             'Family' => array('url' => 'allfamily', 'icon' => 'fa-home', 'child_urls' => array('allfamily', 'addfamily', 'editfamily', 'viewfamily'),
                                 'child' => array(
                                     'All Family' => array('url' => 'allfamily', 'icon' => 'fa-home'), 
@@ -47,22 +46,22 @@ class AppServiceProvider extends ServiceProvider
                                 'child' => array(
                                     'All Engage' => array('url' => 'allengage', 'icon' => 'fa-home'), 
                                     'Add New Engage' => array('url' => 'addengage', 'icon' => 'fa-home'))),
-            'Establish' => array('url' => 'allengage', 'icon' => 'fa-book', 'child_urls' => array('allmember', 'addmember'),
+            'Establish' => array('url' => 'allestablish', 'icon' => 'fa-book', 'child_urls' => array('allestablish', 'addestablish', 'editestablish', 'viewestablish'),
                                 'child' => array(
-                                    'All Engage' => array('url' => 'allengage'), 
-                                    'Add New Engage' => array('url' => 'allengage'))),
-            'Equip' => array('url' => 'allengage', 'icon' => 'fa-book', 'child_urls' => array('allmember', 'addmember'),
+                                    'All Establish' => array('url' => 'allestablish'), 
+                                    'Add New Establish' => array('url' => 'addestablish'))),
+            'Equip' => array('url' => 'allequip', 'icon' => 'fa-book', 'child_urls' => array('allequip', 'addequip', 'editequip', 'viewequip'),
                                 'child' => array(
-                                    'All Engage' => array('url' => 'allengage'), 
-                                    'Add New Engage' => array('url' => 'allengage'))),
-            'Empower' => array('url' => 'allengage', 'icon' => 'fa-book', 'child_urls' => array('allmember', 'addmember'),
+                                    'All Equip' => array('url' => 'allequip'), 
+                                    'Add New Equip' => array('url' => 'addequip'))),
+            'Empower' => array('url' => 'allempower', 'icon' => 'fa-book', 'child_urls' => array('allempower', 'addempower', 'editempower', 'viewempower'),
                                 'child' => array(
-                                    'All Engage' => array('url' => 'allengage'), 
-                                    'Add New Engage' => array('url' => 'allengage'))),
-            'Override Membership' => array('url' => 'allfamily', 'icon' => 'fa-wrench', 'child_urls' => array('allmemberroles', 'addmemberroles'),
+                                    'All Empower' => array('url' => 'allempower'), 
+                                    'Add New Empower' => array('url' => 'addempower'))),
+            'Override Membership' => array('url' => 'mymember', 'icon' => 'fa-wrench', 'child_urls' => array('mymember', 'editmymember'),
                                 'child' => array(
-                                    'All Member Roles' => array('url' => 'allmemberroles'), 
-                                    'Add New Member Role' => array('url' => 'addmemberroles'))),
+                                    'All Membership Status' => array('url' => 'mymember'), 
+                                    'Edit Membership Status' => array('url' => 'editmymember'))),
             'Roles' => array('url' => 'allmemberroles', 'icon' => 'fa-wrench', 'child_urls' => array('allmemberroles', 'addmemberroles'),
                                 'child' => array(
                                     'All Member Roles' => array('url' => 'allmemberroles'), 

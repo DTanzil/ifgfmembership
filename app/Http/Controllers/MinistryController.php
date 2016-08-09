@@ -190,7 +190,7 @@ class MinistryController extends Controller
     {
         // form validation
         $this->validate($request, [
-            '_formaction' => 'bail|required|in:,deleteMinistry,deleteMember',
+            '_formaction' => 'bail|required|in:deleteMinistry,deleteMember',
             '_mbrid' => "required_if:_formaction,deleteMember|exists:ministries,id",
         ]);
         
@@ -208,8 +208,8 @@ class MinistryController extends Controller
             case 'deleteMember':
                 $memberid = $request->_mbrid;
                 $fellowship->members()->detach($memberid);                
-                $request->session()->flash('message', sprintf("One member has been successfully dismissed from this %s.", $this->title['singular']));
-                return redirect()->route('editministry', [$fellowship_id]);
+                $request->session()->flash('message', sprintf("One member has been successfully dismissed from %s %s.", $fellowship->name, $this->title['singular']));
+                return redirect()->back();
             break;
         }
     }

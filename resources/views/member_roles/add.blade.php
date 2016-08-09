@@ -40,7 +40,8 @@
                                             <div class="col-lg-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label class="required">Group:</label>
-                                                    <?php echo Form::select('group', Config::get('constants.GROUPS'), "{{ old('group') }}", array('class' => 'form-control center')); ?>
+                                                    <?php $groups = array_keys(Config::get('constants.GROUPS')); ?>
+                                                    <?php echo Form::select('group', array_combine($groups,$groups), "{{ old('group') }}", array('class' => 'form-control center cap')); ?>
                                                 </div>
                                             </div>                                            
                                         </div>

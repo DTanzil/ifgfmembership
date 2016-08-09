@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Config;
 
+
 class Member extends Model
 {
     
@@ -60,8 +61,33 @@ class Member extends Model
      */
     public function engage()
     {
-        return $this->morphedByMany('App\Engage', 'group')->withPivot('description');
+        return $this->morphedByMany('App\Engage', 'group')->withPivot('description', 'title');
 
+    }
+
+    /**
+     * Get all of establish classes assigned to this member
+     */
+    public function establish()
+    {
+        return $this->morphedByMany('App\Establish', 'group')->withPivot('description', 'title');
+    }
+
+
+    /**
+     * Get all of equip classes assigned to this member
+     */
+    public function equip()
+    {
+        return $this->morphedByMany('App\Equip', 'group')->withPivot('description', 'title');
+    }
+
+    /**
+     * Get all of empower classes assigned to this member
+     */
+    public function empower()
+    {
+        return $this->morphedByMany('App\Empower', 'group')->withPivot('description', 'title');
     }
 
     /**
@@ -70,16 +96,6 @@ class Member extends Model
     public function teachings()
     {
         return $this->morphedByMany('App\ClassSchedules', 'group');
-    }
-
-    /**
-     * Mark student as graduated if student has completed the bible study class
-     * @param $classes number of classes attended
-     */
-    public function determineStudentStatus($classes = 0) 
-    {
-        $status = ($classes >= Config::get('constants.FINISH_ENGAGE')) ? "Graduated" : "Attending";
-        return $status;
     }
 
     /**
@@ -122,4 +138,7 @@ class Member extends Model
         $this->is_member = $membership;
         $this->save();
     }
+
+
+
 }

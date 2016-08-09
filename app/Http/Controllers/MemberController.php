@@ -3,26 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
-
-use App\Family;
-// use App\MemberRole;
-// use App\Member;
 use Storage;
 use Image;
-
 use Config;
-
-use App\Icare;
-
-use App\Engage;
-
 use App\Http\Controllers\Controller;
 use App\Repositories\MemberRepository as Member;
-
-
-use App\functions\QRcode as QRcode;
 
 class MemberController extends Controller
 {
@@ -34,12 +20,7 @@ class MemberController extends Controller
      * @var MemberRepository
      */
     protected $baseModel;
-    
-    /**
-     * The default Member role.
-     */
-    // protected $defaultRole;
-    
+        
     /*
      * General title page
      */
@@ -51,16 +32,9 @@ class MemberController extends Controller
     protected $paramid;
 
     /*
-     * Parameters for the URL
-     */
-    // protected $paramrole;
-
-    /*
      * Hidden input id name for the form
      */
     protected $hdninput;
-
-
 
      /**
      * Create a new controller instance.
@@ -71,64 +45,11 @@ class MemberController extends Controller
     public function __construct(Member $members)
     {
         $this->middleware('auth');
-
         $this->baseModel = $members;
         $this->paramid = 'mbr';
-        // $this->paramrole = 'icarerole';
         $this->hdninput = '_mbrid';
         $this->title = array('header' => 'Members', 'singular' => 'Member');
-
-        
-        // $member = $members->find(5);
-        // $aa = Engage::find(1);
-        
-        // $cl = $member->engage;
-        // foreach ($cl as $key => $value) {
-        //     var_dump($value->name);
-        // }
-
-        // $ll = $aa->students;
-        // foreach ($ll as $key => $value) {
-        //     var_dump($value->name);
-        //     var_dump($value->id);
-        // }
-
-        // $pp = $aa->classes;
-        // foreach ($pp as $key => $value) {
-        //     var_dump($value->name);
-        // }
-
-        
-        
-        // // var_dump($member->engage);
-        // die();
-            
-        // tihs works with putting namespace on phpqrcode
-        // include(app_path() . '\CustomStuff\CustomDirectory\phpqrcode.php');
-        
-        // $aa = new \App\CustomStuff\CustomDirectory\QRcode();
-        // $aa::png('PHP QR Code :)');
-        // $aa::png('aiefjiofae',false, QR_ECLEVEL_L, 14, 10); 
-        
-
-        // // $tempDir = "33";      
-        // // $codeContents = '123456DEMO'; 
-         
-        // // generating 
-        // $aa::png($codeContents, $tempDir.'007_1.png', QR_ECLEVEL_L, 1); 
-        // // $aa::png($codeContents, $tempDir.'007_2.png', QR_ECLEVEL_L, 2); 
-        // // $aa::png($codeContents, $tempDir.'007_3.png', QR_ECLEVEL_L, 3); 
-             
-        // // displaying 
-        // // echo '<img src="'.EXAMPLE_TMP_URLRELPATH.'007_1.png" />'; 
-        // // echo '<img src="'.EXAMPLE_TMP_URLRELPATH.'007_2.png" />'; 
-        // // echo '<img src="'.EXAMPLE_TMP_URLRELPATH.'007_3.png" />'; 
-        // // echo '<img src="'.EXAMPLE_TMP_URLRELPATH.'007_4.png" />'; 
-        
-        
     }
-
-
 
     /**
      * Show a list of all members.
@@ -140,11 +61,21 @@ class MemberController extends Controller
         $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'is_member' => 'Member Status', 'icare' => 'Icare');
         $urls = array(
             'add' => route('addmember'), 
-            'delete' => '/member/delete/', 
+            'delete' => route('deletemember'), 
             'edit' => route('editmember'), 
             'view' => route('viewmember')
         );
+
         return view('members.index', ['title' => $this->title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'dlt_field' => "$this->hdninput", 'dlt_act' => 'deleteMember']);
+    }
+
+    /**
+     * Show the homepage.
+     */
+    public function home(Request $request)
+    {
+        $groups = Config::get('constants.GROUPS');
+        return view('members.home', ['title' => $this->title, 'groups' => $groups]);
     }
 
 
@@ -156,13 +87,9 @@ class MemberController extends Controller
      */
     public function add(Request $request)
     {
-        $urls = array(
-            'add' => route('addmember'), 
-            'delete' => '/member/delete/', 
-            'save' => route('savemember'), 
-            'view' => route('viewmember')
-        );
-        return view('members.add', ['urls' => $urls]);
+        return view('members.add', 
+            ['title' => $this->title, 'urls' => array('save' => route('savemember'), 'cancel' => route('allmember'))]
+        ); 
     }
 
     /*
@@ -173,21 +100,43 @@ class MemberController extends Controller
         $member = $request->{$this->paramid};
         $mbr_id = $member->id;
         $info = $member->description;
-
         $groups = array_keys(Config::get('constants.GROUPS'));
-
-        // $groups = array('families', 'icares');
 
         $urls = array(
             'deletephoto' => route('deletephoto'), 
             'updatephoto' => route('updatephoto'), 
-            'delete' => route('deleteicare'), 
-            'edit' => route('editmember', ['famid' => $mbr_id]), 
-            'add' => route('editmember', ['famid' => $mbr_id] ), 
-            'view' => 'family/view/', 
-            'save' => route('savemember')
+            'delete' => array(
+                'member' => route('deletemember'), 
+                'family' => route('deletefamily'),
+                'ministry' => route('deleteministry'),
+                'icare' => route('deleteicare'),
+                'engage' => route('deleteengage'),
+                'establish' => route('deleteestablish'),
+                'equip' => route('deleteequip'),
+            ),
+            'viewgroup' => array(
+                'member' => route('viewmember'), 
+                'family' => route('viewfamily'),
+                'ministry' => route('viewministry'),
+                'icare' => route('viewicare'),
+                'engage' => route('viewengage'),
+                'establish' => route('viewestablish'),
+                'equip' => route('viewequip'),
+            ),
+            'allgroup' => array(
+                'member' => route('allmember'), 
+                'family' => route('allfamily'),
+                'ministry' => route('allministry'),
+                'icare' => route('allicare'),
+                'engage' => route('allengage'),
+                'establish' => route('allestablish'),
+                'equip' => route('allequip'),
+            ),
+            'view' => route('viewmember', ['mbr' => $mbr_id] ),  
+            'save' => route('savemember'),
+            'cancel' => route('allmember')
         );
-        return view('members.editgeneral', ['title' => $this->title, 'info' => $info, 'groups' => $groups, 'urls' => $urls, 'member' => $member]);
+        return view('members.editgeneral', ['title' => $this->title, 'info' => $info, 'groups' => $groups, 'urls' => $urls, 'member' => $member, 'dlt_field' => $this->hdninput]);
     }
 
     /*
@@ -198,37 +147,69 @@ class MemberController extends Controller
         $member = $request->{$this->paramid};
         $mbr_id = $member->id;
         $info = $member->description;
-
         $groups = array_keys(Config::get('constants.GROUPS'));
-
-        // $groups = array('families', 'icares');
-
+        $families = $member->family;
+        $validRoles = \App\MemberRole::where('type', 'App\Family')->orderBy('priority', 'asc')->lists('maxlimit', 'title'); 
         $urls = array(
-            'deletephoto' => route('deletephoto'), 
-            'updatephoto' => route('updatephoto'), 
-            'delete' => route('deleteicare'), 
-            'edit' => route('editmember', ['famid' => $mbr_id]), 
-            'add' => route('editmember', ['famid' => $mbr_id] ), 
-            'view' => 'family/view/', 
-            'save' => route('savemember')
+            'viewmember' => route('savemember'),
+            'cancel' => route('editmember', ["$this->paramid" => $mbr_id]), 
+            'assign' => route('savemember'),  
         );
-        $urls = array(
-            'cancel' => route('editicare', ["$this->paramid" => $mbr_id]), 
-        );
-        return view('members.view', ['title' => $this->title, 'info' => $info, 'groups' => $groups, 'urls' => $urls, 'member' => $member]);
+       
+        return view('members.view', ['title' => $this->title, 'validRoles' => $validRoles, 'info' => $info, 'groups' => $groups, 'urls' => $urls, 'member' => $member]);
     }
 
 
+    /**
+     * Show a list of all members and option to edit membership status.
+     *
+     */
+    public function mymembers(Request $request)
+    {   
+        $results = $this->baseModel->all();
+        $title = array('header' => 'Override Membership Status', 'singular' => 'Member');
+        $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'is_member' => 'Member Status', 'icare' => 'Icare');
+        $urls = array(
+            'add' => route('addmember'), 
+            'delete' => route('deletefamily'), 
+            'edit' => route('editmymember'), 
+            'view' => route('viewmember')
+        );
+        return view('members.index', 
+            ['title' => $title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'dlt_field' => $this->hdninput, 'dlt_act' => 'deleteFamily', 'editbutton' => 'Edit Membership']
+        );
+    }
 
+    /*
+     * Edit membership status
+     */
+    public function editmembership(Request $request)
+    {   
+        $fellowship = $request->{$this->paramid};
+        $fellowship_id = $fellowship->id;
+        $info = $fellowship->description; //other info
+        $tableCols = array('name' => 'Name', 'role' => sprintf("Role in %s", $this->title['singular']), 'email' => 'Email', 'age' => 'Age', 'gender' => 'Gender', 'is_member' => 'Church Member');
+
+        $urls = array(
+            'save' => route('savemember'), 
+            'cancel' => route('mymember'),
+        );
+        $title = array('header' => 'Override Membership Status', 'singular' => 'Membership Status');
+        return view('membership.edit', 
+            ['title' => $title, 'tableCols' => $tableCols, 'urls' => $urls, 'member' => $fellowship, 'info' => $info, 'dlt_field' => $this->hdninput]
+        );
+    }
 
     /*
      * Show all kids
      */
     public function kids(Request $request)
     {
-
         $now = \Carbon\Carbon::now();
-        $base_date = $now->subYears(14)->format('Y-m-d');
+        $agelimit = Config::get('constants.KIDS_AGE'); 
+        $base_date = $now->subYears($agelimit)->format('Y-m-d');
+        $title = array('header' => 'Kids', 'singular' => 'Kids');
+
         $results = \App\Member::where('birthdate', '>', $base_date)->orWhere('service', '=', 'kids')->get()->each(function($item){
             $data = $item->description;
             $class = '-';
@@ -240,16 +221,57 @@ class MemberController extends Controller
         $tableCols = array('name' => 'Name', 'age' => 'Age', 'gender' => 'Gender', 'service' => 'Ibadah', 'kids_class' => 'Kids Class');
         $urls = array(
             'add' => route('addmember'), 
-            'delete' => '/member/delete/', 
+            'delete' => route('deletemember'), 
             'edit' => route('editmember'), 
             'view' => route('viewmember')
         );
-        $title = array('header' => 'Kids', 'singular' => 'Kids');
 
         return view('members.index', ['title' => $title, 'results' => $results, 'tableCols' => $tableCols, 'urls' => $urls, 'dlt_field' => "$this->hdninput", 'dlt_act' => 'deleteMember']);
     }
 
 
+
+    /*
+     * Delete one member
+     * TODO: authorize which users can destroy [$this->authorize('destroy', $item)];
+     */
+    public function destroy(Request $request)
+    {
+        // form validation
+        $this->validate($request, [
+            '_formaction' => 'bail|required|in:deleteMember',
+        ]);
+        
+        $member = $request->{$this->paramid};
+        $member_id = $member->id;
+        $action = $request->_formaction;
+
+        switch ($action) {
+            case 'deleteMember':
+                $member->family()->detach();
+                $member->icare()->detach();
+                $member->ministry()->detach();
+                $member->engage()->detach();
+                $member->establish()->detach();
+                $member->equip()->detach();
+                $member->empower()->detach();
+
+                //delete image & qr code
+                $oldphoto = $member->image;
+                if(!empty($oldphoto) && Storage::disk('img')->has($oldphoto)) {
+                    Storage::disk('img')->delete($oldphoto);  
+                }
+                $qrcode = $member->qr_image;
+                if(Storage::disk('img')->has($qrcode)) {
+                    Storage::disk('img')->delete($qrcode);  
+                }
+
+                $member->delete();
+                $request->session()->flash('message', sprintf("One %s has been successfully deleted.", $this->title['singular']));             
+                 return redirect()->back();
+            break;
+        }
+    }
 
     /*
      * Delete member photo
@@ -282,7 +304,6 @@ class MemberController extends Controller
     public function updatePhoto(Request $request)
     {
         $photo_rule = Config::get('constants.VALID_IMAGE_TYPES');
-        
         $this->validate($request, [
             '_formaction2' => 'bail|required|in:updateMemberPhoto',
             "$this->hdninput" => 'bail|required|integer|exists:members,id',
@@ -312,148 +333,109 @@ class MemberController extends Controller
      */
     public function save(Request $request)
     {
+        $gender_rule = implode(array_keys(Config::get('constants.GENDER')), ",");
+        $kids_rule = implode(array_keys(Config::get('constants.KIDS_CLASSES')), ",");
+        $marital_rule = implode(array_keys(Config::get('constants.MARITAL_STATUS')), ",");
+        $ibadah_rule = implode(array_keys(Config::get('constants.IBADAH')), ",");
         
-        if ($request->isMethod('post')) {
+        // form action validation
+        $this->validate($request, [
+            '_formaction' => 'bail|required|in:addMember,editMember,memberStatus',
+        ]);
 
-            $gender_rule = implode(array_keys(Config::get('constants.GENDER')), ",");
-            $kids_rule = implode(array_keys(Config::get('constants.KIDS_CLASSES')), ",");
-            $marital_rule = implode(array_keys(Config::get('constants.MARITAL_STATUS')), ",");
-            $ibadah_rule = implode(array_keys(Config::get('constants.IBADAH')), ",");
-            
-            // form action validation
-            $this->validate($request, [
-                '_formaction' => 'bail|required|in:addMember,editRole,editMember',
-            ]);
+        switch ($request->_formaction) {
 
-            switch ($request->_formaction) {
+            case 'addMember':
+                // form validation
+                $this->validate($request, [
+                    'name' => 'bail|required|max:255',
+                    'phone' => 'alpha_dash',
+                    'city' => 'max:255',
+                    'address' => 'max:255',
+                    'zipcode' => 'digits_between:0,8',
+                    'birthdate' => 'date_format:d/m/Y',
+                    'email' => 'required|email|unique:members,email',
+                    'status' => "required|in:$marital_rule",
+                    'gender' => "required|in:$gender_rule",
+                    'photo' => 'mimes:jpeg,bmp,png',
+                    'date_joined' => 'required|digits_between:4,4',
+                    'service' => "required|in:$ibadah_rule",
+                    'kids_class' => "required_if:service,kids|in:$kids_rule"
+                ]);
 
-                case 'addMember':
+                // set kids_class empty if member is not in sunday school
+                if($request->service != 'kids') $request->kids_class = '';                    
+                // place other fields information into one array
+                $description = $this->baseModel->castDescriptionField($request, array('phone', 'city', 'address', 'zipcode', 'kids_class'));
+                //sanitize birthdate field
+                $birth_date = $this->sanitizeDate($request->birthdate);
+                $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'service' => $request->service, 'gender' => $request->gender, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description, 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()];
 
-                    // form validation
-                    $this->validate($request, [
-                        'name' => 'bail|required|max:255',
-                        'phone' => 'alpha_dash',
-                        'city' => 'max:255',
-                        'address' => 'max:255',
-                        'zipcode' => 'digits_between:0,8',
-                        'birthdate' => 'date_format:d/m/Y',
-                        'email' => 'required|email|unique:members,email',
-                        'status' => "required|in:$marital_rule",
-                        'gender' => "required|in:$gender_rule",
-                        'photo' => 'mimes:jpeg,bmp,png',
-                        'date_joined' => 'required|digits_between:4,4',
-                        'service' => "required|in:$ibadah_rule",
-                        'kids_class' => "required_if:service,kids|in:$kids_rule"
-                    ]);
-                    
+                 // check photo upload
+                if ($request->hasFile('photo')) {
+                    $photourl = $this->sanitizePhotoUpload($request);
+                    $data['image'] = $photourl; 
+                } 
 
-                    // create member_id
-                    $member_code = $this->createQRCode($request->gender);
-                    // set kids_class empty if member is not in sunday school
-                    if($request->service != 'kids') $request->kids_class = '';                    
-                    // place other fields information into one array
-                    $description = $this->baseModel->castDescriptionField($request, array('phone', 'city', 'address', 'zipcode', 'kids_class'));
-                    //sanitize birthdate field
-                    $birth_date = $this->sanitizeDate($request->birthdate);
-                    //TODO: determine membership status
+                $mbr_id = $this->baseModel->create($data);               
+                // create member_id and update member
+                $member_code = $this->baseModel->createQRCode($request->gender,$mbr_id);
+                $data = ['member_id' => $member_code['mbr_id'], 'qr_image' => $member_code['qrimg']];
+                $this->baseModel->update($data, $mbr_id, 'id');
+                $request->session()->flash('message', 'You have successfully created a new member!');
+            break;
 
-                    $data = ['name' => $request->name, 'member_id' => $member_code['mbr_id'], 'qr_image' => $member_code['qrimg'], 'email' => $request->email, 'birthdate' => $birth_date, 'service' => $request->service, 'gender' => $request->gender, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description, 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()];
+            case 'editMember':
+                $mbr_id = $request->{$this->hdninput};           
+                $data = array();
+                // form validation
+                $this->validate($request, [
+                    'name' => 'bail|required|max:255',
+                    'phone' => 'alpha_dash',
+                    'city' => 'max:255',
+                    'address' => 'max:255',
+                    'zipcode' => 'digits_between:0,8',
+                    'birthdate' => 'date_format:d/m/Y',
+                    'email' => 'required|email|unique:members,email,'.$mbr_id,
+                    'status' => "required|in:$marital_rule",                        
+                    'date_joined' => 'required|digits_between:4,4',
+                    'service' => "required|in:$ibadah_rule",
+                    "$this->hdninput" => 'bail|required|integer|exists:members,id',
+                    'kids_class' => "required_if:service,kids|in:$kids_rule"
+                ]);                    
 
-                     // check photo upload
-                    if ($request->hasFile('photo')) {
-                        $photourl = $this->sanitizePhotoUpload($request);
-                        $data['image'] = $photourl; 
-                    } 
+                // set kids_class empty if member is not in sunday school
+                if($request->service != 'kids') $request->kids_class = '';    
+                // place other fields information into one array
+                $description = $this->baseModel->castDescriptionField($request, array('phone', 'city', 'address', 'zipcode', 'kids_class'));
+                //sanitize birthdate field
+                $birth_date = $this->sanitizeDate($request->birthdate);
+                $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'service' => $request->service, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description];
 
-                    $mbr_id = $this->baseModel->create($data);
-                    $request->session()->flash('message', 'You have successfully created a new member!');
-                break;
+                $this->baseModel->update($data, $mbr_id, 'id');
+                $request->session()->flash('message', 'Update successful!');     
+            break;
 
-                case 'editMember':
-                             
-                    $mbr_id = $request->{$this->hdninput};           
-                    $data = array();
+            case 'memberStatus':                
+                // form validation
+                $this->validate($request, [
+                    'membershipform' => "required|in:yesiagree",
+                    "$this->hdninput" => 'bail|required|integer|exists:members,id',
+                ]);                    
 
-                    // form validation
-                    $this->validate($request, [
-                        'name' => 'bail|required|max:255',
-                        'phone' => 'alpha_dash',
-                        'city' => 'max:255',
-                        'address' => 'max:255',
-                        'zipcode' => 'digits_between:0,8',
-                        'birthdate' => 'date_format:d/m/Y',
-                        'email' => 'required|email|unique:members,email,'.$mbr_id,
-                        'status' => "required|in:$marital_rule",                        
-                        'date_joined' => 'required|digits_between:4,4',
-                        'service' => "required|in:$ibadah_rule",
-                        "$this->hdninput" => 'bail|required|integer|exists:members,id',
-                        'kids_class' => "required_if:service,kids|in:$kids_rule"
-                    ]);                    
+                $mbr_id = $request->{$this->hdninput};           
+                $data = ['approve_member' => true];
+                $this->baseModel->update($data, $mbr_id, 'id');
+                $request->session()->flash('message', 'You have successfully updated the membership status!');     
 
-                    // set kids_class empty if member is not in sunday school
-                    if($request->service != 'kids') $request->kids_class = '';    
-                    // place other fields information into one array
-                    $description = $this->baseModel->castDescriptionField($request, array('phone', 'city', 'address', 'zipcode', 'kids_class'));
-                    //sanitize birthdate field
-                    $birth_date = $this->sanitizeDate($request->birthdate);
+            break;
 
-                    $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'service' => $request->service, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description];
-
-                    $this->baseModel->update($data, $mbr_id, 'id');
-                    $request->session()->flash('message', 'Update successful!');                    
-
-                break;
-
-                case 'editRole':
-                    // form validation
-                    // $rule = implode(",", $this->validRoles);
-                    // $roleRule = "required|in:{$rule}";
-                    // $this->validate($request, [
-                    //     '_fmid' => 'bail|required|integer',
-                    //     '_mbrid' => 'required|integer',
-                    //     '_fmaction' => 'required|in:replace,add',
-                    //     '_mbrole' => $roleRule
-                    // ]);
-
-                    // $fam_id = $request->_fmid;
-                    // $member_id = $request->_mbrid;
-                    // $member_role = $request->_mbrole;
-                    // $fam_action = $request->_fmaction;
-                    
-                    // // check if role is included in family, if family & member id is valid
-                    // if ($this->family->findIfExist('id', $fam_id) ) {    
-
-                    //     // find if role already exists, whether replacing or creating it
-                    //     if($fam_action == 'replace') {
-                    //         $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model()]);
-                    //     } else {
-                    //         // add new role
-                    //         $role = Group::firstOrNew(['title' => $member_role, 'group_id' => $fam_id, 'group_type' => $this->family->model(), 'member_id' => $member_id]);
-                    //     }
-                            
-                    //     $role->member_id = $member_id;
-                    //     $fam = $this->family->find($fam_id);
-                    //     $fam->roles()->save($role); 
-                    //     $request->session()->flash('message', 'Update successful!');                            
-
-                    // } else {
-                    //     // family does not exist
-                    //     // $request->session()->flash('message', 'Invalid request.');
-                    //     // $request->session()->flash('alert-class', 'alert-danger'); 
-                    //     return redirect()->route('allfamily');  
-                    // }
-                break;
-                
-                default:
-                    return redirect()->route('allmember');    
-                break;
-            }
-            return redirect()->route('editmember', [$mbr_id]);
+            default:
+                return redirect()->route('allmember');    
+            break;
         }
-        return redirect()->route('allmember');
+        return redirect()->route('editmember', [$mbr_id]);
     }
-
-
 
     // check uploaded file and return its name
     private function sanitizePhotoUpload(Request $request)
@@ -487,24 +469,5 @@ class MemberController extends Controller
         }
     }
 
-    private function createQRCode($gender)
-    {
-        // generate random member id
-        $idtf = $gender == 'male' ? 'L' : 'P';
-        $rand = strtoupper(substr(md5(microtime()),rand(0,26),6));
-        $mbr_id = $idtf.$rand;
-
-        $codeContents = 'http://google.com/382020/';   
-        $filename = strtoupper(substr(md5(microtime()),rand(0,26),7));
-        $path = public_path('img/members/') . $filename . '.png';
-        $aa = QRcode::png($codeContents, $path, QR_ECLEVEL_L, 6, 8); 
-        $url = 'img/members/'. $filename . '.png';
-        
-        // Storage::disk('members')->put('325252325.jpg', $aa);
-        // Storage::put('file.jpg', $contents);
-        // die();
-        return array('mbr_id' => $mbr_id, 'qrimg' => $url);
-
-    }
 
 }

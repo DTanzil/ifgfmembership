@@ -21,7 +21,7 @@ class CreateEngageTable extends Migration
         // Insert some stuff
         DB::table('engage')->insert([
             ['name' => 'Batch #3 - 2015'],
-            ['name' => 'Batch #4 - 2015'],
+            // ['name' => 'Batch #4 - 2015'],
         ]);
     }
 

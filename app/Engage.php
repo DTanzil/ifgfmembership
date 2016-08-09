@@ -18,7 +18,7 @@ class Engage extends Model
      */
     public function students()
     {
-        return $this->morphToMany('App\Member', 'group')->withPivot('description');
+        return $this->morphToMany('App\Member', 'group')->withPivot('description', 'title');
     }
 
     /**

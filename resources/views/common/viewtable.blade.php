@@ -13,6 +13,5 @@
                         @include('common.tablecols')
                     </tr>
         @endforeach
-
     </tbody>
 </table>

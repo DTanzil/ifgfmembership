@@ -20,26 +20,35 @@ class CreateAttendancesTable extends Migration
 
         // Insert some stuff
         DB::table('attendances')->insert([
-            ['member_id' => 5, 'class_schedules_id' => 1],
-            ['member_id' => 3, 'class_schedules_id' => 1],
-            ['member_id' => 2, 'class_schedules_id' => 1],
-            ['member_id' => 8, 'class_schedules_id' => 1],
-            ['member_id' => 5, 'class_schedules_id' => 2],
-            ['member_id' => 3, 'class_schedules_id' => 2],
-            ['member_id' => 2, 'class_schedules_id' => 2],
-            ['member_id' => 8, 'class_schedules_id' => 2],
-            ['member_id' => 5, 'class_schedules_id' => 3],
-            ['member_id' => 3, 'class_schedules_id' => 3],
-            ['member_id' => 2, 'class_schedules_id' => 3],
-            ['member_id' => 8, 'class_schedules_id' => 3],
-            ['member_id' => 5, 'class_schedules_id' => 4],
-            ['member_id' => 3, 'class_schedules_id' => 4],
-            ['member_id' => 2, 'class_schedules_id' => 4],
-            ['member_id' => 8, 'class_schedules_id' => 4],
-            ['member_id' => 5, 'class_schedules_id' => 5],
-            ['member_id' => 3, 'class_schedules_id' => 5],
-            ['member_id' => 2, 'class_schedules_id' => 5],
-            ['member_id' => 8, 'class_schedules_id' => 5],
+            ['member_id' => 9, 'class_schedules_id' => 1],
+            ['member_id' => 10, 'class_schedules_id' => 1],
+            ['member_id' => 11, 'class_schedules_id' => 1],
+            ['member_id' => 12, 'class_schedules_id' => 1],
+            ['member_id' => 13, 'class_schedules_id' => 1],
+            ['member_id' => 14, 'class_schedules_id' => 1],
+            ['member_id' => 11, 'class_schedules_id' => 2],
+            ['member_id' => 12, 'class_schedules_id' => 2],
+            ['member_id' => 13, 'class_schedules_id' => 2],
+            ['member_id' => 14, 'class_schedules_id' => 2],
+            ['member_id' => 11, 'class_schedules_id' => 3],
+            ['member_id' => 12, 'class_schedules_id' => 3],
+            ['member_id' => 13, 'class_schedules_id' => 3],
+            ['member_id' => 14, 'class_schedules_id' => 3],
+            ['member_id' => 11, 'class_schedules_id' => 4],
+            ['member_id' => 13, 'class_schedules_id' => 4],
+            ['member_id' => 14, 'class_schedules_id' => 4],
+            ['member_id' => 11, 'class_schedules_id' => 5],
+            ['member_id' => 13, 'class_schedules_id' => 5],
+            ['member_id' => 14, 'class_schedules_id' => 5],
+            ['member_id' => 11, 'class_schedules_id' => 6],
+            ['member_id' => 13, 'class_schedules_id' => 6],
+            ['member_id' => 14, 'class_schedules_id' => 6],
+            ['member_id' => 11, 'class_schedules_id' => 7],
+            ['member_id' => 13, 'class_schedules_id' => 7],
+            ['member_id' => 14, 'class_schedules_id' => 7]
+
+
+           
 
         ]);
     }

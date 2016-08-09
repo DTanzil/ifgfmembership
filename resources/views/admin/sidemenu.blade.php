@@ -29,7 +29,7 @@
             <a href="index.html"><i class="fa fa-fw fa-dashboard"></i>Home</a>
         </li> -->
 
-        <li class="active">
+        <!-- <li class="active">
             <a href="javascript:;" data-toggle="collapse" data-target="#submenu1">
                 <i class="fa fa-fw fa-btn fa-user"></i> Members <i class="fa fa-fw fa-caret-down"></i>
             </a>
@@ -44,7 +44,7 @@
         </li>
         
       
-
+ -->
        <!--  <li>
             <a href="javascript:;" data-toggle="collapse" data-target="#submenu22"><i class="fa fa-fw fa-btn fa-home" aria-hidden="true"></i> Family <i class="fa fa-fw fa-caret-down"></i></a>
             <ul id="submenu22" class="collapse">

@@ -187,7 +187,7 @@ class IcareController extends Controller
     {
         // form validation
         $this->validate($request, [
-            '_formaction' => 'bail|required|in:,deleteIcare,deleteMember',
+            '_formaction' => 'bail|required|in:deleteIcare,deleteMember',
             '_mbrid' => "required_if:_formaction,deleteMember|exists:members,id",
         ]);
         
@@ -209,8 +209,8 @@ class IcareController extends Controller
                 $member_ids = array($request->_mbrid);
                 $fellowship->members()->detach($request->_mbrid);                
                 $this->baseModel->evaluateMembership($member_ids); //evaluate member status
-                $request->session()->flash('message', sprintf("One member has been successfully dismissed from this %s.", $this->title['singular']));
-                return redirect()->route('editicare', [$fellowship_id]);
+                $request->session()->flash('message', sprintf("One member has been successfully dismissed from %s %s.", $fellowship->name, $this->title['singular']));
+                return redirect()->back();
             break;
         }
     }

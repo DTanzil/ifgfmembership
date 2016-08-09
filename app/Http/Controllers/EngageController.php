@@ -294,7 +294,8 @@ class EngageController extends Controller
     {
         // form validation
         $this->validate($request, [
-            '_formaction' => 'bail|required|in:,deleteEngage',
+            '_formaction' => 'bail|required|in:deleteEngage,deleteMember',
+            '_mbrid' => "required_if:_formaction,deleteMember|exists:members,id",
         ]);
         
         $fellowship = $request->{$this->paramid};
@@ -302,6 +303,16 @@ class EngageController extends Controller
         $action = $request->_formaction;
 
         switch ($action) {
+            case 'deleteMember':
+                $mbr_id = $request->_mbrid;
+                $member_ids = array($mbr_id);
+                $fellowship->students()->detach($mbr_id);        
+                $fellowship->attendances()->where('member_id', $mbr_id)->delete();
+                $this->baseModel->evaluateMembership($member_ids); //evaluate member status
+                $request->session()->flash('message', sprintf("One member has been successfully dismissed from %s %s.", $fellowship->name, $this->title['singular']));
+                return redirect()->back();
+            break;
+
             case 'deleteEngage':
                 $member_ids = $fellowship->students->lists('id')->toArray();
                 $fellowship->students()->detach();
@@ -400,7 +411,7 @@ class EngageController extends Controller
                 // get previous selected ids from database then insert new ids 
                 $fellowship = $this->baseModel->find($fellowship_id);                  
                 $previous_ids = $fellowship->students()->getQuery()->where('title', $member_role)->get()->lists('member_id')->toArray();
-                $newids = $this->baseModel->configureSync($member_ids, ['title' => $member_role, 'description' => 'Attending']);
+                $newids = $this->baseModel->configureSync($member_ids, ['title' => $member_role, 'description' => 'Not Graduated']);
                 $fellowship->students()->sync($newids);
 
                 // remove deleted member's attendance list
@@ -485,7 +496,7 @@ class EngageController extends Controller
                 foreach ($class_attendance as $id => $value) {
                     $checked = count($value);
                     $mbr = $fellowship->students()->find($id);
-                    $status = $mbr->determineStudentStatus($checked);
+                    $status = $this->baseModel->determineStudentStatus($value, Config::get('constants.FINISH_ENGAGE'));
                     $fellowship->students()->sync([$id => ['description' => $status]], false);
                     // evaluate member status 
                     $allids =  array_merge($previous_ids, $member_ids);

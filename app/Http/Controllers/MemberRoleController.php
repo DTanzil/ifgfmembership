@@ -55,10 +55,7 @@ class MemberRoleController extends Controller
         $tableCols = array('title' => 'Role Name', 'type' => 'Group', 'priority' => 'Rank', 'maxlimit' => 'Limit');
         $results = $this->role->all();
         $urls = array(
-            'add' => route('addicare'), 
-            // 'delete' => route('deletememberrole'), 
-            'edit' => route('editicare'), 
-            'view' => route('viewicare')
+            'add' => route('addmemberroles'), 
         );
         
         return view('member_roles.index', [
@@ -98,8 +95,7 @@ class MemberRoleController extends Controller
         ]);
         
         $action = $request->_formaction;
-        $models = Config::get('constants.GROUPS_MODELS');
-        $group = $models[$request->group];            
+        $group = Config::get("constants.GROUPS.".$request->group.".model");
         $name = trim($request->name);
         $title = strtolower(str_replace(" ","-", $name));
 

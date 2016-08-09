@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
-
 use App\Member;
 use App\MemberRole;
 
@@ -82,7 +81,7 @@ abstract class MyRepository implements BaseRepositoryInterface {
     public function update(array $data, $value, $attribute="id") {
         return $this->model->where($attribute, '=', $value)->update($data);
     }
- 
+
     /**
      * @param $id
      * @return mixed
@@ -230,7 +229,7 @@ abstract class MyRepository implements BaseRepositoryInterface {
         $results = $class_attendance = array();
         foreach ($classes as $key => $class) {
             $attn = $class->attendance->lists('member_id', 'member_id')->toArray();
-            $tableCols[$class->name] = $class->name;
+            $tableCols[$class->name] = $class->class_date->format('d M Y');
             foreach ($attn as $key => $value) {
                 $class_attendance[$key][] = $class->name;                
             }

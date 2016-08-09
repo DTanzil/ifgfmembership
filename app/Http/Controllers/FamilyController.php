@@ -155,7 +155,6 @@ class FamilyController extends Controller
 
     /*
      * View item detail
-     * TODO: Print PDF option
      */
     public function view(Request $request)
     {
@@ -175,6 +174,20 @@ class FamilyController extends Controller
         );
     }
 
+
+    /*
+     * TODO: View/Print PDF option
+     */
+    public function viewpdf(Request $request)
+    {
+        $view = \View::make('pdf.test', ['name' => 'Rishabh']);
+        $data = $view->render();
+        $pdf = \PDF::loadHTML($data);
+        // return $pdf->inline();
+        return $pdf->inline('invoice.pdf');
+    }
+
+
     /*
      * Delete one icare or delete a member of the icare
      * TODO: authorize which users can destroy [$this->authorize('destroy', $item)];
@@ -183,7 +196,7 @@ class FamilyController extends Controller
     {
         // form validation
         $this->validate($request, [
-            '_formaction' => 'bail|required|in:,deleteFamily,deleteMember',
+            '_formaction' => 'bail|required|in:deleteFamily,deleteMember',
             '_mbrid' => "required_if:_formaction,deleteMember|exists:members,id",
         ]);
         
@@ -202,8 +215,8 @@ class FamilyController extends Controller
             case 'deleteMember':
                 $memberid = $request->_mbrid;
                 $fellowship->members()->detach($memberid);                
-                $request->session()->flash('message', sprintf("One member has been successfully dismissed from this %s.", $this->title['singular']));
-                return redirect()->route('editfamily', [$fellowship_id]);
+                $request->session()->flash('message', sprintf("One member has been successfully dismissed from %s %s.", $fellowship->name, $this->title['singular']));
+                return redirect()->back();
             break;
         }
     }

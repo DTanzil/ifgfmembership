@@ -38,26 +38,8 @@
                                     <td>{{ $item->$key or 'N/A'}}</td>
                                 @endif
                             @endforeach
-
-                            <!-- Table actions: view,edit,delete -->
-                            <!-- <td>
-                                <form action="" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    
-
-                                    <a class="mty-btn btn" href=""> <i class="fa fa-btn fa-pencil" aria-hidden="true"></i> Edit </a>
-                                    <button type="submit" class="btn btn-danger mty-delete">
-                                        <i class="fa fa-btn fa-trash"></i>Delete
-                                    </button>
-                                </form>
-                            </td> -->
                         </tr>
                     @endforeach    
-                @else 
-                    <tr>
-                        <td colspan"7">There is no data at this time.</td>
-                    </tr>
                 @endif
             </tbody>
         </table>

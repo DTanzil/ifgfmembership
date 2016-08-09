@@ -18,7 +18,7 @@
                     @else
                         <td class="center">
                             <?php 
-                            if(isset($class_attendance[$item->id])) {
+                            if(isset($class_attendance[$item->id])) {                                
                                 $list = $class_attendance[$item->id];
                                 if(in_array($key, $list)) echo '<i class="fa fa-check" aria-hidden="true"></i>';
                             }

@@ -3,6 +3,8 @@
         <td> {{ !empty($item->birthdate) ? $item->birthdate->age : '-' }} </td> 
     @elseif($key == 'role')
         <td>{{ $item->pivot->title }}</td>
+    @elseif($key == 'email')
+        <td style="text-transform:lowercase;">{{ $item->$key }}</td>
     @elseif($key == 'is_member')
         @if($item->isMember())
             <td style="color:blue;"><b>Member</b></td>

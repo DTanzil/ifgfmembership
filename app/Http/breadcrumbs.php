@@ -3,9 +3,9 @@
 /*********************************  PARENT  *********************************/
 
 // Home
-Breadcrumbs::register('boboho', function($breadcrumbs)
+Breadcrumbs::register('homepage', function($breadcrumbs)
 {
-    $breadcrumbs->push('Home', route('boboho'));
+    $breadcrumbs->push('Home', route('homepage'));
 });
 
 /*********************************  iCARES  *********************************/
@@ -13,7 +13,7 @@ Breadcrumbs::register('boboho', function($breadcrumbs)
 // Home > All iCares 
 Breadcrumbs::register('allicare', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All iCares', route('allicare'));
 });
 // Home > All iCares > Add iCare  
@@ -48,7 +48,7 @@ Breadcrumbs::register('assignicarerole', function($breadcrumbs, $fellowship, $ro
 // Home > All Family 
 Breadcrumbs::register('allfamily', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All Families', route('allfamily'));
 });
 // Home > All Family > Add Family
@@ -83,7 +83,7 @@ Breadcrumbs::register('assignfamrole', function($breadcrumbs, $fellowship, $role
 // Home > All Ministry 
 Breadcrumbs::register('allministry', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All Ministry', route('allministry'));
 });
 // Home > All Ministry > Add Ministry
@@ -115,59 +115,31 @@ Breadcrumbs::register('assignmstrole', function($breadcrumbs, $fellowship, $role
 
 
 
-
 /*********************************  KIDS  *********************************/
 
 // Home > All Kids 
 Breadcrumbs::register('allkids', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All Kids', route('allkids'));
 });
-// // Home > All Ministry > Add Ministry
-// Breadcrumbs::register('addministry', function($breadcrumbs)
-// {
-//     $breadcrumbs->parent('allministry');
-//     $breadcrumbs->push('Add New Ministry', route('addministry'));
-// });
-// // Home > All Ministry > Ministry 
-// Breadcrumbs::register('editministry', function($breadcrumbs, $fellowship)
-// {
-//     $breadcrumbs->parent('allministry');
-//     $breadcrumbs->push($fellowship->name, route('editministry', $fellowship->id));
-// });
-// // Home > All Ministry > Ministry > View
-// Breadcrumbs::register('viewministry', function($breadcrumbs, $fellowship)
-// {
-//     $breadcrumbs->parent('allministry');
-//     $breadcrumbs->push($fellowship->name, route('editministry', $fellowship->id));
-//     $breadcrumbs->push("View {$fellowship->name}", route('viewministry', $fellowship->id));
-// });
-// // Home > All Ministry > Ministry > Assign
-// Breadcrumbs::register('assignmstrole', function($breadcrumbs, $fellowship, $role)
-// {
-//     $breadcrumbs->parent('allministry');
-//     $breadcrumbs->push($fellowship->name, route('editministry', $fellowship->id));
-//     $breadcrumbs->push("Assign", route('assignmstrole', $fellowship->id, $role));
-// });
-
-
-
-
-
-
-
-
-
 
 /*********************************  MEMBERS *********************************/
 
 // Home > All Members
 Breadcrumbs::register('allmember', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All Members', route('allmember'));
 });
+
+// Home > All Members > Add Members
+Breadcrumbs::register('addmember', function($breadcrumbs)
+{
+    $breadcrumbs->parent('allmember');
+    $breadcrumbs->push('Add New Member', route('addmember'));
+});
+
 // Home > All Members > Edit Member 
 Breadcrumbs::register('editmember', function($breadcrumbs, $fellowship)
 {
@@ -183,18 +155,12 @@ Breadcrumbs::register('viewmember', function($breadcrumbs, $fellowship)
     $breadcrumbs->push("View {$fellowship->name}", route('viewmember', $fellowship->id));
 });
 
-
-
-
-
-
-
 /*********************************  APPROVE MEMBER  *********************************/
 
 // Home > All Members Status
 Breadcrumbs::register('mymember', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All Membership Status', route('mymember'));
 });
 // Home > All Members Status > Edit Member Status
@@ -204,21 +170,11 @@ Breadcrumbs::register('editmymember', function($breadcrumbs, $fellowship)
     $breadcrumbs->push("Edit {$fellowship->name} Membership Status", route('editmymember', $fellowship->id));
 });
 
-
-
-
-
-
-
-
-
-
-
 /*********************************  MEMBER ROLES  *********************************/
 
 Breadcrumbs::register('allmemberroles', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('Member Roles', route('allmemberroles'));
 });
 // Home > All Member Roles > Add
@@ -233,7 +189,7 @@ Breadcrumbs::register('addmemberroles', function($breadcrumbs)
 // Home > All Engage
 Breadcrumbs::register('allengage', function($breadcrumbs)
 {
-    $breadcrumbs->parent('boboho');
+    $breadcrumbs->parent('homepage');
     $breadcrumbs->push('All Engage', route('allengage'));
 });
 
@@ -250,7 +206,6 @@ Breadcrumbs::register('editengage', function($breadcrumbs, $fellowship)
     $breadcrumbs->parent('allengage');
     $breadcrumbs->push($fellowship->name, route('editengage', $fellowship->id));
 });
-
 
 // Home > All Engage > Engage > View 
 Breadcrumbs::register('viewengage', function($breadcrumbs, $fellowship)
@@ -285,57 +240,169 @@ Breadcrumbs::register('attendengage', function($breadcrumbs, $fellowship, $class
 });
 
 
+/*********************************  ESTABLISH  *********************************/
+// Home > All Establish
+Breadcrumbs::register('allestablish', function($breadcrumbs)
+{
+    $breadcrumbs->parent('homepage');
+    $breadcrumbs->push('All Establish', route('allestablish'));
+});
+
+// Home > All Establish > Add Establish
+Breadcrumbs::register('addestablish', function($breadcrumbs)
+{
+    $breadcrumbs->parent('allestablish');
+    $breadcrumbs->push('Add New Establish', route('addestablish'));
+});
+
+// Home > All Establish > Establish
+Breadcrumbs::register('editestablish', function($breadcrumbs, $fellowship)
+{
+    $breadcrumbs->parent('allestablish');
+    $breadcrumbs->push($fellowship->name, route('editestablish', $fellowship->id));
+});
+
+// Home > All Establish > Establish > View 
+Breadcrumbs::register('viewestablish', function($breadcrumbs, $fellowship)
+{
+    $breadcrumbs->parent('allestablish');
+    $breadcrumbs->push($fellowship->name, route('editestablish', $fellowship->id));
+    $breadcrumbs->push("View $fellowship->name", route('viewestablish', $fellowship->id));
+});
+
+// Home > All Establish > Establish > Assign 
+Breadcrumbs::register('assignestrole', function($breadcrumbs, $fellowship, $role)
+{
+    $breadcrumbs->parent('allestablish');
+    $breadcrumbs->push($fellowship->name, route('editestablish', $fellowship->id));
+    $breadcrumbs->push("Assign", route('assignestrole', $fellowship->id, $role));
+});
+
+// Home > All Establish > Establish > Assign Teacher
+Breadcrumbs::register('assignestteacher', function($breadcrumbs, $fellowship, $class)
+{
+    $breadcrumbs->parent('allestablish');
+    $breadcrumbs->push($fellowship->name, route('editestablish', $fellowship->id));
+    $breadcrumbs->push("Assign Teacher - $class", route('assignestteacher', $fellowship->id, $class));
+});
+
+// Home > All Establish > Establish > Assign Teacher
+Breadcrumbs::register('attendestablish', function($breadcrumbs, $fellowship, $class)
+{
+    $breadcrumbs->parent('allestablish');
+    $breadcrumbs->push($fellowship->name, route('editestablish', $fellowship->id));
+    $breadcrumbs->push("Class Attendance - $class", route('attendestablish', $fellowship->id, $class));
+});
+
+/*********************************  EQUIP  *********************************/
+// Home > All Equip
+Breadcrumbs::register('allequip', function($breadcrumbs)
+{
+    $breadcrumbs->parent('homepage');
+    $breadcrumbs->push('All Equip', route('allequip'));
+});
+
+// Home > All Equip > Add Equip
+Breadcrumbs::register('addequip', function($breadcrumbs)
+{
+    $breadcrumbs->parent('allequip');
+    $breadcrumbs->push('Add New Equip', route('addequip'));
+});
+
+// Home > All Equip > Equip
+Breadcrumbs::register('editequip', function($breadcrumbs, $fellowship)
+{
+    $breadcrumbs->parent('allequip');
+    $breadcrumbs->push($fellowship->name, route('editequip', $fellowship->id));
+});
+
+// Home > All Equip > Equip > View 
+Breadcrumbs::register('viewequip', function($breadcrumbs, $fellowship)
+{
+    $breadcrumbs->parent('allequip');
+    $breadcrumbs->push($fellowship->name, route('editequip', $fellowship->id));
+    $breadcrumbs->push("View $fellowship->name", route('viewequip', $fellowship->id));
+});
+
+// Home > All Equip > Equip > Assign 
+Breadcrumbs::register('assignequrole', function($breadcrumbs, $fellowship, $role)
+{
+    $breadcrumbs->parent('allequip');
+    $breadcrumbs->push($fellowship->name, route('editequip', $fellowship->id));
+    $breadcrumbs->push("Assign", route('assignequrole', $fellowship->id, $role));
+});
+
+// Home > All Equip > Equip > Assign Teacher
+Breadcrumbs::register('assignequteacher', function($breadcrumbs, $fellowship, $class)
+{
+    $breadcrumbs->parent('allequip');
+    $breadcrumbs->push($fellowship->name, route('editequip', $fellowship->id));
+    $breadcrumbs->push("Assign Teacher - $class", route('assignequteacher', $fellowship->id, $class));
+});
+
+// Home > All Equip > Equip > Assign Teacher
+Breadcrumbs::register('attendequip', function($breadcrumbs, $fellowship, $class)
+{
+    $breadcrumbs->parent('allequip');
+    $breadcrumbs->push($fellowship->name, route('editequip', $fellowship->id));
+    $breadcrumbs->push("Class Attendance - $class", route('attendequip', $fellowship->id, $class));
+});
 
 
 
+/*********************************  EMPOWER  *********************************/
+// Home > All Empower
+Breadcrumbs::register('allempower', function($breadcrumbs)
+{
+    $breadcrumbs->parent('homepage');
+    $breadcrumbs->push('All Empower', route('allempower'));
+});
 
+// Home > All Empower > Add Empower
+Breadcrumbs::register('addempower', function($breadcrumbs)
+{
+    $breadcrumbs->parent('allempower');
+    $breadcrumbs->push('Add New Empower', route('addempower'));
+});
 
+// Home > All Empower > Empower
+Breadcrumbs::register('editempower', function($breadcrumbs, $fellowship)
+{
+    $breadcrumbs->parent('allempower');
+    $breadcrumbs->push($fellowship->name, route('editempower', $fellowship->id));
+});
 
+// Home > All Empower > Empower > View 
+Breadcrumbs::register('viewempower', function($breadcrumbs, $fellowship)
+{
+    $breadcrumbs->parent('allempower');
+    $breadcrumbs->push($fellowship->name, route('editempower', $fellowship->id));
+    $breadcrumbs->push("View $fellowship->name", route('viewempower', $fellowship->id));
+});
 
+// Home > All Empower > Empower > Assign 
+Breadcrumbs::register('assignemprole', function($breadcrumbs, $fellowship, $role)
+{
+    $breadcrumbs->parent('allempower');
+    $breadcrumbs->push($fellowship->name, route('editempower', $fellowship->id));
+    $breadcrumbs->push("Assign", route('assignemprole', $fellowship->id, $role));
+});
 
+// Home > All Empower > Empower > Assign Teacher
+Breadcrumbs::register('assignempteacher', function($breadcrumbs, $fellowship, $class)
+{
+    $breadcrumbs->parent('allempower');
+    $breadcrumbs->push($fellowship->name, route('editempower', $fellowship->id));
+    $breadcrumbs->push("Assign Teacher - $class", route('assignempteacher', $fellowship->id, $class));
+});
 
-
-// Breadcrumbs::register('/', function($breadcrumbs)
-// {
-
-// });
-
-// // Home
-// Breadcrumbs::register('home', function($breadcrumbs)
-// {
-// 	// $breadcrumbs->parent('/');
-//     $breadcrumbs->push('Home', route('addicare'));
-// });
-
-// // Home > All iCares
-// Breadcrumbs::register('allicare', function($breadcrumbs)
-// {
-//     $breadcrumbs->parent('home');
-//     $breadcrumbs->push('All iCares', route('allicare'));
-// });
-
-// // Home > Blog > [Category]
-// Breadcrumbs::register('editicare', function($breadcrumbs, $icare)
-// {	
-// 	$breadcrumbs->parent('allicare');
-// 	$breadcrumbs->push('IOJEAOIRJAOI', route('editicare', $icare->id));	
-
-// });
-
-// // Home > Blog > [Category]
-// Breadcrumbs::register('viewicare', function($breadcrumbs, $icare)
-// {
-//     $breadcrumbs->parent('editicare', $icare);
-//     $breadcrumbs->push('View', route('viewicare', $icare->id));
-// });
-
-
-// // Home > Blog > [Category] > [Page]
-// Breadcrumbs::register('viewicare', function($breadcrumbs, $page)
-// {
-//     $breadcrumbs->parent('category', $page->category);
-//     $breadcrumbs->push($page->name, route('viewicare', $page->id));
-// });
+// Home > All Empower > Empower > Assign Teacher
+Breadcrumbs::register('attendempower', function($breadcrumbs, $fellowship, $class)
+{
+    $breadcrumbs->parent('allempower');
+    $breadcrumbs->push($fellowship->name, route('editempower', $fellowship->id));
+    $breadcrumbs->push("Class Attendance - $class", route('attendempower', $fellowship->id, $class));
+});
 
 
 ?>

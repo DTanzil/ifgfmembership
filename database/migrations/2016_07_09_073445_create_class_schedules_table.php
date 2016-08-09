@@ -29,20 +29,40 @@ class CreateClassSchedulesTable extends Migration
 
         // Insert some stuff
         DB::table('class_schedules')->insert([
-            ['name' => 'Keselamatan', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-08'],
-            ['name' => 'Transformasi Kehidupan', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-22'],
-            ['name' => 'Baptisan Air', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-12'],
-            ['name' => 'Setiap Hari Bersama Kristus', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-30'],
-            ['name' => 'Ikatan Perjanjian', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-02'],
-            ['name' => 'Spiritual Formation', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-04'],
-            ['name' => 'IFGF DNA Dan Icare Group', 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-04'],
-            ['name' => 'Keselamatan', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-08'],
-            ['name' => 'Transformasi Kehidupan', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-22'],
-            ['name' => 'Baptisan Air', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-12'],
-            ['name' => 'Setiap Hari Bersama Kristus', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-30'],
-            ['name' => 'Ikatan Perjanjian', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-02'],
-            ['name' => 'Spiritual Formation', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-04'],
-            ['name' => 'IFGF DNA Dan Icare Group', 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-04'],
+     
+            ['name' => Config::get('constants.ENGAGE_CLASSES.0'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-01-26'],
+            ['name' => Config::get('constants.ENGAGE_CLASSES.1'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-02-02'],
+            ['name' => Config::get('constants.ENGAGE_CLASSES.2'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-02-09'],
+            ['name' => Config::get('constants.ENGAGE_CLASSES.3'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-02-16'],
+            ['name' => Config::get('constants.ENGAGE_CLASSES.4'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-02-23'],
+            ['name' => Config::get('constants.ENGAGE_CLASSES.5'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-02-09'],
+            ['name' => Config::get('constants.ENGAGE_CLASSES.6'), 'lesson_id' => 1, 'lesson_type' => 'App\Engage', 'class_date' => '2015-03-16'],
+
+
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.0'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-08'],
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.1'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-22'],
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.2'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-12'],
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.3'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-30'],
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.4'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-02'],
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.5'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-04'],
+            // ['name' => Config::get('constants.ENGAGE_CLASSES.6'), 'lesson_id' => 2, 'lesson_type' => 'App\Engage', 'class_date' => '2016-07-04'],
+
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.0'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-04-11'],
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.1'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-04-18'],
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.2'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-04-25'],
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.3'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-05-09'],
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.4'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-05-16'],
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.5'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-05-23'],
+            ['name' => Config::get('constants.ESTABLISH_CLASSES.6'), 'lesson_id' => 1, 'lesson_type' => 'App\Establish', 'class_date' => '2016-05-30'],
+
+            // ['name' => Config::get('constants.EQUIP_CLASSES.0'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-08'],
+            // ['name' => Config::get('constants.EQUIP_CLASSES.1'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-22'],
+            // ['name' => Config::get('constants.EQUIP_CLASSES.2'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-12'],
+            // ['name' => Config::get('constants.EQUIP_CLASSES.3'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-30'],
+            // ['name' => Config::get('constants.EQUIP_CLASSES.4'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-02'],
+            // ['name' => Config::get('constants.EQUIP_CLASSES.5'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-04'],
+            // ['name' => Config::get('constants.EQUIP_CLASSES.6'), 'lesson_id' => 1, 'lesson_type' => 'App\Equip', 'class_date' => '2016-07-04'],
+
 
         ]);
     }

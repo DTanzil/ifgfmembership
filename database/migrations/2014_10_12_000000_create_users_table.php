@@ -23,9 +23,12 @@ class CreateUsersTable extends Migration
 
          // Insert some stuff
         DB::table('users')->insert([
-            ['name' => 'Dania', 'email' => 'daniat@uw.edu', 'password' => '$2y$10$cbaBF9z7P32mBsQv54vKn.6W4yDdSc31TN.eHKto6TNAk1n19bBk.'],
-            ['name' => 'Bobo', 'email' => 'bobo@uw.edu', 'password' => '$2y$10$cbaBF9z7P32mBsQv54vKn.6W4yDdSc31TN.eHKto6TNAk1n19bBk.'],
-            ['name' => 'Lolo', 'email' => 'lolo@uw.edu', 'password' => '$2y$10$cbaBF9z7P32mBsQv54vKn.6W4yDdSc31TN.eHKto6TNAk1n19bBk.']
+            ['name' => 'IFGF Admin', 'email' => 'admin@ifgfbandung.org', 'password' => '$2y$10$5Dd//i8d3I8rNAIpf7kBTukmgsyhzHR9vg9lOHKAeHJYAhfmgz27u'],
+            ['name' => 'IFGF Kids', 'email' => 'kids@ifgfbandung.org', 'password' => '$2y$10$5Dd//i8d3I8rNAIpf7kBTukmgsyhzHR9vg9lOHKAeHJYAhfmgz27u'],
+            ['name' => 'Jonathan Kasmin', 'email' => 'jonathankasmin@gmail.com', 'password' => '$2y$10$5Dd//i8d3I8rNAIpf7kBTukmgsyhzHR9vg9lOHKAeHJYAhfmgz27u'],
+            ['name' => 'Sam Hartanto', 'email' => 'samhartanto@gmail.com', 'password' => '$2y$10$5Dd//i8d3I8rNAIpf7kBTukmgsyhzHR9vg9lOHKAeHJYAhfmgz27u'],
+            ['name' => 'Sandy Harsono', 'email' => 'sandyharsono@gmail.com', 'password' => '$2y$10$5Dd//i8d3I8rNAIpf7kBTukmgsyhzHR9vg9lOHKAeHJYAhfmgz27u'],
+            ['name' => 'Max Thenu', 'email' => 'maxthenu@yahoo.com', 'password' => '$2y$10$5Dd//i8d3I8rNAIpf7kBTukmgsyhzHR9vg9lOHKAeHJYAhfmgz27u']            
         ]);
     }
 

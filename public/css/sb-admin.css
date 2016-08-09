@@ -1,14 +1,7 @@
-/*!
- * Start Bootstrap - SB Admin Bootstrap Admin Template (http://startbootstrap.com)
- * Code licensed under the Apache License v2.0.
- * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */
-
 /* Global Styles */
 
 body {
     margin-top: 100px;
-    /*background-color: #222;*/
 }
 
 @media(min-width:768px) {
@@ -159,67 +152,6 @@ ul.alert-dropdown {
 }
 
 
-/* Custom Colored Panels */
-/*
-.huge {
-    font-size: 40px;
-}
-
-.panel-green {
-    border-color: #5cb85c;
-}
-
-.panel-green > .panel-heading {
-    border-color: #5cb85c;
-    color: #fff;
-    background-color: #5cb85c;
-}
-
-.panel-green > a {
-    color: #5cb85c;
-}
-
-.panel-green > a:hover {
-    color: #3d8b3d;
-}
-
-.panel-red {
-    border-color: #d9534f;
-}
-
-.panel-red > .panel-heading {
-    border-color: #d9534f;
-    color: #fff;
-    background-color: #d9534f;
-}
-
-.panel-red > a {
-    color: #d9534f;
-}
-
-.panel-red > a:hover {
-    color: #b52b27;
-}
-
-.panel-yellow {
-    border-color: #f0ad4e;
-}
-
-.panel-yellow > .panel-heading {
-    border-color: #f0ad4e;
-    color: #fff;
-    background-color: #f0ad4e;
-}
-
-.panel-yellow > a {
-    color: #f0ad4e;
-}
-
-.panel-yellow > a:hover {
-    color: #df8a13;
-}*/
-
-
 /**************************************** DANIA EDIT *******************************************/
 .dt-media {
     /*text-align: center;*/
@@ -337,10 +269,7 @@ li.subactive{
     margin-top: 30px;
 }
 
-/*.dt-view-img {
-    margin: auto;
-}
-*/
+
 /*--------------------------- Form & Search Table (start) ----------------------------*/
 form.registration-form fieldset {
     display: none;
@@ -374,15 +303,50 @@ ul.dt-view {
     list-style-type: none;
     padding:0;
 }
+dl.dt-view dd {
+    margin-bottom: 10px;
+}
 
-ul.dt-view li {
+ul.dt-view li, dl.dt-view {
     margin:10px;
 }
 
 
 /*--------------------------- View Groups (end) ----------------------------*/
 
+.dt-title {
+    padding:10px;text-align:center;border-bottom:1px solid #eee;font-weight:bold;
+}
 
+.dt-row {
+    padding:30px;
+}
+
+.dt-icon {
+    background-color:yellow; border-radius:10px;
+}
+
+.dt-act {
+    background-color: #ecec7a;padding: 10px;display: inline-block;border-radius: 10px;
+}
+
+#dt-act-info {
+    margin:0 10px; vertical-align:baseline;
+}
+#dt-bible-group {
+    background-color:#91d0d0;padding:10px;
+}
+.dt-act-group {
+    text-transform:uppercase; margin-top:0px;
+}
+
+.dt-qr {
+    height:197px; margin:auto;
+}
+
+.dt-btm-space {
+    margin-bottom: 20px;
+}
 /*--------------------------- Member Roles (start) ----------------------------*/
 
 .dt-roles {
@@ -398,3 +362,84 @@ ul.dt-view li {
     margin-bottom: 30px;
 }
 
+
+
+/*--------------------------- FORM LOGIN ----------------------------- */
+
+.navbar-default {
+    background: #91c7a4; /* fallback for old browsers */
+    background: -webkit-linear-gradient(right, #91c7a4, #6f9cc2);
+    background: -moz-linear-gradient(right, #91c7a4, #6f9cc2);
+    background: -o-linear-gradient(right, #91c7a4, #6f9cc2);
+    background:linear-gradient(to left, #91c7a4, #6f9cc2);
+    border:transparent!important;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+    border:transparent!important;
+}
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.myform {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.myform input {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.myform button {
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.myform button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.myform .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.myform .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+.myform .register-form {
+  display: none;
+}
+
+body#app-layout {
+  background: #91c7a4; /* fallback for old browsers */
+  background: -webkit-linear-gradient(right, #91c7a4, #6f9cc2);
+  background: -moz-linear-gradient(right, #91c7a4, #6f9cc2);
+  background: -o-linear-gradient(right, #91c7a4, #6f9cc2);
+  background:linear-gradient(to left, #91c7a4, #6f9cc2);
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
+}

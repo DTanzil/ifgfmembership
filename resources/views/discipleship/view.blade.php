@@ -15,7 +15,7 @@
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
             <div class="listbuttons">
-                <h2> Class Sessions </h3>
+                <h2> Class Sessions </h2>
                 <ul class="dt-view">
                     @foreach($fellowship->classes as $class)
                         @if(count($class->teachers) >= 1 )

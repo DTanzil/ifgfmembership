@@ -24,10 +24,10 @@ class CreateIcaresTable extends Migration
 
         // Insert some stuff
         DB::table('icares')->insert([
-            ['name' => 'Social Justice', 'email' => 'lianichristi@yahoo.com', 'day' => 'Tuesday', 'time' => '1110', 'description' => '{"phone":"","city":"Bandung","address":"Hypersquare Olivia Shannon Hair Studio","zipcode":"11111"}'],
-            ['name' => 'Boanerges Reborn', 'email' => 'yudhi.saputra1505@gmail.com', 'day' => 'Tuesday', 'time' => '1110', 'description' => '{"phone":"","city":"Bandung","address":"Jl. Taman Rahayu 1","zipcode":"11111"}'],
-            ['name' => 'Jesus On You', 'email' => 'taufik_hanata_louis@yahoo.com', 'day' => 'Tuesday', 'time' => '1140', 'description' => '{"phone":"","city":"Bandung","address":"Jl. Tampomas","zipcode":"11111"}'],
-            ['name' => 'College Community', 'email' => 'kevin.theophilus@gmail.com', 'day' => 'Friday', 'time' => '1110', 'description' => '{"phone":"","city":"Bandung","address":"Cahaya Garuda Pasteur","zipcode":"11111"}']
+            ['name' => 'Inside Out', 'email' => 'billywahyudi@yahoo.com', 'day' => 'Tuesday', 'time' => '1110', 'description' => '{"phone":"","city":"Bandung","address":"Hypersquare (Olivia Shannon Hair Studio)","zipcode":""}'],
+            ['name' => 'Faith Factor', 'email' => 'gracia.ruth92@gmail.com', 'day' => 'Wednesday', 'time' => '1140', 'description' => '{"phone":"","city":"Bandung","address":"Dago Pakar","zipcode":""}'],
+            ['name' => 'Jesus On You', 'email' => 'taufik_hanata_louis@yahoo.com', 'day' => 'Tuesday', 'time' => '1140', 'description' => '{"phone":"","city":"Bandung","address":"Jl. Tampomas","zipcode":""}'],
+            ['name' => 'College Community', 'email' => 'kevin.theophilus@gmail.com', 'day' => 'Friday', 'time' => '1110', 'description' => '{"phone":"","city":"Bandung","address":"Cahaya Garuda Pasteur","zipcode":""}']
         ]);
     }
 

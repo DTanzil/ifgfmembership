@@ -29,14 +29,6 @@ class MemberRole extends Model
     public $timestamps = false;
 
     /**
-     * Get all of the owning group models.
-     */
-    // public function group()
-    // {
-    //     return $this->morphTo();
-    // }
-
-    /**
      * Get all of the owning group models
      */
     public function families()

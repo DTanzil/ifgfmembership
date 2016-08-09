@@ -43,8 +43,15 @@
                                             <div class="col-lg-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label class="required">Group:</label>
-                                                    <?php $list = Config::get('constants.GROUPS_MODELS'); ?>
-                                                    <?php echo Form::select('group', Config::get('constants.GROUPS'), array_search($fellowship->type, $list), array('class' => 'form-control center')); ?>
+                                                    <?php //$list = Config::get('constants.GROUPS_MODELS'); ?>
+                                                    <?php $groups = array_keys(Config::get('constants.GROUPS')); 
+                                                        $aa = array_values(Config::get('constants.GROUPS'));
+                                                        $bb = array_search('App/Family', $aa);
+                                                        var_dump($bb);
+                                                        die();
+
+                                                    ?>
+                                                    <?php echo Form::select('group', array_combine($groups,$groups), array_search($fellowship->type, $list), array('class' => 'form-control center cap')); ?>
                                                 </div>
                                             </div>                                            
                                         </div>

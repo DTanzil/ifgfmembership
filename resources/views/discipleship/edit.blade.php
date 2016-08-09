@@ -31,8 +31,8 @@
                                     <?php $classes = $fellowship->classes; ?>
                                     @foreach($classes as $key => $class)
                                         <div class="row">
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="form-group input-group">
+                                            <div class="col-lg-8 col-sm-12">
+                                                <div class="form-group ">
                                                     <label class="required">Session {{ $key+1 }}: ({{ $class->name }})</label>
                                                     <?php $field = 'session_'.$key; ?>
                                                     <input type="text" class="mydate form-control" name=<?=$field?> value="{{ empty($class->class_date) ? '' : $class->class_date->format('d/m/Y') }}" placeholder="Date">
@@ -42,7 +42,9 @@
                                     @endforeach
                                 </div>                                                                                               
                             </div>
-                            <div class="col-lg-6 col-sm-12 "></div>
+                            <div class="col-lg-6 col-sm-12 ">
+                                @include('discipleship.graduationrule')
+                            </div>
                         </div>
                         <div class="center">
                             <button type="submit" class="btn mty-btn mty-update-big">
@@ -103,13 +105,17 @@
                                         <?php $teachers = $class->teachers; ?>                              
                                         @for($i = 0; $i < $count; $i++)
                                             <div class="col-lg-6 col-sm-12 form-box center">
-                                                <a href="{{ $urls['assign'] }}/{{ $role }}">
+                                                <a href="{{ $urls['assignteacher'] }}/{{ $class->name }}">
                                                     @if(isset($teachers[$i]))
-                                                        <i class="fa fa-user dt-profile orn" aria-hidden="true"></i>
+                                                        @if(!empty($teachers[$i]->image))
+                                                          <img class="media-object dt-circle" style="margin:auto;" src="{{ asset($teachers[$i]->image) }}">
+                                                        @else
+                                                          <i class="fa fa-user dt-profile orn" aria-hidden="true" ></i>
+                                                        @endif 
+                                                        <!-- <i class="fa fa-user dt-profile orn" aria-hidden="true"></i> -->
                                                     @else
                                                         <i class="fa fa-user-plus dt-profile" aria-hidden="true"></i>
                                                     @endif                                            
-                                                    
                                                 </a>
                                                 <p><b><?php echo (isset($teachers[$i]) ? $teachers[$i]->name . " (teacher)" : 'No Teacher Assigned'); ?></b></p>
                                             </div>

@@ -21,13 +21,15 @@ class CreateFamiliesTable extends Migration
 
         // Insert some stuff
 
-        $info = '{"phone":"022-839281","city":"Bandung","address":"Jalan Kejaksaan XII no 8 Blok 3","zipcode":"32513"}';
+        // $info = '{"phone":"022-839281","city":"Bandung","address":"Jalan Kejaksaan XII no 8 Blok 3","zipcode":"32513"}';
+
+        $info = '{"phone":"","city":"Bandung","address":"","zipcode":""}';
 
         DB::table('families')->insert([
-            ['name' => 'GNH', 'description' => $info],
-            ['name' => 'Widodo', 'description' => $info],
-            ['name' => 'Hartanto', 'description' => $info],
-            ['name' => 'Sutanto', 'description' => $info]
+            ['name' => 'Sam Hartanto', 'description' => $info],
+            // ['name' => 'Widodo', 'description' => $info],
+            // ['name' => 'Hartanto', 'description' => $info],
+            // ['name' => 'Sutanto', 'description' => $info]
         ]);
 
     }

@@ -70,7 +70,7 @@ return [
 
         'img' => [
             'driver' => 'local',
-            'root' => public_path(),            
+            'root' => storage_path('img/members'),            
             'visibility' => 'public',
         ],
 

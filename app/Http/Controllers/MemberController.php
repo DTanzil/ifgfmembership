@@ -49,6 +49,12 @@ class MemberController extends Controller
         $this->paramid = 'mbr';
         $this->hdninput = '_mbrid';
         $this->title = array('header' => 'Members', 'singular' => 'Member');
+
+        // $filename = 'img/members/DF97F93.png';
+        // $aa = Image::make(storage_path() . '/' . $filename)->response();
+
+        // $aa = Image::make(storage_path() . '/' . 'img/members/DF97F93.png')->response();
+        
     }
 
     /**
@@ -113,6 +119,7 @@ class MemberController extends Controller
                 'engage' => route('deleteengage'),
                 'establish' => route('deleteestablish'),
                 'equip' => route('deleteequip'),
+                'empower' => route('deleteempower')
             ),
             'viewgroup' => array(
                 'member' => route('viewmember'), 
@@ -122,6 +129,7 @@ class MemberController extends Controller
                 'engage' => route('viewengage'),
                 'establish' => route('viewestablish'),
                 'equip' => route('viewequip'),
+                'empower' => route('viewempower')
             ),
             'allgroup' => array(
                 'member' => route('allmember'), 
@@ -131,6 +139,7 @@ class MemberController extends Controller
                 'engage' => route('allengage'),
                 'establish' => route('allestablish'),
                 'equip' => route('allequip'),
+                'empower' => route('allempower')
             ),
             'view' => route('viewmember', ['mbr' => $mbr_id] ),  
             'save' => route('savemember'),
@@ -450,10 +459,9 @@ class MemberController extends Controller
         }
         
         $filename =  str_random(10) . "." .$file->getClientOriginalExtension(); 
-        $path = public_path('img/members/' . $filename);
+        $path = storage_path('img/members/' . $filename);
         Image::make($file->getRealPath())->resize('200','200')->save($path);
-        $photourl = 'img/members/'.  $filename;        
- 
+        $photourl = $filename;         
         return $photourl;
 
     }

@@ -32,6 +32,12 @@ Route::group(['middleware' => ['web']], function () {
     // Route::get('login',  'Auth\AuthController@showLoginForm');
     // Route::get('logout', 'Auth\AuthController@logout');
 
+    // MEMBER IMAGES
+    Route::get('ifgf-photos/{image}', function($image){
+        if(!File::exists( $image=storage_path("img/members/{$image}") )) abort(404);
+        return Image::make($image)->response(); 
+    });
+
 
     // HOMEPAGE
     Route::get('/home', ['as' => 'homepage', 'uses' => 'MemberController@home']);

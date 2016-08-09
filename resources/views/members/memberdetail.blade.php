@@ -1,7 +1,8 @@
 <div class="col-lg-3">
     <p class="center"> 
         @if(!empty($member->image))
-          <img class="media-object dt-circle" style="margin:auto;" src="{{ asset($member->image) }}">
+          <img class="media-object dt-circle" style="margin:auto;" src="{{ url('ifgf-photos/') }}/{{ $member->image }}">
+          
         @else
           <i class="fa fa-user dt-profile" aria-hidden="true" style="margin:auto;" ></i>
         @endif 

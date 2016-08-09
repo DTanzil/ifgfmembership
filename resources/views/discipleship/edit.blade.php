@@ -108,11 +108,10 @@
                                                 <a href="{{ $urls['assignteacher'] }}/{{ $class->name }}">
                                                     @if(isset($teachers[$i]))
                                                         @if(!empty($teachers[$i]->image))
-                                                          <img class="media-object dt-circle" style="margin:auto;" src="{{ asset($teachers[$i]->image) }}">
+                                                          <img class="media-object dt-circle" style="margin:auto;" src="{{ url('ifgf-photos/') }}/{{ $teachers[$i]->image }}">
                                                         @else
                                                           <i class="fa fa-user dt-profile orn" aria-hidden="true" ></i>
                                                         @endif 
-                                                        <!-- <i class="fa fa-user dt-profile orn" aria-hidden="true"></i> -->
                                                     @else
                                                         <i class="fa fa-user-plus dt-profile" aria-hidden="true"></i>
                                                     @endif                                            

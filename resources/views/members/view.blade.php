@@ -48,7 +48,8 @@
                                             <div class="media-left media-middle">
                                                 <a href="{{ $urls['assign'] }}/">
                                                     @if(!empty($mbr->image))
-                                                      <img class="media-object dt-profile dt-circle"src="{{ asset($mbr->image) }}">
+                                                      <img class="media-object dt-profile dt-circle"src="{{ url('ifgf-photos/') }}/{{ $mbr->image }}">
+                                                      
                                                     @else
                                                       <i class="fa fa-user dt-profile orn" aria-hidden="true"></i>
                                                     @endif 

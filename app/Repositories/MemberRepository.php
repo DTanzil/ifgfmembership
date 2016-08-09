@@ -27,9 +27,9 @@ class MemberRepository extends MyRepository
 
         $codeContents = route('viewmember', ['mbr' => $id] ); 
         $filename = strtoupper(substr(md5(microtime()),rand(0,26),7));
-        $path = public_path('img/members/') . $filename . '.png';
+        $path = storage_path('img/members/') . $filename . '.png';
         $code = QRcode::png($codeContents, $path, QR_ECLEVEL_L, 6, 8); 
-        $url = 'img/members/'. $filename . '.png';
+        $url = $filename . '.png';
 
         return array('mbr_id' => $mbr_id, 'qrimg' => $url);
 

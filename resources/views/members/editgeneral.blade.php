@@ -21,7 +21,7 @@
                                     <div class="col-lg-4 col-sm-12 center">
                                         <div class="form-group">
                                             @if(Storage::disk('img')->exists("{$member->image}"))
-                                                <img class="media-object dt-profile dt-circle" style="margin:15px auto;" src="{{ asset($member->image) }}"> 
+                                                <img class="media-object dt-profile dt-circle" style="margin:15px auto;" src="{{ url('ifgf-photos/') }}/{{ $member->image }}"> 
                                             @else
                                                 <i class="fa fa-user dt-profile" aria-hidden="true" style="margin:15px auto;" ></i>
                                             @endif
@@ -77,7 +77,7 @@
                             <div class="panel-body">
                                 <p class="center"><i>Scan this QR Code to view all information about this member.</i></p>
                                 @if(Storage::disk('img')->exists("{$member->qr_image}"))
-                                    <img class="media-object dt-qr" src="{{ asset($member->qr_image) }}"> 
+                                    <img class="media-object dt-qr" src="{{ url('ifgf-photos/') }}/{{ $member->qr_image }} " />
                                 @endif
                             </div>
                         </div>

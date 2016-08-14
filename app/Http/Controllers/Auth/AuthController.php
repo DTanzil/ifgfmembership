@@ -72,15 +72,17 @@ class AuthController extends Controller
         ]);
     }
 
-    // public function showRegistrationForm()
-    // {
-    //     return redirect('login');
-    // }
+    // IMPORTANT: comment showRegistrationForm() if registration is allowed
+    public function showRegistrationForm()
+    {
+        return redirect('login');
+    }
 
-    // public function register()
-    // {
+    // IMPORTANT: comment register() if registration is allowed
+    public function register()
+    {
 
-    // }
+    }
 
 
 }

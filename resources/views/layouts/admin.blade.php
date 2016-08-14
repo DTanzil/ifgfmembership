@@ -109,7 +109,7 @@
                 }
             );
 
-            $( "#datepicker, .mydate").datepicker({
+            $( "#datepicker, #datepicker1, .mydate").datepicker({
               dateFormat: 'dd/mm/yy',
               changeMonth: true,
               changeYear: true

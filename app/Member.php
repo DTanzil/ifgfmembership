@@ -21,7 +21,7 @@ class Member extends Model
      *
      * @var array
      */
-    protected $dates = ['birthdate'];
+    protected $dates = ['birthdate', 'date_baptized'];
 
     /**
      * The attributes that should be casted to native types.

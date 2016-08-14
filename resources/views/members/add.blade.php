@@ -80,14 +80,14 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="form-group input-group">
-                                                <label>Cell Phone</label>
-                                                <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" placeholder="Cell Phone">
+                                                <label>Date of Birth</label>
+                                                <input type="text" id="datepicker" name="birthdate" value="{{ old('birthdate') }}" class="form-control" placeholder="Date of Birth">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="form-group input-group">
-                                                <label>Date of Birth</label>
-                                                <input type="text" id="datepicker" name="birthdate" value="{{ old('birthdate') }}" class="form-control" placeholder="Date of Birth">
+                                                <label>Baptism Date</label>
+                                                <input type="text" id="datepicker1" name="baptism" value="{{ old('baptism') }}" class="form-control" placeholder="Baptism Date">
                                             </div>
                                         </div>
                                     </div>
@@ -95,6 +95,10 @@
                             </div>
 
                             <div class="col-lg-6 col-sm-12 form-box">
+                                <div class="form-group input-group">
+                                    <label>Cell Phone</label>
+                                    <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" placeholder="Cell Phone">
+                                </div>
                                 <div class="form-group">
                                     <label>Address</label>
                                     <input type="text" name="address" value="{{ old('address') }}" class="form-control" placeholder=" Address">

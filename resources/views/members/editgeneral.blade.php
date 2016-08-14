@@ -157,20 +157,25 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="form-group input-group">
-                                                <label>Cell Phone</label>
-                                                <input type="text" name="phone" value="{{ $info['phone'] }}" class="form-control" placeholder="Cell Phone">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
-                                            <div class="form-group input-group">
                                                 <label>Date of Birth</label>
                                                 <input type="text" id="datepicker" name="birthdate" value="{{ empty($member->birthdate) ? '' : $member->birthdate->format('d/m/Y') }}" class="form-control" placeholder="Date of Birth">
                                             </div>
                                         </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="form-group input-group">
+                                                <label>Baptism Date</label>
+                                                <input type="text" id="datepicker1" name="baptism" value="{{ empty($member->date_baptized) ? '' : $member->date_baptized->format('d/m/Y') }}" class="form-control" placeholder="Baptism Date">
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-sm-12 form-box">
+                                <div class="form-group input-group">
+                                    <label>Cell Phone</label>
+                                    <input type="text" name="phone" value="{{ $info['phone'] }}" class="form-control" placeholder="Cell Phone">
+                                </div>
                                 <div class="form-group">
                                     <label>Address</label>
                                     <input type="text" name="address" value="{{ $info['address'] }}" class="form-control" placeholder=" Address">

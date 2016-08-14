@@ -49,12 +49,6 @@ class MemberController extends Controller
         $this->paramid = 'mbr';
         $this->hdninput = '_mbrid';
         $this->title = array('header' => 'Members', 'singular' => 'Member');
-
-        // $filename = 'img/members/DF97F93.png';
-        // $aa = Image::make(storage_path() . '/' . $filename)->response();
-
-        // $aa = Image::make(storage_path() . '/' . 'img/members/DF97F93.png')->response();
-        
     }
 
     /**
@@ -363,6 +357,7 @@ class MemberController extends Controller
                     'address' => 'max:255',
                     'zipcode' => 'digits_between:0,8',
                     'birthdate' => 'date_format:d/m/Y',
+                    'baptism' => 'date_format:d/m/Y',
                     'email' => 'required|email|unique:members,email',
                     'status' => "required|in:$marital_rule",
                     'gender' => "required|in:$gender_rule",
@@ -378,7 +373,9 @@ class MemberController extends Controller
                 $description = $this->baseModel->castDescriptionField($request, array('phone', 'city', 'address', 'zipcode', 'kids_class'));
                 //sanitize birthdate field
                 $birth_date = $this->sanitizeDate($request->birthdate);
-                $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'service' => $request->service, 'gender' => $request->gender, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description, 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()];
+                $baptism_date = $this->sanitizeDate($request->baptism);
+                
+                $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'date_baptized' => $baptism_date, 'service' => $request->service, 'gender' => $request->gender, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description, 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()];
 
                  // check photo upload
                 if ($request->hasFile('photo')) {
@@ -405,6 +402,7 @@ class MemberController extends Controller
                     'address' => 'max:255',
                     'zipcode' => 'digits_between:0,8',
                     'birthdate' => 'date_format:d/m/Y',
+                    'baptism' => 'date_format:d/m/Y',
                     'email' => 'required|email|unique:members,email,'.$mbr_id,
                     'status' => "required|in:$marital_rule",                        
                     'date_joined' => 'required|digits_between:4,4',
@@ -419,7 +417,8 @@ class MemberController extends Controller
                 $description = $this->baseModel->castDescriptionField($request, array('phone', 'city', 'address', 'zipcode', 'kids_class'));
                 //sanitize birthdate field
                 $birth_date = $this->sanitizeDate($request->birthdate);
-                $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'service' => $request->service, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description];
+                $baptism_date = $this->sanitizeDate($request->baptism);
+                $data = ['name' => $request->name, 'email' => $request->email, 'birthdate' => $birth_date, 'date_baptized' => $baptism_date, 'service' => $request->service, 'status' => $request->status, 'date_joined' => $request->date_joined, 'description' => $description];
 
                 $this->baseModel->update($data, $mbr_id, 'id');
                 $request->session()->flash('message', 'Update successful!');     

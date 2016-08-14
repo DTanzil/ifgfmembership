@@ -204,6 +204,11 @@ ul.alert-dropdown {
     background-color: #4659DE;
     color:white;
 }
+@media(max-width: 480px){
+  table .mty-btn {
+    margin-bottom: 10px;
+  }
+}
 
 .mty-update {
     padding:6px 20px;
@@ -271,10 +276,6 @@ li.subactive{
 
 
 /*--------------------------- Form & Search Table (start) ----------------------------*/
-form.registration-form fieldset {
-    display: none;
-}
-
 
 a#mbr-chosen {
     background-color : green;

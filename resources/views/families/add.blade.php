@@ -37,17 +37,17 @@
                             </div>
                             <div class="col-lg-6 col-sm-12 ">
                                 <div class="form-group">
-                                    <label>Home Address</label>
+                                    <label class="required">Home Address</label>
                                     <input type="text" name="address" value="{{ old('address') }}" class="form-control" placeholder="Home Address">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>City</label>
+                                    <label class="required">City</label>
                                     <input type="text" name="city" value="{{ old('city') }}" class="form-control" placeholder="City">
                                 </div>
 
                                 <div class="form-group input-group">
-                                    <label>Postal Code</label>
+                                    <label class="required">Postal Code</label>
                                     <input type="text" name="zipcode" value="{{ old('zipcode') }}" class="form-control" placeholder="Postal Code">
                                 </div>
                             </div>

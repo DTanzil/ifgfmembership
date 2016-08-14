@@ -7,7 +7,7 @@
 <p> Please use the menu on the left to navigate your way. As an admin, you can manage membership, iCares, families, ministries and bible studies. </p>
 
 <div class="row">    
-	<div class="col-lg-3 col-sm-12">
+	<div class="col-lg-3 col-md-6 col-sm-6">
 	    <div class="dt-media" style="background-color:transparent;">
 	        <div class="media">
 	            <div class="media-left media-middle center">
@@ -23,7 +23,7 @@
 	</div>
 
 	@foreach ($groups as $group => $item)
-        <div class="col-lg-3 col-sm-12">
+        <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="dt-media" style="background-color:transparent;">
                 <div class="media">
                     <div class="media-left media-middle center">

@@ -5,10 +5,11 @@
 <table id="itemtable" class="display" cellspacing="0" width="100%">
     <thead>
         <tr>
+            <th>Action</th>
             @foreach ($tableCols as $key => $name)
                 <th>{{ $name }}</th>
             @endforeach
-                <th>Action</th>
+                
         </tr>
     </thead>
     <tbody>
@@ -16,6 +17,20 @@
         @if (count($results) > 0)
             @foreach ($results as $item)
                 <tr class="cap">
+                    <td>
+                        <span id="mbr-choice-{{ $item->id }}">
+                            @if(in_array($item->id, $current_members))
+                                <?php $selected[$item->id] = $item->name; ?>
+                                <a name="mbr_mulselection" class="btn mty-btn grey mbr-mulchosen">
+                                    <i class="fa fa-check" aria-hidden="true"></i> Selected
+                                </a>
+                            @else
+                                <a name="mbr_mulselection" class="btn mty-btn grey">
+                                Choose Member
+                                </a>                                    
+                            @endif
+                        </span>
+                    </td>
                     @foreach ($tableCols as $key => $col)
                         @if($key == 'age') 
                             <td> {{ !empty($item->birthdate) ? $item->birthdate->age : '-' }} </td> 
@@ -40,20 +55,7 @@
                             <td>{{ $item->$key or ''}}</td>
                         @endif
                     @endforeach
-                    <td>
-                        <span id="mbr-choice-{{ $item->id }}">
-                            @if(in_array($item->id, $current_members))
-                                <?php $selected[$item->id] = $item->name; ?>
-                                <a name="mbr_mulselection" class="btn mty-btn grey mbr-mulchosen">
-                                    <i class="fa fa-check" aria-hidden="true"></i> Selected
-                                </a>
-                            @else
-                                <a name="mbr_mulselection" class="btn mty-btn grey">
-                                Choose Member
-                                </a>                                    
-                            @endif
-                        </span>
-                    </td>
+                    
                 </tr>
             @endforeach
     

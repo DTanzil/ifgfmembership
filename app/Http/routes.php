@@ -25,7 +25,7 @@
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
-        return view('welcome');
+        return view('auth.login');
     })->middleware('guest');
 
     // Route::post('login', 'Auth\AuthController@login');
